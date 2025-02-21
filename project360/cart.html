@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="cart.css" />
+</head>
+<body>
+  <!-- Optional Header -->
+  <div id="loginheader"></div>
+
+  <div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb mb-4">
+      <a class="breadcrumb-item text-decoration-none text-muted" href="#">Home</a>
+      <span class="breadcrumb-item active" aria-current="page">Cart</span>
+    </nav>
+
+    <div class="row gy-4">
+      <!-- Left Section: Cart Table and Actions -->
+      <div class="col-lg-8">
+        <!-- Cart Table -->
+        <div class="table-responsive shadow-sm rounded bg-white p-3">
+          <table class="table table-borderless align-middle cart-table mb-0">
+            <thead class="border-bottom">
+              <tr class="text-uppercase text-muted small">
+                <th class="fw-semibold">Remove</th>
+                <th class="fw-semibold">Product</th>
+                <th class="fw-semibold">Price</th>
+                <th class="fw-semibold">Quantity</th>
+                <th class="fw-semibold">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr>
+                <!-- Remove Icon -->
+                <td class="text-center">
+                  <i class="bi bi-x-circle text-danger fs-5 remove-item" role="button"></i>
+                </td>
+                <!-- Product -->
+                <td class="d-flex align-items-center">
+                  <img src="images/monitor.avif" alt="LCD Monitor" class="cart-img" />
+                  <span class="ms-2">LCD Monitor</span>
+                </td>
+                <!-- Price (Store base price as data attribute) -->
+                <td class="cart-price" data-price="650">$650</td>
+                <!-- Quantity -->
+                <td style="max-width: 80px;">
+                  <select class="form-select cart-quantity">
+                    <option selected>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                </td>
+                <!-- Subtotal -->
+                <td class="cart-subtotal">$650</td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr>
+                <td class="text-center">
+                  <i class="bi bi-x-circle text-danger fs-5 remove-item" role="button"></i>
+                </td>
+                <td class="d-flex align-items-center">
+                  <img src="images/tablet.avif" alt="Tablet" class="cart-img" />
+                  <span class="ms-2">Tablet</span>
+                </td>
+                <td class="cart-price" data-price="550">$550</td>
+                <td style="max-width: 80px;">
+                  <select class="form-select cart-quantity">
+                    <option>1</option>
+                    <option selected>2</option>
+                    <option>3</option>
+                  </select>
+                </td>
+                <td class="cart-subtotal">$1100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Cart Buttons -->
+        <div class="mt-3 d-flex flex-wrap justify-content-between">
+          <button class="btn btn-outline-dark mb-2">Return To Shop</button>
+        </div>
+
+        <!-- Coupon Section -->
+        <div class="mt-3 d-flex flex-wrap align-items-center gap-2">
+          <input
+            type="text"
+            class="form-control flex-grow-1"
+            placeholder="Coupon Code"
+            id="couponCodeInput"
+          />
+          <button class="btn btn-danger" id="applyCouponBtn">Apply Coupon</button>
+        </div>
+      </div>
+
+      <!-- Right Section: Cart Total -->
+      <div class="col-lg-4">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h5 class="fw-bold mb-3">Cart Total</h5>
+          <!-- Subtotal -->
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span class="fw-semibold" id="cartSubtotal">$1750</span>
+          </div>
+          <!-- Shipping -->
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping:</span>
+            <span class="fw-semibold">Free</span>
+          </div>
+          <hr />
+          <!-- Total -->
+          <div class="d-flex justify-content-between mb-3">
+            <span>Total:</span>
+            <span class="fw-semibold" id="cartTotal">$1750</span>
+          </div>
+          <button class="btn btn-danger w-100">
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional Footer -->
+  <div id="footer"></div>
+
+  <!-- Your custom JS to load header/footer if needed -->
+  <script src="hfload.js"></script>
+
+  <!-- Bootstrap Bundle (JS) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+
+  <!-- Main Cart Script -->
+  <script>
+    // Flag to indicate if MONHALF coupon is active
+    let couponUsed = false;
+
+    // Recalculate all subtotals and totals
+    function updateCart() {
+      const cartRows = document.querySelectorAll(".cart-table tbody tr");
+      let originalTotal = 0; // sum of all items BEFORE discount
+
+      cartRows.forEach((row) => {
+        if (!row.isConnected) return; // skip removed rows
+
+        // Get base price from data attribute
+        const priceCell = row.querySelector(".cart-price");
+        const basePrice = parseFloat(priceCell.dataset.price);
+
+        // Get selected quantity
+        const quantitySelect = row.querySelector(".cart-quantity");
+        const quantity = parseInt(quantitySelect.value);
+
+        // Calculate row subtotal
+        const rowSubtotal = basePrice * quantity;
+
+        // Update row's displayed subtotal
+        const subtotalCell = row.querySelector(".cart-subtotal");
+        subtotalCell.textContent = "$" + rowSubtotal;
+
+        // Accumulate the total
+        originalTotal += rowSubtotal;
+      });
+
+      // If coupon is used, discount is half
+      let finalTotal = originalTotal;
+      if (couponUsed) {
+        finalTotal = originalTotal / 2;
+      }
+
+      // Update SUBTOTAL display
+      const cartSubtotalEl = document.getElementById("cartSubtotal");
+      if (couponUsed) {
+        // Show old (crossed out) and new
+        cartSubtotalEl.innerHTML =
+          `<span style="text-decoration: line-through; color:red;">` +
+          `$${originalTotal}` +
+          `</span> $${finalTotal}`;
+      } else {
+        // Normal display if no coupon
+        cartSubtotalEl.textContent = "$" + originalTotal;
+      }
+
+      // Update TOTAL display
+      const cartTotalEl = document.getElementById("cartTotal");
+      if (couponUsed) {
+        cartTotalEl.innerHTML =
+          `<span style="text-decoration: line-through; color:red;">` +
+          `$${originalTotal}` +
+          `</span> $${finalTotal}`;
+      } else {
+        cartTotalEl.textContent = "$" + originalTotal;
+      }
+    }
+
+    // Check and apply coupon
+    function applyCoupon() {
+      const couponInput = document
+        .getElementById("couponCodeInput")
+        .value.trim()
+        .toUpperCase();
+
+      if (couponInput === "MONHALF") {
+        couponUsed = true;
+        alert("Coupon MONHALF applied! Prices reduced by half.");
+      } else {
+        alert("Invalid coupon code!");
+      }
+      updateCart();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Listen for quantity changes
+      const quantitySelects = document.querySelectorAll(".cart-quantity");
+      quantitySelects.forEach((select) => {
+        select.addEventListener("change", updateCart);
+      });
+
+      // Handle remove item click
+      const removeIcons = document.querySelectorAll(".remove-item");
+      removeIcons.forEach((icon) => {
+        icon.addEventListener("click", () => {
+          const row = icon.closest("tr");
+          row.remove();
+          updateCart();
+        });
+      });
+
+      // Update cart on "Update Cart" button
+      const updateCartBtn = document.getElementById("updateCartBtn");
+      if (updateCartBtn) {
+        updateCartBtn.addEventListener("click", updateCart);
+      }
+
+      // Apply coupon code
+      const applyCouponBtn = document.getElementById("applyCouponBtn");
+      applyCouponBtn.addEventListener("click", applyCoupon);
+
+      // Initial cart update
+      updateCart();
+    });
+  </script>
+</body>
+</html>

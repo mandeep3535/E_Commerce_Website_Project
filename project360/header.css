@@ -1,0 +1,63 @@
+/* Top Banner */
+.top-banner {
+    background: black;
+    color: white;
+    font-size: 14px;
+}
+
+.shop-now {
+    color: yellow;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Navbar */
+.navbar {
+    padding: 15px;
+}
+
+/* Navbar Styling */
+.navbar {
+    padding: 15px;
+}
+
+/* Icons Styling */
+.bi {
+    color: black;
+    text-decoration: none;
+}
+
+.bi:hover {
+    color: #dc3545;
+}
+
+/* Profile Icon */
+.profile-icon {
+    background-color: #c0392b;
+    color: white !important;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.profile-icon i {
+    color: white !important;
+}
+
+.profile-icon:hover {
+    background-color: #a93226;
+}
+
+/* Responsive: Stack icons on mobile */
+@media (max-width: 992px) {
+    .d-flex.align-items-center {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+}

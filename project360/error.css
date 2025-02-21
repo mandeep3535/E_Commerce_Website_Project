@@ -1,0 +1,44 @@
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    color: gray;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+}
+
+.breadcrumb-item.active {
+    color: black;
+    font-weight: bold;
+}
+
+/* Center Content */
+.container {
+    text-align: center;
+}
+
+/* 404 Heading */
+h1 {
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+/* Responsive Font Sizes */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3rem; /* Smaller font size for mobile */
+    }
+}
+
+/* Button Styling */
+.btn-danger {
+    background-color: red;
+    border: none;
+    font-size: 16px;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}

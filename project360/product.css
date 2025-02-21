@@ -1,0 +1,73 @@
+/* Basic spacing for thumbnails */
+.thumb-card {
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .thumb-card:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.15);
+  }
+  
+  /* Main product image styling */
+  .main-product-img {
+    max-height: 350px;
+    object-fit: contain;
+  }
+  
+  /* Color dots for product colors */
+  .color-dot {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 2px solid #ccc;
+    cursor: pointer;
+  }
+  .color-dot:hover {
+    opacity: 0.8;
+  }
+  
+  /* Active size button highlight */
+  .active-size {
+    background-color: #dc3545 !important; /* Red background */
+    border-color: #dc3545 !important; 
+    color: #fff !important;
+  }
+  
+  /* Star rating half star example
+     If you want all full stars:
+     replace the last star-half with star-fill
+  */
+  
+  /* Minor style tweaks for quantity input */
+  .input-group > input[type="text"] {
+    max-width: 50px;
+  }
+  
+  /* Delivery/Return icons spacing */
+  .border p {
+    margin-bottom: 4px;
+  }
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    color: gray;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+}
+
+.breadcrumb-item.active {
+    color: black;
+    font-weight: bold;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+

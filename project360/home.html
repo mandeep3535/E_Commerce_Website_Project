@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MV Electronics - Homepage</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+  <!-- Bootstrap Icons (Optional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+    <div id = "header"></div>
+
+<!-- ===================================
+     MAIN SECTION WITH SIDEBAR & CAROUSEL
+=================================== -->
+<div class="container-fluid my-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-2 d-none d-lg-block">
+      <ul class="list-group border-0">
+        <li class="list-group-item border-0 py-2">Phones</li>
+        <li class="list-group-item border-0 py-2">Computers <i class="bi bi-chevron-right"></i></li>
+        <li class="list-group-item border-0 py-2">SmartWatch</li>
+        <li class="list-group-item border-0 py-2">Camera</li>
+        <li class="list-group-item border-0 py-2">Headphones</li>
+        <li class="list-group-item border-0 py-2">Gaming</li>
+        <li class="list-group-item border-0 py-2">Accessories</li>
+      </ul>
+    </div>
+
+    <!-- Carousel -->
+<div class="col-lg-8 col-md-12 col-sm-6 container-fluid p-0">
+  <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner rounded shadow-sm">
+      <!-- Slide 1 -->
+      <div class="carousel-item active">
+        <img src="images/iphone.jpg" class="d-block w-100 carousel-img" alt="Promo Slide 1" />
+      </div>
+      <!-- Slide 2 -->
+      <div class="carousel-item">
+        <img src="images/laptop.avif" class="d-block w-100 carousel-img" alt="Promo Slide 2" />
+      </div>
+      <!-- Slide 3 -->
+      <div class="carousel-item">
+        <img src="images/headphone.avif" class="d-block w-100 carousel-img" alt="Promo Slide 3" />
+      </div>
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ===================================
+     BROWSE BY CATEGORY SECTION
+=================================== -->
+<section class="container my-5">
+  <div class="d-flex align-items-center mb-3">
+    <div class="category-label bg-danger text-white me-2"></div>
+    <h5 class="text-danger mb-0">Categories</h5>
+  </div>
+  <h2 class="fw-bold">Browse By Category</h2>
+  <div class="row mt-4 g-3">
+    <!-- Category Card 1 -->
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="cat-card text-center p-3">
+        <i class="bi bi-phone fs-1"></i>
+        <p class="mt-2">Phones</p>
+      </div>
+    </div>
+    <!-- Category Card 2 -->
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="cat-card text-center p-3">
+        <i class="bi bi-laptop fs-1"></i>
+        <p class="mt-2">Computers</p>
+      </div>
+    </div>
+    <!-- Category Card 3 -->
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="cat-card text-center p-3">
+        <i class="bi bi-watch fs-1"></i>
+        <p class="mt-2">SmartWatch</p>
+      </div>
+    </div>
+    <!-- Category Card 4 -->
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="cat-card text-center p-3">
+        <i class="bi bi-camera fs-1"></i>
+        <p class="mt-2">Camera</p>
+      </div>
+    </div>
+    <!-- Category Card 5 -->
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="cat-card text-center p-3">
+        <i class="bi bi-headphones fs-1"></i>
+        <p class="mt-2">HeadPhones</p>
+      </div>
+    </div>
+    <!-- Category Card 6 -->
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="cat-card text-center p-3">
+        <i class="bi bi-controller fs-1"></i>
+        <p class="mt-2">Gaming</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================================
+     BEST SELLING PRODUCTS
+=================================== -->
+<section class="container my-5">
+  <div class="d-flex align-items-center mb-3">
+    <div class="category-label bg-danger text-white me-2"></div>
+    <h6 class="text-danger mb-0">This Month</h6>
+  </div>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="fw-bold">Best Selling Products</h2>
+  </div>
+  <!-- Products Row -->
+  <div class="row mt-4 g-3">
+    <!-- Product Card 1 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="product-card p-3 bg-white">
+        <!-- Icons (Wishlist, QuickView) -->
+        <div class="product-icons position-absolute top-0 end-0 m-2">
+          <i class="bi bi-heart fs-5 me-2"></i>
+          
+        </div>
+        <img
+          src="images/asusevo.jpg"
+          alt="Asus evo"
+          class="img-fluid mb-3"
+        />
+        <h6 class="mb-1">Asus evo</h6>
+        <p class="text-danger mb-0">$260 <span class="text-muted text-decoration-line-through">$360</span></p>
+        <!-- Star Rating -->
+        <div class="text-warning small mb-1">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <span class="text-muted">(65)</span>
+        </div>
+      </div>
+    </div>
+    <!-- Product Card 2 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="product-card p-3 bg-white">
+        <div class="product-icons position-absolute top-0 end-0 m-2">
+          <i class="bi bi-heart fs-5 me-2"></i>
+        
+        </div>
+        <img
+          src="images/16pro.webp"
+          alt="Iphone 16"
+          class="img-fluid mb-3"
+        />
+        <h6 class="mb-1">Iphone 16</h6>
+        <p class="text-danger mb-0">$960 <span class="text-muted text-decoration-line-through">$1160</span></p>
+        <div class="text-warning small mb-1">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <span class="text-muted">(65)</span>
+        </div>
+      </div>
+    </div>
+    <!-- Product Card 3 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="product-card p-3 bg-white">
+        <div class="product-icons position-absolute top-0 end-0 m-2">
+          <i class="bi bi-heart fs-5 me-2"></i>
+         
+        </div>
+        <img
+          src="images/rbgcooler.jpg"
+          alt="RGB liquid CPU Cooler"
+          class="img-fluid mb-3"
+        />
+        <h6 class="mb-1">RGB liquid CPU Cooler</h6>
+        <p class="text-danger mb-0">$160 <span class="text-muted text-decoration-line-through">$170</span></p>
+        <div class="text-warning small mb-1">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <span class="text-muted">(65)</span>
+        </div>
+      </div>
+    </div>
+    <!-- Product Card 4 -->
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="product-card p-3 bg-white">
+        <div class="product-icons position-absolute top-0 end-0 m-2">
+          <i class="bi bi-heart fs-5 me-2"></i>
+         
+        </div>
+        <img
+          src="images/keyboard.jpg"
+          alt="Keyboard"
+          class="img-fluid mb-3"
+        />
+        <h6 class="mb-1">Roccat mechanical keyboard</h6>
+        <p class="text-danger mb-0">$200 <span class="text-muted text-decoration-line-through">$220</span></p>
+        <div class="text-warning small mb-1">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <span class="text-muted">(65)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================
+     BIG BANNER (Music Experience)
+=================================== -->
+<section class="container-fluid my-5">
+  <div class="row g-0 position-relative banner-dark align-items-center text-white">
+    <!-- Text & Timer -->
+    <div class="col-lg-6 p-5">
+      <h6 class="text-success fw-bold">Categories</h6>
+      <h2 class="fw-bold">Enhance Your Music Experience</h2>
+      <div class="d-flex align-items-center my-4 fs-5">
+        <div class="me-3 text-center">
+          <div>23</div>
+          <small>Hours</small>
+        </div>
+        <div class="me-3 text-center">
+          <div>05</div>
+          <small>Days</small>
+        </div>
+        <div class="me-3 text-center">
+          <div>59</div>
+          <small>Minutes</small>
+        </div>
+        <div class="me-3 text-center">
+          <div>35</div>
+          <small>Seconds</small>
+        </div>
+      </div>
+      <button class="btn btn-success px-4 py-2">Buy Now!</button>
+    </div>
+    <!-- Image -->
+    <div class="col-lg-6">
+      <img
+        src="images/JBL.png"
+        alt="JBL Speaker"
+        class="img-fluid"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- ===================================
+     FEATURES (Icons) 
+=================================== -->
+<section class="container text-center my-5">
+  <div class="row g-4">
+    <!-- Feature 1 -->
+    <div class="col-md-4">
+      <i class="bi bi-truck fs-1 text-dark mb-2"></i>
+      <h6 class="fw-bold">FREE AND FAST DELIVERY</h6>
+      <p class="text-muted">
+        Free delivery for all orders over $140
+      </p>
+    </div>
+    <!-- Feature 2 -->
+    <div class="col-md-4">
+      <i class="bi bi-headset fs-1 text-dark mb-2"></i>
+      <h6 class="fw-bold">24/7 CUSTOMER SERVICE</h6>
+      <p class="text-muted">
+        Friendly 24/7 customer support
+      </p>
+    </div>
+    <!-- Feature 3 -->
+    <div class="col-md-4">
+      <i class="bi bi-shield-check fs-1 text-dark mb-2"></i>
+      <h6 class="fw-bold">MONEY BACK GUARANTEE</h6>
+      <p class="text-muted">
+        We return money within 30 days
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Bootstrap JS -->
+<div id = "footer"></div>
+<script src = "hfload.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
+</body>
+</html>

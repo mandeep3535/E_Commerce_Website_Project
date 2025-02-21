@@ -1,0 +1,52 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    color: gray;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+}
+
+.breadcrumb-item.active {
+    color: black;
+    font-weight: bold;
+}
+
+/* Order Summary */
+.order-summary {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Payment Option Styles */
+.form-check-label img {
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* Buttons */
+.btn-danger {
+    background-color: #c0392b;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #a93226;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .order-summary {
+        margin-top: 20px;
+    }
+}
