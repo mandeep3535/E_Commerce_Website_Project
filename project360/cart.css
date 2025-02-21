@@ -1,47 +1,46 @@
 /* General styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* Breadcrumb */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: " / ";
+}
+.breadcrumb-item.active {
+  color: #000;
+  font-weight: 600;
+}
+
+/* Cart Table */
+.cart-table th {
+  white-space: nowrap;
+}
+.cart-table td {
+  white-space: nowrap;
+}
+
+/* Cart Product Images */
+.cart-img {
+  width: 60px;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Buttons */
+.btn-danger {
+  background-color: #c0392b;
+  border: none;
+}
+.btn-danger:hover {
+  background-color: #a93226;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  /* Make the table scrollable horizontally on smaller screens */
+  .table-responsive {
+    margin-bottom: 1rem;
   }
-  
-  /* Breadcrumb */
-  .breadcrumb-item + .breadcrumb-item::before {
-    content: " / ";
-  }
-  .breadcrumb-item.active {
-    color: #000;
-    font-weight: 600;
-  }
-  
-  /* Cart Table */
-  .cart-table th {
-    white-space: nowrap;
-  }
-  .cart-table td {
-    white-space: nowrap;
-  }
-  
-  /* Cart Product Images */
-  .cart-img {
-    width: 60px;
-    height: auto;
-    border-radius: 4px;
-  }
-  
-  /* Buttons */
-  .btn-danger {
-    background-color: #c0392b;
-    border: none;
-  }
-  .btn-danger:hover {
-    background-color: #a93226;
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 992px) {
-    /* Make the table scrollable horizontally on smaller screens */
-    .table-responsive {
-      margin-bottom: 1rem;
-    }
-  }
-  
+}
