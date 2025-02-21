@@ -1,0 +1,32 @@
+html, body {
+    overflow-x: hidden;
+}
+
+/* Top Banner */
+.top-banner {
+    background: black;
+    color: white;
+    font-size: 14px;
+}
+
+.shop-now {
+    color: yellow;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Navbar */
+.navbar {
+    padding: 15px;
+}
+
+/* Login Section */
+.login-container {
+    padding: 50px 0;
+}
+
+.login-container img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
