@@ -131,3 +131,31 @@ const cart = JSON.parse(localStorage.getItem("cart")) || [];
 cart.push(product);
 localStorage.setItem("cart", JSON.stringify(cart));
 }
+
+//WishList Btn
+document.addEventListener("DOMContentLoaded", function () {
+    const wishlistBtn = document.getElementById("wishlistBtn");
+  
+    wishlistBtn.addEventListener("click", function () {
+      const product = {
+        // Grab these details dynamically from your product page
+        name: document.getElementById("productName").textContent,
+        price: parseFloat(document.getElementById("productPrice").innerText.replace("$", "")),
+        image: document.getElementById("mainProductImage").getAttribute("src")
+      };
+  
+      // Get existing wishlist or create a new array if none
+      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  
+      // Check if this product already exists in the wishlist
+      const existingProduct = wishlist.find(item => item.name === product.name);
+      if (!existingProduct) {
+        wishlist.push(product);
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        alert("Added to wishlist!");
+      } else {
+        alert("This product is already in the wishlist!");
+      }
+    });
+  });
+  
