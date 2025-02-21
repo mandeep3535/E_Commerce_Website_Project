@@ -1,38 +1,37 @@
 document.addEventListener("DOMContentLoaded", function () {
     let orderTableBody = document.getElementById("orderTableBody");
 
-    // Sample order data (This would usually come from a database)
     let orders = [
         {
-            orderId: "#ORD1023",
-            customer: "John Doe",
+            orderId: "1023",
+            customer: "AB",
             product: "iPhone 15",
             quantity: 1,
             totalPrice: 999.99,
             orderDate: "Feb 20, 2025",
-            deliveryAddress: "123 Main St, New York, NY",
+            deliveryAddress: "123 Main St, Kelowna",
             paymentMethod: "Credit Card",
             status: "Pending"
         },
         {
             orderId: "#ORD1024",
-            customer: "Jane Smith",
+            customer: "CD",
             product: "MacBook Pro",
             quantity: 1,
             totalPrice: 1999.99,
             orderDate: "Feb 19, 2025",
-            deliveryAddress: "456 Oak St, Los Angeles, CA",
+            deliveryAddress: "456 Oak St, Kelowna",
             paymentMethod: "PayPal",
             status: "Shipped"
         },
         {
             orderId: "#ORD1025",
-            customer: "Michael Scott",
+            customer: "DE",
             product: "Sony Headphones",
             quantity: 2,
             totalPrice: 299.99,
             orderDate: "Feb 18, 2025",
-            deliveryAddress: "1725 Scranton Rd, PA",
+            deliveryAddress: "1725 Scranton, Kelowna",
             paymentMethod: "Cash on Delivery",
             status: "Delivered"
         }
