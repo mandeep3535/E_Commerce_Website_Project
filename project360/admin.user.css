@@ -1,0 +1,28 @@
+/* Table styling */
+.table {
+    margin-top: 20px;
+  }
+  
+  /* Button spacing & sizing */
+  #editButton,
+  #saveButton {
+    min-width: 120px;
+  }
+  
+  /* Hide Save button by default (Bootstrap .d-none is also applied) */
+  #saveButton {
+    display: inline-block;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    .table {
+      font-size: 14px;
+    }
+  
+    .btn-sm {
+      font-size: 12px;
+      padding: 4px 6px;
+    }
+  }
+  
