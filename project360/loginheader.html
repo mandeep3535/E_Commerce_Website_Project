@@ -63,7 +63,10 @@
             <!-- Icons Section (Wishlist, Cart, Profile) -->
             <div class="d-none d-lg-flex align-items-center">
                 <a href="#" class="me-3"><i class="bi bi-heart fs-4"></i></a>
-                <a href="#" class="me-3"><i class="bi bi-cart fs-4"></i></a>
+                <a href="cart.html" class="me-3 position-relative">
+                    <i class="bi bi-cart fs-4"></i>
+                    <span id="cartCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
+                </a>
 
                 <!-- Desktop Profile Dropdown with Clickable Button -->
                 <div class="dropdown">
@@ -86,5 +89,37 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function updateCartCount() {
+     let cart = JSON.parse(localStorage.getItem("cart")) || [];
+     let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+     
+     let cartBadge = document.getElementById("cartCountBadge");
+     let cartBadgeMobile = document.getElementById("cartCountBadgeMobile");
+
+     if (totalQuantity > 0) {
+         cartBadge.innerText = totalQuantity;
+         cartBadge.style.display = "inline-block";
+         cartBadgeMobile.innerText = totalQuantity;
+         cartBadgeMobile.style.display = "inline-block";
+     } else {
+         cartBadge.style.display = "none";
+         cartBadgeMobile.style.display = "none";
+     }
+ }
+
+ // Ensure cart count updates when the page loads
+ document.addEventListener("DOMContentLoaded", function () {
+     updateCartCount();
+ });
+
+ // Listen for storage changes (Handles changes made in different tabs/windows)
+ window.addEventListener("storage", function () {
+     updateCartCount();
+ });
+
+ // Ensure cart count updates on page load
+
+</script>
 </body>
 </html>
