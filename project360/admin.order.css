@@ -1,0 +1,11 @@
+/* Basic table styling */
+.table {
+    margin-top: 20px;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .table {
+        font-size: 14px;
+    }
+}
