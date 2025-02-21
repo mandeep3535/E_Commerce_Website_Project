@@ -42,53 +42,23 @@
                 <th class="fw-semibold">Quantity</th>
                 <th class="fw-semibold">Subtotal</th>
               </tr>
-            </thead>
-            <tbody>
-              <!-- Row 1 -->
-              <tr>
-                <!-- Remove Icon -->
-                <td class="text-center">
-                  <i class="bi bi-x-circle text-danger fs-5 remove-item" role="button"></i>
-                </td>
-                <!-- Product -->
-                <td class="d-flex align-items-center">
-                  <img src="images/monitor.avif" alt="LCD Monitor" class="cart-img" />
-                  <span class="ms-2">LCD Monitor</span>
-                </td>
-                <!-- Price (Store base price as data attribute) -->
-                <td class="cart-price" data-price="650">$650</td>
-                <!-- Quantity -->
-                <td style="max-width: 80px;">
-                  <select class="form-select cart-quantity">
-                    <option selected>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-                <!-- Subtotal -->
-                <td class="cart-subtotal">$650</td>
-              </tr>
-
-              <!-- Row 2 -->
-              <tr>
-                <td class="text-center">
-                  <i class="bi bi-x-circle text-danger fs-5 remove-item" role="button"></i>
-                </td>
-                <td class="d-flex align-items-center">
-                  <img src="images/tablet.avif" alt="Tablet" class="cart-img" />
-                  <span class="ms-2">Tablet</span>
-                </td>
-                <td class="cart-price" data-price="550">$550</td>
-                <td style="max-width: 80px;">
-                  <select class="form-select cart-quantity">
-                    <option>1</option>
-                    <option selected>2</option>
-                    <option>3</option>
-                  </select>
-                </td>
-                <td class="cart-subtotal">$1100</td>
-              </tr>
-            </tbody>
+              <tbody id="cartBody">
+                <tr>
+                  <td><button class="btn btn-sm btn-outline-danger remove-item">&times;</button></td>
+                  <td>Sample Product</td>
+                  <td class="product-price">$50</td>
+                  <td>
+                    <select class="form-select quantity-select">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </td>
+                  <td class="subtotal">$50</td>
+                </tr>
+              </tbody>
           </table>
         </div>
 
@@ -150,113 +120,177 @@
 
   <!-- Main Cart Script -->
   <script>
-    // Flag to indicate if MONHALF coupon is active
     let couponUsed = false;
 
-    // Recalculate all subtotals and totals
+    // Combined cart update function
     function updateCart() {
-      const cartRows = document.querySelectorAll(".cart-table tbody tr");
-      let originalTotal = 0; // sum of all items BEFORE discount
+        const cartRows = document.querySelectorAll(".cart-table tbody tr");
+        let originalTotal = 0;
 
-      cartRows.forEach((row) => {
-        if (!row.isConnected) return; // skip removed rows
+        cartRows.forEach((row) => {
+            if (!row.isConnected) return;
 
-        // Get base price from data attribute
-        const priceCell = row.querySelector(".cart-price");
-        const basePrice = parseFloat(priceCell.dataset.price);
+            const priceCell = row.querySelector(".cart-price");
+            const basePrice = parseFloat(priceCell.dataset.price);
+            const quantitySelect = row.querySelector(".cart-quantity");
+            const quantity = parseInt(quantitySelect.value);
+            const rowSubtotal = basePrice * quantity;
 
-        // Get selected quantity
-        const quantitySelect = row.querySelector(".cart-quantity");
-        const quantity = parseInt(quantitySelect.value);
-
-        // Calculate row subtotal
-        const rowSubtotal = basePrice * quantity;
-
-        // Update row's displayed subtotal
-        const subtotalCell = row.querySelector(".cart-subtotal");
-        subtotalCell.textContent = "$" + rowSubtotal;
-
-        // Accumulate the total
-        originalTotal += rowSubtotal;
-      });
-
-      // If coupon is used, discount is half
-      let finalTotal = originalTotal;
-      if (couponUsed) {
-        finalTotal = originalTotal / 2;
-      }
-
-      // Update SUBTOTAL display
-      const cartSubtotalEl = document.getElementById("cartSubtotal");
-      if (couponUsed) {
-        // Show old (crossed out) and new
-        cartSubtotalEl.innerHTML =
-          `<span style="text-decoration: line-through; color:red;">` +
-          `$${originalTotal}` +
-          `</span> $${finalTotal}`;
-      } else {
-        // Normal display if no coupon
-        cartSubtotalEl.textContent = "$" + originalTotal;
-      }
-
-      // Update TOTAL display
-      const cartTotalEl = document.getElementById("cartTotal");
-      if (couponUsed) {
-        cartTotalEl.innerHTML =
-          `<span style="text-decoration: line-through; color:red;">` +
-          `$${originalTotal}` +
-          `</span> $${finalTotal}`;
-      } else {
-        cartTotalEl.textContent = "$" + originalTotal;
-      }
-    }
-
-    // Check and apply coupon
-    function applyCoupon() {
-      const couponInput = document
-        .getElementById("couponCodeInput")
-        .value.trim()
-        .toUpperCase();
-
-      if (couponInput === "MONHALF") {
-        couponUsed = true;
-        alert("Coupon MONHALF applied! Prices reduced by half.");
-      } else {
-        alert("Invalid coupon code!");
-      }
-      updateCart();
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      // Listen for quantity changes
-      const quantitySelects = document.querySelectorAll(".cart-quantity");
-      quantitySelects.forEach((select) => {
-        select.addEventListener("change", updateCart);
-      });
-
-      // Handle remove item click
-      const removeIcons = document.querySelectorAll(".remove-item");
-      removeIcons.forEach((icon) => {
-        icon.addEventListener("click", () => {
-          const row = icon.closest("tr");
-          row.remove();
-          updateCart();
+            row.querySelector(".cart-subtotal").textContent = "$" + rowSubtotal;
+            originalTotal += rowSubtotal;
         });
-      });
 
-      // Update cart on "Update Cart" button
-      const updateCartBtn = document.getElementById("updateCartBtn");
-      if (updateCartBtn) {
-        updateCartBtn.addEventListener("click", updateCart);
-      }
+        const finalTotal = couponUsed ? originalTotal / 2 : originalTotal;
+        const formatTotal = (amount) => `$$${amount.toFixed(2)}`;
 
-      // Apply coupon code
-      const applyCouponBtn = document.getElementById("applyCouponBtn");
-      applyCouponBtn.addEventListener("click", applyCoupon);
+        // Update displays
+        const cartSubtotalEl = document.getElementById("cartSubtotal");
+        const cartTotalEl = document.getElementById("cartTotal");
+        
+        if (couponUsed) {
+            const strikeThrough = (amount) => `<span style="text-decoration: line-through; color:red;">$$${amount.toFixed(2)}</span>`;
+            cartSubtotalEl.innerHTML = `${strikeThrough(originalTotal)} ${formatTotal(finalTotal)}`;
+            cartTotalEl.innerHTML = `${strikeThrough(originalTotal)} ${formatTotal(finalTotal)}`;
+        } else {
+            cartSubtotalEl.textContent = formatTotal(originalTotal);
+            cartTotalEl.textContent = formatTotal(originalTotal);
+        }
+    }
 
-      // Initial cart update
-      updateCart();
+    // Combined coupon handling
+    function applyCoupon() {
+        const couponInput = document.getElementById("couponCodeInput").value.trim().toUpperCase();
+        if (couponInput === "MONHALF") {
+            couponUsed = true;
+            alert("Coupon MONHALF applied! Prices reduced by half.");
+        } else {
+            alert("Invalid coupon code!");
+        }
+        updateCart();
+    }
+
+    // Unified cart count updater
+    function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    // Get both desktop and mobile badges
+    const badges = document.querySelectorAll("#cartCountBadge, #cartCountBadgeMobile");
+    
+    // If badges not found, retry after short delay
+    if (badges.length === 0) {
+        setTimeout(updateCartCount, 100);
+        return;
+    }
+
+    badges.forEach(badge => {
+        if (totalQuantity > 0) {
+            badge.textContent = totalQuantity;
+            badge.style.display = "inline-block";
+        } else {
+            badge.style.display = "none";
+        }
     });
-  </script>
+}
+
+    // Consolidated cart loader
+    function loadCart() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartBody = document.getElementById("cartBody");
+        cartBody.innerHTML = "";
+
+        if (cart.length === 0) {
+            cartBody.innerHTML = `<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>`;
+            updateCartCount();
+            return;
+        }
+
+        let totalPrice = 0;
+        cart.forEach((product, index) => {
+            const subtotal = product.price * product.quantity;
+            totalPrice += subtotal;
+
+            cartBody.innerHTML += `
+                <tr>
+                    <td class="text-center">
+                        <i class="bi bi-x-circle text-danger fs-5 remove-item" role="button" data-index="${index}"></i>
+                    </td>
+                    <td class="d-flex align-items-center">
+                        <img src="${product.image}" alt="${product.name}" class="cart-img" />
+                        <span class="ms-2">${product.name}</span>
+                    </td>
+                    <td class="cart-price" data-price="${product.price}">$${product.price}</td>
+                    <td style="max-width: 80px;">
+                        <select class="form-select cart-quantity" data-index="${index}">
+                            ${[1, 2, 3].map(q => `<option ${product.quantity === q ? "selected" : ""}>${q}</option>`).join('')}
+                            ${product.quantity > 3 ? `<option selected>${product.quantity}</option>` : ''}
+                        </select>
+                    </td>
+                    <td class="cart-subtotal">$${subtotal.toFixed(2)}</td>
+                </tr>`;
+        });
+
+        // Event listeners for dynamic elements
+        cartBody.querySelectorAll(".remove-item").forEach(button => {
+            button.addEventListener("click", removeItem);
+        });
+
+        cartBody.querySelectorAll(".cart-quantity").forEach(select => {
+            select.addEventListener("change", updateQuantity);
+        });
+
+        updateCart();
+        updateCartCount();
+    }
+
+    // Item management functions
+    function removeItem(event) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.splice(event.target.dataset.index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+    }
+
+    function updateQuantity(event) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const index = event.target.dataset.index;
+        cart[index].quantity = parseInt(event.target.value);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+    }
+
+    // Initial setup
+    document.addEventListener("DOMContentLoaded", () => {
+        // Static event listeners
+        document.getElementById("updateCartBtn")?.addEventListener("click", updateCart);
+        document.getElementById("applyCouponBtn").addEventListener("click", applyCoupon);
+        document.getElementById("buyNowBtn")?.addEventListener("click", addToCart);
+
+        // Initial load
+        loadCart();
+    });
+
+    // Simplified add to cart function
+    function addToCart() {
+        const product = {
+            name: "Havic HV G-92 Gamepad",
+            price: parseFloat(document.getElementById("productPrice").textContent.replace("$", "")), 
+            quantity: parseInt(document.getElementById("quantityInput").value),
+            image: "havit.jpg"
+        };
+
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existingProduct = cart.find(item => item.name === product.name);
+
+        if (existingProduct) {
+            existingProduct.quantity += product.quantity;
+        } else {
+            cart.push(product);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+    }
+</script>
 </body>
 </html>
