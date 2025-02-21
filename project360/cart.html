@@ -141,7 +141,7 @@
         });
 
         const finalTotal = couponUsed ? originalTotal / 2 : originalTotal;
-        const formatTotal = (amount) => `$$${amount.toFixed(2)}`;
+        const formatTotal = (amount) => `$${amount.toFixed(2)}`;
 
         // Update displays
         const cartSubtotalEl = document.getElementById("cartSubtotal");
@@ -217,7 +217,7 @@
                     </td>
                     <td class="d-flex align-items-center">
                         <img src="${product.image}" alt="${product.name}" class="cart-img" />
-                        <span class="ms-2">${product.name}</span>
+                             <span class="ms-2">${product.name}</span>
                     </td>
                     <td class="cart-price" data-price="${product.price}">$${product.price}</td>
                     <td style="max-width: 80px;">
@@ -272,25 +272,28 @@
 
     // Simplified add to cart function
     function addToCart() {
-        const product = {
-            name: "Havic HV G-92 Gamepad",
-            price: parseFloat(document.getElementById("productPrice").textContent.replace("$", "")), 
-            quantity: parseInt(document.getElementById("quantityInput").value),
-            image: "havit.jpg"
-        };
+      const productImage = document.getElementById("mainProductImage");
+      const relativeImagePath = productImage.getAttribute('src');
+      
+      const product = {
+        name: document.getElementById("productName").textContent, // Get from HTML element
+        price: parseFloat(document.getElementById("productPrice").textContent.replace("$", "")), 
+        quantity: parseInt(document.getElementById("quantityInput").value),
+        image:  relativeImagePath // Updated ID
+    };
 
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        const existingProduct = cart.find(item => item.name === product.name);
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProduct = cart.find(item => item.name === product.name);
 
-        if (existingProduct) {
-            existingProduct.quantity += product.quantity;
-        } else {
-            cart.push(product);
-        }
-
-        localStorage.setItem("cart", JSON.stringify(cart));
-        updateCartCount();
+    if (existingProduct) {
+        existingProduct.quantity += product.quantity;
+    } else {
+        cart.push(product);
     }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+}
 </script>
 </body>
 </html>

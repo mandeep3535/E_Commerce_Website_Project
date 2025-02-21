@@ -1,12 +1,41 @@
 /* Basic spacing for thumbnails */
 .thumb-card {
-    cursor: pointer;
-    transition: 0.2s;
-  }
+  cursor: pointer;
+  transition: 0.2s;
+  width: 100%;
+  max-width: 100px;
+  text-align: center;
+}
+
+.thumb-card img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.thumb-card:hover img {
+    opacity: 1;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.thumb-card.active {
+    border: 2px solid red;
+    opacity: 1;
+}
   .thumb-card:hover {
     box-shadow: 0 0 5px rgba(0,0,0,0.15);
   }
   
+  @media (min-width: 768px) {
+    .thumb-card {
+        max-width: 120px;
+    }
+    .thumb-card img {
+        height: 100px;
+    }
+}
+
+
   /* Main product image styling */
   .main-product-img {
     max-height: 350px;
