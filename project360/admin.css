@@ -1,0 +1,48 @@
+/* Navbar Fix */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Profile image */
+.navbar-nav .dropdown img {
+    border: 2px solid white;
+}
+
+/* Fix Profile Dropdown Overlap on Mobile */
+@media (max-width: 992px) {
+    .navbar {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .navbar-collapse {
+        background-color: #343a40;
+        padding: 10px;
+    }
+
+    /* Move profile below navbar in mobile */
+    .profile-dropdown {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    /* Center profile dropdown properly */
+    .profile-dropdown .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Align dropdown on mobile */
+    .navbar-nav .dropdown-menu {
+        width: 200px;
+        position: absolute !important;
+        margin-top: 10px;
+        right: 50% !important;
+        transform: translateX(50%);
+        text-align: left;
+    }
+}

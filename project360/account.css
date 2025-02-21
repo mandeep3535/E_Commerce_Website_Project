@@ -1,0 +1,55 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Breadcrumb */
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+}
+
+.breadcrumb-item.active {
+    color: black;
+}
+
+/* Sidebar Links */
+.list-unstyled li {
+    margin-bottom: 8px;
+}
+
+.list-unstyled a {
+    text-decoration: none;
+    color: black;
+}
+
+.list-unstyled a:hover {
+    color: #dc3545;
+}
+
+.active-link {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 8px;
+    border: none;
+}
+
+/* Buttons */
+.btn-danger {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+.btn-danger:hover {
+    background-color: #a93226;
+}
+
+.btn-light {
+    color: black;
+    border: 1px solid #ccc;
+}

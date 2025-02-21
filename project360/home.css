@@ -1,0 +1,101 @@
+/********************************
+  General Styles
+********************************/
+body {
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Category Label (the red bar next to heading) */
+  .category-label {
+    width: 4px;
+    height: 25px;
+    border-radius: 2px;
+  }
+  
+  /********************************
+    Sidebar
+  ********************************/
+  .list-group-item {
+    cursor: pointer;
+    border: none;
+  }
+  .list-group-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /********************************
+    Carousel
+  ********************************/
+  .carousel-inner img {
+    height: auto;
+    object-fit: fill;
+    border-radius: 0 !important;
+    padding: 1px;
+  }
+  
+  /********************************
+    Category Cards
+  ********************************/
+  .cat-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.2s;
+    background-color: #fff;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cat-card:hover {
+    background-color: #f5f5f5;
+  }
+  .active-cat {
+    background-color: #c0392b;
+    color: #fff;
+    border-color: #c0392b;
+  }
+  
+  /********************************
+    Product Cards
+  ********************************/
+  .product-card {
+    position: relative;
+    border-radius: 8px;
+    min-height: 270px;
+  }
+  .product-icons {
+    color: #333;
+  }
+  .product-icons .bi:hover {
+    color: #dc3545; /* red hover */
+  }
+  
+  /********************************
+    Dark Banner (Music Experience)
+  ********************************/
+  .banner-dark {
+    background-color: #000; /* black background */
+    color: #fff;
+    overflow: hidden;
+  }
+  
+  /********************************
+    Features Section
+  ********************************/
+  .bi {
+    color: #c0392b;
+  }
+  .bi:hover {
+    color: #a93226;
+  }
+  
+  
+  #footer{
+    padding: 0px !important; 
+  }
+
+html, body {
+  height: 100%;
+}
+
