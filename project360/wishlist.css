@@ -1,0 +1,68 @@
+/* Basic reset for container spacing */
+.container {
+    max-width: 1200px;
+  }
+  
+  /* Product Card */
+  .product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+  
+  /* Product Image */
+  .product-img {
+    width: auto;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  /* Badges (Discount / New) */
+  .discount-badge,
+  .new-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: red;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 3px;
+    padding: 2px 6px;
+  }
+  
+  .new-badge {
+    background-color: green;
+  }
+  
+  /* Icon Button (Trash / Eye) */
+  .icon-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: none;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    color: red;
+  }
+  
+  /* Star Rating */
+  .star-rating .bi-star-fill {
+    color: #fec600; /* Gold color */
+    margin-right: 2px;
+    font-size: 14px;
+  }
+  
+  /* Headings & text tweaks */
+  h5 {
+    font-size: 1.1rem;
+  }
+  
+  .product-card p {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+  

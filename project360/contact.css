@@ -1,0 +1,93 @@
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    color: gray;
+}
+
+.breadcrumb-item a {
+    text-decoration: none;
+    color: gray;
+}
+
+.breadcrumb-item.active {
+    color: black;
+    font-weight: bold;
+}
+
+/* Contact Box */
+.contact-box {
+    background: white;
+    border: 1px solid #eee;
+    padding: 15px;
+}
+
+/* Contact Icons */
+.contact-icon {
+    font-size: 24px;
+    color: red;
+}
+
+/* Contact Form */
+.contact-form {
+    background: white;
+    border: 1px solid #eee;
+    padding: 20px;
+}
+
+/* Email & Phone Fix - Ensures text never overflows */
+.contact-box p {
+    word-wrap: break-word; /* ✅ Forces text to wrap */
+    overflow-wrap: break-word;
+    white-space: normal; /* ✅ Allows text to properly wrap */
+}
+
+/* Input Fields - Fix Overflow Issue */
+.form-input {
+    background: #f8f9fa;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    width: 100%; /* ✅ Ensures full width */
+    min-width: unset; /* ✅ Removes forced width issue */
+}
+
+/* Textarea */
+.form-textarea {
+    background: #f8f9fa;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    width: 100%;
+    min-width: unset;
+}
+
+/* Button */
+.btn-danger {
+    background-color: red;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}
+
+/* Links */
+a.text-danger {
+    font-weight: bold;
+    display: inline-block; /* ✅ Ensures email stays inside the box */
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Ensure form inputs are properly aligned */
+@media (max-width: 768px) {
+    .form-input, .form-textarea {
+        width: 100%;
+    }
+
+    /* Fix email breaking issue */
+    .contact-box p {
+        word-break: break-word; /* ✅ Fixes long emails */
+    }
+}

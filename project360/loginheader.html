@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MV Electronics - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+<header>
+    <!-- Top Banner -->
+    <div class="top-banner text-center py-2">
+        Back to School deals up to <strong>50% OFF</strong> and Free Express Delivery! 
+        <a href="#" class="shop-now">Shop Now</a>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold" href="#">
+                <img src="images/logo1.png" alt="MV Electronics" width="135">
+            </a>
+            <a href="#" class="d-flex d-lg-none"><i class="bi bi-cart fs-4"></i></a>
+            <a href="#" class="d-flex d-lg-none"><i class="bi bi-heart fs-4"></i></a>
+
+            <!-- Mobile Profile Icon with Clickable Dropdown -->
+            <div class="dropdown d-flex d-lg-none">
+                <button class="btn border-0" id="mobileProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person fs-4"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileProfileDropdown">
+                    <li><a class="dropdown-item" href="#">Manage My Account</a></li>
+                    <li><a class="dropdown-item" href="#">Cart</a></li>
+                    <li><a class="dropdown-item" href="#">Wishlist</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                </ul>
+            </div>
+
+            <!-- Search Bar -->
+            <form class="d-flex mx-auto" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search">
+                <button class="btn btn-outline-dark" type="submit">Search</button>
+            </form>
+
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse text-center" id="navbarNav">
+                <ul class="navbar-nav ms-auto me-5">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                </ul>
+            </div>
+
+            <!-- Icons Section (Wishlist, Cart, Profile) -->
+            <div class="d-none d-lg-flex align-items-center">
+                <a href="#" class="me-3"><i class="bi bi-heart fs-4"></i></a>
+                <a href="#" class="me-3"><i class="bi bi-cart fs-4"></i></a>
+
+                <!-- Desktop Profile Dropdown with Clickable Button -->
+                <div class="dropdown">
+                    <button class="btn border-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person fs-4"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="#">Manage My Account</a></li>
+                        <li><a class="dropdown-item" href="#"> Cart </a></li>
+                        <li><a class="dropdown-item" href="#">Wishlist</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+</header>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

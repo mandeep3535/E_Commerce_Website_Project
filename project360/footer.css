@@ -1,0 +1,81 @@
+footer {
+    margin-top: 50px;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+footer .row {
+    width: 100%;
+}
+
+footer .col-md-3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+footer figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer img {
+    max-width: 150px; /* Adjust based on logo size */
+    height: auto;
+}
+
+footer h5 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+footer ul {
+    padding: 0;
+}
+
+footer ul li {
+    margin-bottom: 5px;
+}
+#email a,#phone a{
+    text-decoration: none !important;
+    color: white !important;
+}
+footer {
+    width: 100vw;  /* Ensures full viewport width */
+    margin: 0;
+    padding: 0;
+}
+
+footer .container-fluid {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+footer .row {
+    margin: 0;
+    width: 100%;
+}
+
+footer .col-md-3 {
+    text-align: center;
+    padding: 10px; /* Adjust as needed */
+}
