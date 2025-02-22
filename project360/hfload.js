@@ -5,5 +5,10 @@ fetch("footer.html")
 .then(response => response.text())
 .then(data => document.getElementById("footer").innerHTML = data);
 fetch("loginheader.html")
-.then(response => response.text())
-.then(data => document.getElementById("loginheader").innerHTML = data);
+  .then(response => response.text())
+  .then(html => {
+    document.getElementById("loginheader").innerHTML = html;
+    // Now that the navbar is inserted, call the badge updates
+    updateCartCount();
+    updateWishlistCount();
+  });

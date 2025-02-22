@@ -132,6 +132,43 @@ cart.push(product);
 localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+/* Update Wishlist count */
+function updateWishlistCount() {
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    let totalItems = wishlist.length;
+  
+    // Desktop badge
+    let wishlistBadgeDesktop = document.getElementById("wishlistCountBadge");
+    // Mobile badge (if you have one)
+    let wishlistBadgeMobile = document.getElementById("wishlistCountBadgeMobile");
+  
+    if (wishlistBadgeDesktop) {
+      if (totalItems > 0) {
+        wishlistBadgeDesktop.innerText = totalItems;
+        wishlistBadgeDesktop.style.display = "inline-block";
+      } else {
+        wishlistBadgeDesktop.style.display = "none";
+      }
+    } else {
+      // Retry if the badge wasn't found (some pages load the header later)
+      setTimeout(updateWishlistCount, 500);
+    }
+  
+    if (wishlistBadgeMobile) {
+      if (totalItems > 0) {
+        wishlistBadgeMobile.innerText = totalItems;
+        wishlistBadgeMobile.style.display = "inline-block";
+      } else {
+        wishlistBadgeMobile.style.display = "none";
+      }
+    }
+  }
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    updateWishlistCount();
+  });
+  
+
 //WishList Btn
 document.addEventListener("DOMContentLoaded", function () {
     const wishlistBtn = document.getElementById("wishlistBtn");
@@ -152,10 +189,29 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!existingProduct) {
         wishlist.push(product);
         localStorage.setItem("wishlist", JSON.stringify(wishlist));
-        alert("Added to wishlist!");
+  
+       // Update the wishlist count right after adding
+      updateWishlistCount();
+
+        //  Show success modal
+        const wishlistModal = new bootstrap.Modal(document.getElementById('wishlistModal'));
+        const wishlistModalBody = document.getElementById('wishlistModalBody');
+        wishlistModalBody.textContent = `${product.name} has been added to your wishlist!`;
+        
+        wishlistModal.show();
       } else {
-        alert("This product is already in the wishlist!");
+        // Show "already in wishlist" modal
+        const wishlistModal = new bootstrap.Modal(document.getElementById('wishlistModal'));
+        const wishlistModalBody = document.getElementById('wishlistModalBody');
+        wishlistModalBody.textContent = `${product.name} is already in your wishlist!`;
+        
+        wishlistModal.show();
       }
     });
+  });
+  
+  window.addEventListener("storage", function () {
+    updateCartCount();
+    updateWishlistCount();
   });
   

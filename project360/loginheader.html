@@ -23,8 +23,8 @@
             <a class="navbar-brand fw-bold" href="#">
                 <img src="images/logo1.png" alt="MV Electronics" width="135">
             </a>
-            <a href="#" class="d-flex d-lg-none"><i class="bi bi-cart fs-4"></i></a>
-            <a href="#" class="d-flex d-lg-none"><i class="bi bi-heart fs-4"></i></a>
+            <a href="cart.html" class="d-flex d-lg-none"><i class="bi bi-cart fs-4"></i></a>
+            <a href="" class="d-flex d-lg-none"><i class="bi bi-heart fs-4"></i></a>
 
             <!-- Mobile Profile Icon with Clickable Dropdown -->
             <div class="dropdown d-flex d-lg-none">
@@ -62,7 +62,24 @@
 
             <!-- Icons Section (Wishlist, Cart, Profile) -->
             <div class="d-none d-lg-flex align-items-center">
-                <a href="#" class="me-3"><i class="bi bi-heart fs-4"></i></a>
+                <a href="wishlist.html" class="me-3 position-relative">
+                    <i class="bi bi-heart fs-4"></i>
+                    <span 
+                      id="wishlistCountBadge" 
+                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                      style="display:none;"
+                    >0</span>
+                </a>
+
+                <!-- Mobile Wishlist Icon -->
+<a href="wishlist.html" class="d-flex d-lg-none position-relative me-2">
+    <i class="bi bi-heart fs-4"></i>
+    <span 
+      id="wishlistCountBadgeMobile"
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+      style="display:none;"
+    >0</span>
+  </a>
                 <a href="cart.html" class="me-3 position-relative">
                     <i class="bi bi-cart fs-4"></i>
                     <span id="cartCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
@@ -83,43 +100,15 @@
                 </div>
             </div>
 
+
+
+
         </div>
     </nav>
 </header>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    function updateCartCount() {
-     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-     let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-     
-     let cartBadge = document.getElementById("cartCountBadge");
-     let cartBadgeMobile = document.getElementById("cartCountBadgeMobile");
-
-     if (totalQuantity > 0) {
-         cartBadge.innerText = totalQuantity;
-         cartBadge.style.display = "inline-block";
-         cartBadgeMobile.innerText = totalQuantity;
-         cartBadgeMobile.style.display = "inline-block";
-     } else {
-         cartBadge.style.display = "none";
-         cartBadgeMobile.style.display = "none";
-     }
- }
-
- // Ensure cart count updates when the page loads
- document.addEventListener("DOMContentLoaded", function () {
-     updateCartCount();
- });
-
- // Listen for storage changes (Handles changes made in different tabs/windows)
- window.addEventListener("storage", function () {
-     updateCartCount();
- });
-
- // Ensure cart count updates on page load
-
-</script>
+<script src = "loginheader.js"></script>
 </body>
 </html>

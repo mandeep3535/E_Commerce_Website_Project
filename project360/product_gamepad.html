@@ -111,7 +111,7 @@
 </div> <!-- END MAIN CONTAINER -->
 
 
-<!-- Add this toast container at the bottom of the body -->
+<!-- Added to cart modal -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header bg-success text-white">
@@ -141,6 +141,33 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
           <a href="cart.html" class="btn btn-danger">Go to Cart</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wishlist Modal -->
+<div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="wishlistModalLabel">Wishlist Update</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body" id="wishlistModalBody">
+          <!-- We'll inject our success message here via JS -->
+        </div>
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
