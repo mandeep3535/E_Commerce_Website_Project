@@ -38,9 +38,9 @@ function updateCart() {
 // Combined coupon handling
 function applyCoupon() {
     const couponInput = document.getElementById("couponCodeInput").value.trim().toUpperCase();
-    if (couponInput === "MONHALF") {
+    if (couponInput === "MV50") {
         couponUsed = true;
-        alert("Coupon MONHALF applied! Prices reduced by half.");
+        alert("Coupon MV50 applied! Prices reduced by half.");
     } else {
         alert("Invalid coupon code!");
     }

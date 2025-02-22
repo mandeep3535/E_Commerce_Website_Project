@@ -53,24 +53,31 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function updateCartCount() {
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let totalQuantity = cart.reduce((sum, item) => sum + (item.quantity || 1), 0); // Ensure quantity exists
 
-// Wait for the cart badge to exist before updating it
-let cartBadge = document.getElementById("cartCountBadge");
+    let cartBadge = document.getElementById("cartCountBadge");
+    let cartBadgeMobile = document.getElementById("cartCountBadgeMobile");
 
-if (cartBadge) { // Ensure the cart badge exists
     if (totalQuantity > 0) {
-        cartBadge.innerText = totalQuantity;
-        cartBadge.style.display = "inline-block"; // Show the badge
+        if (cartBadge) {
+            cartBadge.innerText = totalQuantity;
+            cartBadge.style.display = "inline-block";
+        }
+        if (cartBadgeMobile) {
+            cartBadgeMobile.innerText = totalQuantity;
+            cartBadgeMobile.style.display = "inline-block";
+        }
     } else {
-        cartBadge.style.display = "none"; // Hide badge when cart is empty
+        if (cartBadge) cartBadge.style.display = "none";
+        if (cartBadgeMobile) cartBadgeMobile.style.display = "none";
     }
-} else {
-    // Retry updating the cart count after a slight delay (if the cart icon isn't available immediately)
-    setTimeout(updateCartCount, 500);
 }
-}
+
+// Ensure cart count updates when the page loads
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(updateCartCount, 500); // 🔥 Delay in case elements are loaded later
+});
 
 // Ensure cart count updates correctly when the page loads
 document.addEventListener("DOMContentLoaded", function () {
