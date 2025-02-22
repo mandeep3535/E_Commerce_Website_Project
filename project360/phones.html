@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Products</title>
+  <!-- Ensure proper mobile rendering -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  />
+
+  <!-- Bootstrap Icons (for heart, star, etc.) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="phones.css" />
+</head>
+<body>
+  <div id = "header"></div>
+  <div class="container my-4">
+    <!-- Products Section -->
+    <div class="products-section border rounded p-3">
+      <h5 class="fw-bold mb-4">Our Products</h5>
+
+      <!-- Row of Product Cards -->
+      <!-- 1 column on XS screens, 2 on SM, 4 on MD+ -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="productRow" >
+
+        <!-- Example Product 1 (with discount badge) -->
+        <div class="col">
+          <div class="product-card p-3 d-flex flex-column position-relative h-100">
+
+            <!-- Heart Icon (no border, small, top-right) -->
+            <button class="icon-btn wishlist-icon" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+
+            <!-- Product Image -->
+            <div class="text-center mb-2">
+              <img
+                src="images/samsungs24.jpg"
+                alt="samsungs24"
+                class="img-fluid product-img"
+              />
+            </div>
+            <!-- Add To Cart Button -->
+            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <!-- Product Info -->
+            <p class="mb-0 fw-semibold">Samsung S24</p>
+            <p class="text-danger mb-1">
+              $960
+              <span class="text-muted text-decoration-line-through ms-1">$1160</span>
+            </p>
+            <!-- Star Rating -->
+            <div class="star-rating">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <span class="text-muted">(65)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Example Product 2 (no badge) -->
+        <div class="col">
+          <div class="product-card p-3 d-flex flex-column position-relative h-100">
+            <!-- Heart Icon -->
+            <button class="icon-btn wishlist-icon" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="text-center mb-2">
+              <img
+                src="images/iphone12.jpg"
+                alt="Iphone 12"
+                class="img-fluid product-img"
+              />
+            </div>
+            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <p class="mb-0 fw-semibold">Iphone 12</p>
+            <p class="text-danger mb-1">$1160</p>
+            <div class="star-rating">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <span class="text-muted">(65)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Example Product 3 (NEW badge) -->
+        <div class="col">
+          <div class="product-card p-3 d-flex flex-column position-relative h-100">
+            <!-- Heart Icon -->
+            <button class="icon-btn wishlist-icon" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="text-center mb-2">
+              <img
+                src="images/iPhone_16_Pro_Max.avif"
+                alt="Iphone 16 Pro Max"
+                class="img-fluid product-img"
+              />
+            </div>
+            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <p class="mb-0 fw-semibold">iPhone 16 Pro Max</p>
+            <p class="text-danger mb-1">$560</p>
+            <div class="star-rating">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <span class="text-muted">(65)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Example Product 4 (no badge) -->
+        <div class="col">
+          <div class="product-card p-3 d-flex flex-column position-relative h-100">
+            <!-- Heart Icon -->
+            <button class="icon-btn wishlist-icon" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="text-center mb-2">
+              <img
+                src="images/google pixel 9.webp"
+                alt="Google Pixel 9"
+                class="img-fluid product-img"
+              />
+            </div>
+            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <p class="mb-0 fw-semibold">Google Pixel 9</p>
+            <p class="text-danger mb-1">$800</p>
+            <div class="star-rating">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <span class="text-muted">(65)</span>
+            </div>
+          </div>
+        </div>
+        <!-- Example Product 4 (no badge) -->
+        <div class="col">
+          <div class="product-card p-3 d-flex flex-column position-relative h-100">
+            <!-- Heart Icon -->
+            <button class="icon-btn wishlist-icon" title="Add to Wishlist">
+              <i class="bi bi-heart"></i>
+            </button>
+            <div class="text-center mb-2">
+              <img
+                src="images/huawei global.png"
+                alt="Huawei Global"
+                class="img-fluid product-img"
+              />
+            </div>
+            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <p class="mb-0 fw-semibold">Huawei Global</p>
+            <p class="text-danger mb-1">$400</p>
+            <div class="star-rating">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <span class="text-muted">(65)</span>
+            </div>
+          </div>
+        </div>
+      </div><!-- row -->
+      
+    </div><!-- products-section -->
+  </div><!-- container -->
+
+  <!-- Bootstrap Bundle (includes Popper) -->
+  <div id = "footer"></div>
+  <script src = "hfload.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+    <script src="phones.js"></script>
+</body>
+</html>

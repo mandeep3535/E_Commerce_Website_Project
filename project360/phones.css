@@ -1,0 +1,76 @@
+/* Main container styling for products */
+.products-section {
+    background-color: #fff;
+  }
+  
+  /* Product card styling */
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    position: relative;
+    transition: box-shadow 0.2s ease;
+    background-color: #fff;
+  }
+  
+  .product-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Product images - standardized height */
+  .product-img {
+    max-height: 150px;
+    object-fit: contain;
+  }
+  
+  /* Discount or NEW badge (optional) */
+  .discount-badge,
+  .new-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .discount-badge {
+    background-color: #dc3545; /* Red discount */
+  }
+  .new-badge {
+    background-color: #198754; /* Green new */
+  }
+  
+  /* Star rating color */
+  .star-rating i {
+    color: #f1c40f; /* Gold stars */
+    margin-right: 2px;
+  }
+  
+  /* Heart icon (wishlist icon), no border, no background */
+  .icon-btn.wishlist-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #666; /* Default color */
+  }
+  .icon-btn.wishlist-icon:hover {
+    color: #dc3545; /* Turn red on hover */
+  }
+
+  /* Optional: remove focus outlines */
+  .icon-btn.wishlist-icon:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  /* Smaller screen tweaks */
+  @media (max-width: 576px) {
+    .product-img {
+      max-height: 130px;
+    }
+  }
+  
