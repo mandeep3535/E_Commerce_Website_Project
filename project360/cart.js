@@ -33,6 +33,8 @@ function updateCart() {
         cartSubtotalEl.textContent = formatTotal(originalTotal);
         cartTotalEl.textContent = formatTotal(originalTotal);
     }
+ // Save the subtotal in localStorage for the checkout page
+    localStorage.setItem("cartSubtotal", originalTotal);
 }
 
 // Combined coupon handling
