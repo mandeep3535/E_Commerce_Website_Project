@@ -3,22 +3,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const orderSubtotalElem = document.getElementById("orderSubtotal");
     const orderTotalElem = document.getElementById("orderTotal");
     const shippingElem = document.getElementById("shippingCost");
-
-    // Get coupon input and button elements
+  
+    // Get coupon input, button, and message elements
     const couponInput = document.getElementById("couponInput");
     const applyCouponBtn = document.getElementById("applyCoupon");
-
+    const couponMessageEl = document.getElementById("couponMessage");
+  
     // Retrieve the cart data from localStorage (or use an empty array)
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
+  
     // Global flag to indicate if coupon discount has been applied
     let couponApplied = false;
-
+  
+    // Check if a coupon code was previously applied
+    const storedCoupon = localStorage.getItem("appliedCoupon");
+    if (storedCoupon && storedCoupon.toUpperCase() === "MV50") {
+      couponApplied = true;
+      // Pre-fill the coupon input with the applied coupon code
+      couponInput.value = storedCoupon;
+      couponMessageEl.textContent =  ` Coupon code ${storedCoupon} is applied.`;
+      couponMessageEl.classList.remove("text-danger");
+      couponMessageEl.classList.add("text-success");
+      applyCouponBtn.textContent = "Remove Coupon";
+    }else {
+        couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
+        couponMessageEl.classList.remove("text-success");
+        couponMessageEl.classList.add("text-danger");
+        applyCouponBtn.textContent = "Apply Coupon";
+      }
+  
     // Function to render order summary based on provided pricing callback
     const renderOrder = (pricingCallback) => {
       let subtotal = 0;
       let orderItemsHtml = "";
-
+  
       if (cart.length === 0) {
         orderItemsHtml = "<p>Your cart is empty.</p>";
       } else {
@@ -27,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const discountedPrice = pricingCallback(item.price);
           const itemSubtotal = discountedPrice * item.quantity;
           subtotal += itemSubtotal;
-
+  
           // If coupon applied, show original price struck out and new price
           if (couponApplied) {
             orderItemsHtml += `
@@ -55,10 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       }
-
+  
       orderContainer.innerHTML = orderItemsHtml;
       orderSubtotalElem.textContent = "$" + subtotal.toFixed(2);
-
+  
       // Shipping logic: if subtotal is less than $500 and greater than 0, shipping is $15; otherwise, free.
       let shipping = 0;
       if (subtotal > 0 && subtotal < 500) {
@@ -67,25 +85,52 @@ document.addEventListener("DOMContentLoaded", () => {
       shippingElem.textContent = shipping === 0 ? "Free" : "$" + shipping.toFixed(2);
       orderTotalElem.textContent = "$" + (subtotal + shipping).toFixed(2);
     };
-
-    // Initial render without coupon discount
-    renderOrder(price => price);
-
+  
+    // Initial render using discount callback if coupon is applied
+    if (couponApplied) {
+      renderOrder(price => price / 2);
+    } else {
+      renderOrder(price => price);
+    }
+  
     // Coupon logic: If the coupon code is "MV50", alert, apply discount, and update rendering.
     applyCouponBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      if (couponApplied) {
-        alert("Coupon already applied.");
-        return;
-      }
-      const couponCode = couponInput.value.trim();
-      if (couponCode.toUpperCase() === "MV50") {
-        alert("Coupon MV50 applied! Prices reduced by half.");
-        couponApplied = true;
-        // Re-render order with prices reduced by half
-        renderOrder(price => price / 2);
-      } else {
-        alert("Invalid coupon code");
-      }
-    });
+        e.preventDefault();
+        // If coupon already applied, remove it.
+        if (couponApplied) {
+          couponApplied = false;
+          localStorage.removeItem("appliedCoupon");
+          couponInput.value = "";
+          couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
+          couponMessageEl.classList.remove("text-success");
+          couponMessageEl.classList.add("text-danger");
+          applyCouponBtn.textContent = "Apply Coupon";
+          renderOrder(price => price); // no discount
+          return;
+        }
+        
+        const couponCode = couponInput.value.trim();
+        if (couponCode.toUpperCase() === "MV50") {
+          couponApplied = true;
+          localStorage.setItem("appliedCoupon", couponCode.toUpperCase());
+          couponInput.value = couponCode.toUpperCase();
+          couponMessageEl.textContent = `Coupon code ${couponCode.toUpperCase()} is applied.`;
+          couponMessageEl.classList.remove("text-danger");
+          couponMessageEl.classList.add("text-success");
+          applyCouponBtn.textContent = "Remove Coupon";
+          alert("Coupon MV50 applied! Prices reduced by half.");
+          renderOrder(price => price / 2);
+        } else {
+          couponApplied = false;
+          localStorage.removeItem("appliedCoupon");
+          couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
+          couponMessageEl.classList.remove("text-success");
+          couponMessageEl.classList.add("text-danger");
+          applyCouponBtn.textContent = "Apply Coupon";
+          alert("Invalid coupon code");
+          renderOrder(price => price);
+        }
+      });
+      
   });
+  
