@@ -1,47 +1,58 @@
-document.getElementById("addProductForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("addProductForm");
+    const productTableBody = document.getElementById("productTableBody");
 
-    // Get form values
-    let productName = document.getElementById("productName").value;
-    let productID = document.getElementById("productID").value;
-    let productPrice = document.getElementById("productPrice").value;
-    let productStock = document.getElementById("productStock").value;
-    let productColor = document.getElementById("productColor").value;
-    let productCategory = document.getElementById("productCategory").value;
-    let productImage = document.getElementById("productImage").files[0];
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent page refresh
 
-    // Validate that an image is selected
-    if (!productImage) {
-        alert("Please select a product image.");
-        return;
-    }
+        // Get form values
+        const name = document.getElementById("productName").value;
+        const id = document.getElementById("productID").value;
+        const price = document.getElementById("productPrice").value;
+        const stock = document.getElementById("productStock").value;
+        const color = document.getElementById("productColor").value;
+        const category = document.getElementById("productCategory").value;
+        const images = document.getElementById("productImages").files;
 
-    // Create an object URL for the image preview
-    let imageURL = URL.createObjectURL(productImage);
+        if (images.length > 3) {
+            alert("You can only upload up to 3 images.");
+            return;
+        }
 
-    // Create a new row in the table
-    let tableBody = document.getElementById("productTableBody");
-    let newRow = document.createElement("tr");
-    newRow.innerHTML = `
-        <td><img src="${imageURL}" width="50" height="50" class="rounded"></td>
-        <td>${productID}</td>
-        <td>${productName}</td>
-        <td>${productCategory}</td>
-        <td>${productStock}</td>
-        <td>$${productPrice}</td>
-        <td>${productColor}</td>
-        <td>
-            <button class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteProduct(this)"><i class="bi bi-trash"></i> Delete</button>
-        </td>
-    `;
-    tableBody.appendChild(newRow);
+        // Create table row
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${images.length > 0 ? images[0].name : "No Image"}</td>
+            <td>${id}</td>
+            <td>${name}</td>
+            <td>${category}</td>
+            <td>${stock}</td>
+            <td>$${price}</td>
+            <td>${color}</td>
+            <td>
+                <button class="btn btn-sm btn-success toggle-btn">Publish</button>
+            </td>
+        `;
 
-    // Reset form fields
-    document.getElementById("addProductForm").reset();
+        // Add row to table
+        productTableBody.appendChild(row);
+
+        // Add event listener to the toggle button
+        row.querySelector(".toggle-btn").addEventListener("click", function () {
+            if (this.textContent === "Publish") {
+                this.textContent = "Unpublish";
+                this.classList.remove("btn-success");
+                this.classList.add("btn-danger");
+                row.classList.add("table-secondary"); // Fades the row (optional)
+            } else {
+                this.textContent = "Publish";
+                this.classList.remove("btn-danger");
+                this.classList.add("btn-success");
+                row.classList.remove("table-secondary"); // Removes fade (optional)
+            }
+        });
+
+        // Clear form after adding
+        form.reset();
+    });
 });
-
-// Function to delete a product row
-function deleteProduct(button) {
-    button.parentElement.parentElement.remove();
-}

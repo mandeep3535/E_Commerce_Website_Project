@@ -124,8 +124,9 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Product Image</label>
-                        <input type="file" class="form-control" id="productImage" accept="image/*" required>
+                        <label class="form-label">Product Images (Max 3)</label>
+                        <input type="file" class="form-control" id="productImages" accept="image/*" multiple required>
+                        <small class="text-danger" id="fileError" style="display: none;">You can only upload up to 3 images.</small>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-danger mt-3">Add Product</button>

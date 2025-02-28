@@ -11,9 +11,13 @@
 <body>
 <!--Header-->
 <div id = "header"></div>
-
+<nav class="breadcrumb mt-4 ms-5">
+    <a class="breadcrumb-item text-decoration-none text-muted" href="home.html">Home</a>
+    <span class="breadcrumb-item active text-secondary fw-bold" >login</span>
+  </nav>
     <!-- Login Section -->
 <div class="container-fluid login-container">
+    
         <div class="row align-items-center">
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center text-md-start px-4 p-md-0">
                 <img src="images/loginpagephoto.webp" alt="Shopping" class="img-fluid">
@@ -23,10 +27,10 @@
                 <p>Enter your details below</p>
                 <form class="w-75">
                     <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="Email or Phone Number">
+                        <input type="email" class="form-control" placeholder="Email or Phone Number" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password" required>
                     </div>
                     <button type="submit" class="btn btn-danger w-100">Log In</button>
                     <div class = "row">
@@ -34,7 +38,7 @@
                             <a href="signup.html" class="text-danger">Sign up</a>
                         </div>
                         <div class = "col-md-6 text-center text-md-end mt-2">
-                            <a href="#" class="text-danger">Forgot Password?</a>
+                            <a href="forgotpassword.html" class="text-danger">Forgot Password?</a>
                         </div>
                     </div>
                 </form>
