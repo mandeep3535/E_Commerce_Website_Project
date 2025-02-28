@@ -26,49 +26,93 @@ function updateCart() {
     const cartTotalEl = document.getElementById("cartTotal");
     
     if (couponUsed) {
-        const strikeThrough = (amount) => `<span style="text-decoration: line-through; color:red;">$$${amount.toFixed(2)}</span>`;
+        const strikeThrough = (amount) => `<span style="text-decoration: line-through; color:red;">$${amount.toFixed(2)}</span>`;
         cartSubtotalEl.innerHTML = `${strikeThrough(originalTotal)} ${formatTotal(finalTotal)}`;
         cartTotalEl.innerHTML = `${strikeThrough(originalTotal)} ${formatTotal(finalTotal)}`;
     } else {
         cartSubtotalEl.textContent = formatTotal(originalTotal);
         cartTotalEl.textContent = formatTotal(originalTotal);
     }
+    // Save the subtotal in localStorage for the checkout page
+    localStorage.setItem("cartSubtotal", originalTotal);
 }
 
 // Combined coupon handling
 function applyCoupon() {
-    const couponInput = document.getElementById("couponCodeInput").value.trim().toUpperCase();
-    if (couponInput === "MV50") {
-        couponUsed = true;
-        alert("Coupon MV50 applied! Prices reduced by half.");
+    const couponInput = document.getElementById("couponCodeInput");
+    const couponMessageEl = document.getElementById("couponMessage");
+    const applyCouponBtn = document.getElementById("applyCouponBtn");
+    const couponCode = couponInput.value.trim();
+   // If coupon is already applied, remove it when button is clicked.
+  if (couponUsed) {
+    couponUsed = false;
+    localStorage.removeItem("appliedCoupon");
+    couponInput.value = "";
+    couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
+    couponMessageEl.classList.remove("text-success");
+    couponMessageEl.classList.add("text-danger");
+    applyCouponBtn.textContent = "Apply Coupon";
+    updateCart();
+    return;
+  }
+  // Otherwise, try to apply the coupon.
+  if (couponCode === "") return; // do nothing if field is empty
+
+    if (couponCode.toUpperCase() === "MV50") {
+      couponUsed = true;
+      localStorage.setItem("appliedCoupon", couponCode.toUpperCase());
+      couponInput.value = couponCode.toUpperCase(); // Pre-fill field with valid coupon
+      couponMessageEl.textContent = `Coupon code ${couponCode.toUpperCase()} is applied.`;
+      couponMessageEl.classList.remove("text-danger");
+      couponMessageEl.classList.add("text-success");
+      applyCouponBtn.textContent = "Remove Coupon";
+      alert("Coupon MV50 applied! Prices reduced by half.");
     } else {
-        alert("Invalid coupon code!");
+      couponUsed = false;
+      localStorage.removeItem("appliedCoupon");
+      couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
+      couponMessageEl.classList.remove("text-success");
+      couponMessageEl.classList.add("text-danger");
+      applyCouponBtn.textContent = "Apply Coupon";
+      alert("Invalid coupon code!");
     }
     updateCart();
 }
 
+// Remove coupon if the input is cleared on blur
+document.getElementById("couponCodeInput").addEventListener("blur", () => {
+  const couponInput = document.getElementById("couponCodeInput");
+  const couponMessageEl = document.getElementById("couponMessage");
+  if (couponInput.value.trim() === "") {
+    couponUsed = false;
+    localStorage.removeItem("appliedCoupon");
+    couponMessageEl.textContent = "";
+    updateCart();
+  }
+});
+
 // Unified cart count updater
 function updateCartCount() {
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
-const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-// Get both desktop and mobile badges
-const badges = document.querySelectorAll("#cartCountBadge, #cartCountBadgeMobile");
+    // Get both desktop and mobile badges
+    const badges = document.querySelectorAll("#cartCountBadge, #cartCountBadgeMobile");
 
-// If badges not found, retry after short delay
-if (badges.length === 0) {
-    setTimeout(updateCartCount, 100);
-    return;
-}
-
-badges.forEach(badge => {
-    if (totalQuantity > 0) {
-        badge.textContent = totalQuantity;
-        badge.style.display = "inline-block";
-    } else {
-        badge.style.display = "none";
+    // If badges not found, retry after short delay
+    if (badges.length === 0) {
+        setTimeout(updateCartCount, 100);
+        return;
     }
-});
+
+    badges.forEach(badge => {
+        if (totalQuantity > 0) {
+            badge.textContent = totalQuantity;
+            badge.style.display = "inline-block";
+        } else {
+            badge.style.display = "none";
+        }
+    });
 }
 
 // Consolidated cart loader
@@ -95,7 +139,7 @@ function loadCart() {
                 </td>
                 <td class="d-flex align-items-center">
                     <img src="${product.image}" alt="${product.name}" class="cart-img" />
-                         <span class="ms-2">${product.name}</span>
+                    <span class="ms-2">${product.name}</span>
                 </td>
                 <td class="cart-price" data-price="${product.price}">$${product.price}</td>
                 <td style="max-width: 80px;">
@@ -118,7 +162,7 @@ function loadCart() {
     });
 
     updateCart();
-    updateCartCount();
+    updateCartCount(); 
 }
 
 // Item management functions
@@ -146,6 +190,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial load
     loadCart();
+
+    // Pre-fill coupon if already applied
+    const couponInput = document.getElementById("couponCodeInput");
+    const couponMessageEl = document.getElementById("couponMessage");
+    const applyCouponBtn = document.getElementById("applyCouponBtn");
+    const storedCoupon = localStorage.getItem("appliedCoupon");
+    if (storedCoupon && storedCoupon.toUpperCase() === "MV50") {
+      couponUsed = true;
+      couponInput.value = storedCoupon; // Pre-fill the coupon field
+      couponMessageEl.textContent = `Coupon code ${storedCoupon} is applied.`;
+      couponMessageEl.classList.remove("text-danger");
+      couponMessageEl.classList.add("text-success");
+      applyCouponBtn.textContent = "Remove Coupon";
+      updateCart(); 
+    }
+    else {
+        couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
+        couponMessageEl.classList.remove("text-success");
+  couponMessageEl.classList.add("text-danger");
+  applyCouponBtn.textContent = "Apply Coupon";
+      }
 });
 
 // Simplified add to cart function
@@ -158,19 +223,19 @@ function addToCart() {
     price: parseFloat(document.getElementById("productPrice").textContent.replace("$", "")), 
     quantity: parseInt(document.getElementById("quantityInput").value),
     image:  relativeImagePath // Updated ID
-};
+  };
 
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
-const existingProduct = cart.find(item => item.name === product.name);
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingProduct = cart.find(item => item.name === product.name);
 
-if (existingProduct) {
-    existingProduct.quantity += product.quantity;
-} else {
-    cart.push(product);
-}
+  if (existingProduct) {
+      existingProduct.quantity += product.quantity;
+  } else {
+      cart.push(product);
+  }
 
-localStorage.setItem("cart", JSON.stringify(cart));
-updateCartCount();
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
 }
 
 function updateWishlistCount() {
@@ -198,19 +263,19 @@ function updateWishlistCount() {
       if (wishlistBadgeDesktop) wishlistBadgeDesktop.style.display = "none";
       if (wishlistBadgeMobile) wishlistBadgeMobile.style.display = "none";
     }
-  }
+}
   
-  // Run once DOM is loaded
-  document.addEventListener("DOMContentLoaded", function () {
+// Run once DOM is loaded for wishlist
+document.addEventListener("DOMContentLoaded", function () {
     updateWishlistCount();
-  });
+});
   
-  // Listen for storage changes (in case another tab updates localStorage)
-  window.addEventListener("storage", function () {
+// Listen for storage changes (in case another tab updates localStorage)
+window.addEventListener("storage", function () {
     updateWishlistCount();
-  });
+});
   
-  wishlistBtn.addEventListener("click", function () {
+wishlistBtn.addEventListener("click", function () {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   
     // ... check if product is already in the wishlist ...
@@ -219,4 +284,4 @@ function updateWishlistCount() {
   
     // Update the badge count
     updateWishlistCount();
-  });
+});
