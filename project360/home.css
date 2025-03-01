@@ -49,6 +49,7 @@ body {
   }
   .cat-card:hover {
     background-color: #f5f5f5;
+    cursor:pointer;
   }
   .active-cat {
     background-color: #c0392b;

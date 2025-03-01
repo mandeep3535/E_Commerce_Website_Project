@@ -14,12 +14,24 @@
   
   .product-card:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor:pointer;
   }
   
   /* Product images - standardized height */
   .product-img {
     max-height: 150px;
     object-fit: contain;
+  }
+  
+
+  .product-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .product-link:hover {
+    color: red;
   }
   
   /* Discount or NEW badge (optional) */
