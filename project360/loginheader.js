@@ -21,20 +21,20 @@
      updateCartCount();
  });
 
- // Listen for storage changes (Handles changes made in different tabs/windows)
+ // Listen for storage changes
  window.addEventListener("storage", function () {
      updateCartCount();
  });
 
  /*update wishlist count*/
  function updateWishlistCount() {
-  // 1. Read the wishlist from localStorage
+  // Read the wishlist from localStorage
   let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-  // 2. The total number of items is just the length
+  // The total number of items is just the length
   let totalItems = wishlist.length;
 
-  // 3. Get references to the desktop & mobile badges
+  // Get references to the desktop & mobile badges
   const wishlistBadgeDesktop = document.getElementById("wishlistCountBadge");
   const wishlistBadgeMobile = document.getElementById("wishlistCountBadgeMobile");
 
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateWishlistCount();
 });
 
-// Listen for storage changes (in case another tab updates localStorage)
+// Listen for storage changes 
 window.addEventListener("storage", function () {
   updateWishlistCount();
 });
@@ -67,7 +67,7 @@ window.addEventListener("storage", function () {
 wishlistBtn.addEventListener("click", function () {
   let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-  // ... check if product is already in the wishlist ...
+  // check if product is already in the wishlist 
   wishlist.push(product);
   localStorage.setItem("wishlist", JSON.stringify(wishlist));
 

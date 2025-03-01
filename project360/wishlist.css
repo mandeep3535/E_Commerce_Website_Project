@@ -51,12 +51,12 @@
   
   /* Star Rating */
   .star-rating .bi-star-fill {
-    color: #fec600; /* Gold color */
+    color: #fec600; 
     margin-right: 2px;
     font-size: 14px;
   }
   
-  /* Headings & text tweaks */
+  /* Headings & text  */
   h5 {
     font-size: 1.1rem;
   }

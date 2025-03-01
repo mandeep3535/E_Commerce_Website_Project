@@ -9,7 +9,7 @@
     min-width: 120px;
   }
   
-  /* Hide Save button by default (Bootstrap .d-none is also applied) */
+  /* Hide Save button by default */
   #saveButton {
     display: inline-block;
   }

@@ -1,10 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // DOM Elements
     const wishlistContainer = document.getElementById("wishlistContainer");
     const wishlistHeader = document.getElementById("wishlistHeader");
     const moveAllBtn = document.getElementById("moveAllButton");
   
-    // Initialize Data
+    // Initializing Data
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
   
@@ -47,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const existingProduct = cart.find(item => item.name === product.name);
       existingProduct ? existingProduct.quantity += 1 : cart.push({...product, quantity: 1});
       localStorage.setItem("cart", JSON.stringify(cart));
-      // ❗️ Remove it from the wishlist as well
+      // Remove it from the wishlist as well
     removeItem(product.name);
       // Show confirmation modal
       new bootstrap.Modal(document.getElementById('cartModal')).show();
@@ -89,31 +88,31 @@ document.addEventListener("DOMContentLoaded", function () {
   
 /*Just for you section*/
   document.addEventListener("DOMContentLoaded", function() {
-    // 1. Select the "Just For You" container
+    //  Select the "Just For You" container
     const justForYouContainer = document.getElementById("justForYouContainer");
   
-    // 2. Attach an event listener for clicks on any "Add To Cart" button inside
+    // Attach an event listener for clicks on any "Add To Cart" button inside
     justForYouContainer.addEventListener("click", function(e) {
       // Check if the click was on (or inside) a button that says "Add To Cart"
       if (e.target.closest(".btn.btn-danger")) {
-        // 3. Find the closest .product-card
+        // Find the closest .product-card
         const productCard = e.target.closest(".product-card");
         if (!productCard) return;
   
-        // 4. Extract product info from the DOM
+        // Extract product info from the DOM
         const imgEl = productCard.querySelector(".product-img");
         const titleEl = productCard.querySelector(".fw-semibold"); 
         const priceEl = productCard.querySelector(".text-danger");
   
-        // Name (from <p class="fw-semibold">... </p> or img alt)
+        // Name 
         const productName = titleEl ? titleEl.textContent.trim() : imgEl.alt;
-        // Price (parse from text content like "$960")
+        // Price 
         const rawPrice = priceEl ? priceEl.textContent.replace("$", "").trim() : "0";
         const productPrice = parseFloat(rawPrice) || 0;
         // Image src
         const productImage = imgEl ? imgEl.src : "";
   
-        // 5. Build the product object
+        // Build the product object
         const product = {
           name: productName,
           price: productPrice,
@@ -121,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
           quantity: 1 // Default quantity
         };
   
-        // 6. Add to cart in localStorage
+        // Add to cart in localStorage
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
         // Check if item already in cart
         const existingItem = cart.find(item => item.name === productName);
@@ -132,12 +131,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         localStorage.setItem("cart", JSON.stringify(cart));
   
-        // 7. Show add to cart modal 
+        // Show add to cart modal 
         const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
         document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
         cartModal.show();
         
-        // If you have a global function to update cart count in the navbar:
+        // if you have a global function to update cart count in the navbar:
         if (window.updateCartCount) {
           window.updateCartCount();
         }

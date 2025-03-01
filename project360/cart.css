@@ -37,9 +37,8 @@ body {
   background-color: #a93226;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 992px) {
-  /* Make the table scrollable horizontally on smaller screens */
+  /* Making the table scrollable horizontally on mobile */
   .table-responsive {
     margin-bottom: 1rem;
   }

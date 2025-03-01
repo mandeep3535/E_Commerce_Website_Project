@@ -1,3 +1,6 @@
+
+
+
 /* Breadcrumb */
 .breadcrumb {
     font-size: 14px;
@@ -34,21 +37,21 @@
     padding: 20px;
 }
 
-/* Email & Phone Fix - Ensures text never overflows */
+/* Email & Phone  */
 .contact-box p {
-    word-wrap: break-word; /* ✅ Forces text to wrap */
+    word-wrap: break-word; 
     overflow-wrap: break-word;
-    white-space: normal; /* ✅ Allows text to properly wrap */
+    white-space: normal; 
 }
 
-/* Input Fields - Fix Overflow Issue */
+/* Input Fields */
 .form-input {
     background: #f8f9fa;
     border: none;
     padding: 12px;
     border-radius: 6px;
-    width: 100%; /* ✅ Ensures full width */
-    min-width: unset; /* ✅ Removes forced width issue */
+    width: 100%; 
+    min-width: unset; 
 }
 
 /* Textarea */
@@ -74,7 +77,7 @@
 /* Links */
 a.text-danger {
     font-weight: bold;
-    display: inline-block; /* ✅ Ensures email stays inside the box */
+    display: inline-block; 
     max-width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -86,8 +89,13 @@ a.text-danger {
         width: 100%;
     }
 
-    /* Fix email breaking issue */
     .contact-box p {
-        word-break: break-word; /* ✅ Fixes long emails */
+        word-break: break-word; 
     }
 }
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+

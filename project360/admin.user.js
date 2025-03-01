@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let userTableBody = document.getElementById("userTableBody");
     let editMode = false;
   
-    // Sample user data
+    // Summy user user data
     let users = [
       { userId: "1001", name: "AB",     email: "ab@example.com",    role: "User",  status: "Active" },
       { userId: "1002", name: "CD",   email: "cd@example.com",    role: "Admin", status: "Active" },
@@ -22,8 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
       users.forEach((user, idx) => {
         let newRow = document.createElement("tr");
   
-        // Input field for email with required & type="email"
-        // Note: disabled by default, enabled in "edit" mode
+
         newRow.innerHTML = `
           <td>${user.userId}</td>
           <td>${user.name}</td>
@@ -61,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   
-    // Make email fields editable
+    // Making email fields editable
     window.enableEditing = function() {
       editMode = true;
       document.querySelectorAll(".email-input").forEach(input => {
@@ -71,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("saveButton").classList.remove("d-none");
     };
   
-    // Save edited emails (validate them first)
+    // Save edited emails (but validate them first)
     window.saveChanges = function() {
       // Gather all email inputs
       let emailInputs = document.querySelectorAll(".email-input");
@@ -92,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
       disableEditing();
     };
   
-    // Disable editing mode
+    // disable editing mode
     function disableEditing() {
       editMode = false;
       document.querySelectorAll(".email-input").forEach(input => {
@@ -102,7 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("saveButton").classList.add("d-none");
     }
   
-    // Reset password (simulated by an alert)
     window.resetPassword = function(email) {
       alert(`Password reset link has been sent to ${email}.`);
     };
@@ -118,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
       displayUsers();
     };
   
-    // Initial display
     displayUsers();
   });
   

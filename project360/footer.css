@@ -36,7 +36,7 @@ footer figure {
 }
 
 footer img {
-    max-width: 150px; /* Adjust based on logo size */
+    max-width: 150px; 
     height: auto;
 }
 
@@ -57,7 +57,7 @@ footer ul li {
     color: white !important;
 }
 footer {
-    width: 100vw;  /* Ensures full viewport width */
+    width: 100vw;  
     margin: 0;
     padding: 0;
 }
@@ -77,5 +77,5 @@ footer .row {
 
 footer .col-md-3 {
     text-align: center;
-    padding: 10px; /* Adjust as needed */
+    padding: 10px; 
 }

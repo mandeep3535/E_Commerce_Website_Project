@@ -59,17 +59,12 @@
   
   /* Active size button highlight */
   .active-size {
-    background-color: #dc3545 !important; /* Red background */
+    background-color: #dc3545 !important; 
     border-color: #dc3545 !important; 
     color: #fff !important;
   }
   
-  /* Star rating half star example
-     If you want all full stars:
-     replace the last star-half with star-fill
-  */
-  
-  /* Minor style tweaks for quantity input */
+  /* Minor style for quantity input */
   .input-group > input[type="text"] {
     max-width: 50px;
   }

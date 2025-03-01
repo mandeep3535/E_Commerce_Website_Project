@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const applyCouponBtn = document.getElementById("applyCoupon");
     const couponMessageEl = document.getElementById("couponMessage");
   
-    // Retrieve the cart data from localStorage (or use an empty array)
+    // Retrieve the cart data from localStorage 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
   
     // Global flag to indicate if coupon discount has been applied
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
           couponMessageEl.classList.remove("text-success");
           couponMessageEl.classList.add("text-danger");
           applyCouponBtn.textContent = "Apply Coupon";
-          renderOrder(price => price); // no discount
+          renderOrder(price => price); 
           return;
         }
         

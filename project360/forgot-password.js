@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
   
-      // Send a POST request to forgot-password.php
       fetch('forgot-password.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -21,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(response => response.json())
       .then(data => {
-        // data should be a JSON object like { success: true, message: 'Email sent' }
+        
         if (data.success) {
           displayStatus(data.message, 'success');
-          emailInput.value = ''; // clear input
+          emailInput.value = ''; 
         } else {
           displayStatus(data.message, 'danger');
         }

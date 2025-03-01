@@ -1,10 +1,8 @@
 function changeMainImage(imageSrc, element) {
     document.getElementById("mainProductImage").src ="images/" + imageSrc;
 
-    // Remove active class from all thumbnails
     document.querySelectorAll('.thumb-card').forEach(card => card.classList.remove('active'));
     
-    // Add active class to the clicked thumbnail
     element.classList.add('active');
 }
 
@@ -106,7 +104,7 @@ if (existingProduct) {
 localStorage.setItem("cart", JSON.stringify(cart));
 updateCartCount();
 
-// 3. Show the Modal
+// Show the Modal
 const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
 const cartModalBody = document.getElementById('cartModalBody');
 
@@ -157,7 +155,7 @@ function updateWishlistCount() {
         wishlistBadgeDesktop.style.display = "none";
       }
     } else {
-      // Retry if the badge wasn't found (some pages load the header later)
+      // Retry if the badge wasn't found 
       setTimeout(updateWishlistCount, 500);
     }
   

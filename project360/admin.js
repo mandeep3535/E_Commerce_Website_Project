@@ -12,7 +12,7 @@ function fetchDashboardData() {
             document.getElementById("totalRevenue").textContent = `$${data.totalRevenue.toFixed(2)}`;
 
             let orderTableBody = document.getElementById("orderTableBody");
-            orderTableBody.innerHTML = ""; // Clear existing rows
+            orderTableBody.innerHTML = ""; 
 
             data.orders.forEach(order => {
                 let row = `

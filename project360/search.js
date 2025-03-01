@@ -1,12 +1,12 @@
 // search.js
 
-// 1. Function to get query parameter from URL
+// Function to get query parameter from URL
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
   }
   
-  // 2. Define your dataset with sample pages (ensure these match your actual content)
+  // Define your dataset with sample pages (ensure these match your actual content)
   const pages = [
     { 
       id: "1", 
@@ -112,7 +112,7 @@ function getQueryParam(param) {
       }
   ];
   
-  // 3. Search function: Filter pages that contain the query in the title or content
+  // Search function: Filter pages that contain the query in the title or content
   function simpleSearch(query) {
     const lowerQuery = query.toLowerCase();
     console.log("Searching for:", lowerQuery);
@@ -124,7 +124,7 @@ function getQueryParam(param) {
     return filtered;
   }
   
-  // 4. Function to render search results on the page
+  //  Function to render search results on the page
   function displayResults(results, query) {
     const resultsList = document.getElementById("results");
     resultsList.innerHTML = "";
@@ -155,7 +155,7 @@ function getQueryParam(param) {
     });
   }
   
-  // 5. Main execution: Retrieve query, perform search, and display results
+  // Main execution: Retrieve query, perform search, and display results
   const query = getQueryParam('query') || "";
   // Log the query to check if it’s being captured properly
   console.log("Query from URL:", query);

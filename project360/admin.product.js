@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const productTableBody = document.getElementById("productTableBody");
 
     form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent page refresh
+        event.preventDefault(); 
 
         // Get form values
         const name = document.getElementById("productName").value;
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Create table row
+        // Creating table row
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${images.length > 0 ? images[0].name : "No Image"}</td>
@@ -43,16 +43,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.textContent = "Unpublish";
                 this.classList.remove("btn-success");
                 this.classList.add("btn-danger");
-                row.classList.add("table-secondary"); // Fades the row (optional)
+                row.classList.add("table-secondary"); 
             } else {
                 this.textContent = "Publish";
                 this.classList.remove("btn-danger");
                 this.classList.add("btn-success");
-                row.classList.remove("table-secondary"); // Removes fade (optional)
+                row.classList.remove("table-secondary"); 
             }
         });
 
-        // Clear form after adding
+        // Clearing form after adding
         form.reset();
     });
 });

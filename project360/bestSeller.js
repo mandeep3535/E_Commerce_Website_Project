@@ -1,6 +1,6 @@
 // home-products.js
 
-// Function to update the cart count badge(s)
+// Function to update the cart count badge
 function updateCartCount() {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     let totalQuantity = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
@@ -23,7 +23,7 @@ function updateCartCount() {
     }
   }
   
-  // Function to update the wishlist count badge(s)
+  // Function to update the wishlist count badge
   function updateWishlistCount() {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     let totalItems = wishlist.length;
@@ -49,7 +49,7 @@ function updateCartCount() {
     }
   }
   
-  // Wait for the DOM to load
+  // wait for the DOM to load
   document.addEventListener("DOMContentLoaded", function () {
   
     // === CART FUNCTIONALITY ===
