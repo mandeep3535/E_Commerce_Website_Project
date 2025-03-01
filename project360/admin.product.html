@@ -83,7 +83,7 @@
 </nav>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container mt-4 mb-100">
         <h2>Products</h2>
 
         <!-- Add Product Form -->
@@ -127,6 +127,10 @@
                         <label class="form-label">Product Images (Max 3)</label>
                         <input type="file" class="form-control" id="productImages" accept="image/*" multiple required>
                         <small class="text-danger" id="fileError" style="display: none;">You can only upload up to 3 images.</small>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-danger mt-3">Add Product</button>
