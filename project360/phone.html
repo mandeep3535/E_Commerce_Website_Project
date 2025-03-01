@@ -19,10 +19,10 @@
   />
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="phones.css" />
+  <link rel="stylesheet" href="categories.css" />
 </head>
 <body>
-  <div id = "header"></div>
+  <div id = "loginheader"></div>
   <div class="container my-4">
     <!-- Breadcrumb -->
    <nav class="breadcrumb mb-4">
@@ -55,7 +55,7 @@
               />
             </div>
             <!-- Add To Cart Button -->
-            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <button class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart">Add To Cart</button>
             <!-- Product Info -->
             <p class="mb-0 fw-semibold">Samsung S24</p>
             <p class="text-danger mb-1">
@@ -88,7 +88,7 @@
                 class="img-fluid product-img"
               />
             </div>
-            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <button class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart">Add To Cart</button>
             <p class="mb-0 fw-semibold">Iphone 12</p>
             <p class="text-danger mb-1">$1160</p>
             <div class="star-rating">
@@ -116,7 +116,7 @@
                 class="img-fluid product-img"
               />
             </div>
-            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <button class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart">Add To Cart</button>
             <p class="mb-0 fw-semibold">iPhone 16 Pro Max</p>
             <p class="text-danger mb-1">$560</p>
             <div class="star-rating">
@@ -144,7 +144,7 @@
                 class="img-fluid product-img"
               />
             </div>
-            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <button class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart">Add To Cart</button>
             <p class="mb-0 fw-semibold">Google Pixel 9</p>
             <p class="text-danger mb-1">$800</p>
             <div class="star-rating">
@@ -171,7 +171,7 @@
                 class="img-fluid product-img"
               />
             </div>
-            <button class="btn btn-danger w-100 btn-sm mb-2">Add To Cart</button>
+            <button class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart">Add To Cart</button>
             <p class="mb-0 fw-semibold">Huawei Global</p>
             <p class="text-danger mb-1">$400</p>
             <div class="star-rating">
@@ -184,17 +184,59 @@
             </div>
           </div>
         </div>
-      </div><!-- row -->
+      </div>
       
-    </div><!-- products-section -->
-  </div><!-- container -->
+    </div>
+  </div>
 
-  <!-- Bootstrap Bundle (includes Popper) -->
   <div id = "footer"></div>
+
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="cartModalLabel">Cart</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="cartModalBody">
+        <!-- Confirmation message will be inserted here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="cart.html" class="btn btn-primary">View Cart</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Wishlist Modal -->
+<div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="wishlistModalLabel">Wishlist</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="wishlistModalBody">
+        <!-- Confirmation message will be inserted here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="wishlist.html" class="btn btn-primary">View Wishlist</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script src = "hfload.js"></script>
+  
+  <!-- Bootstrap Bundle (includes Popper) -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
   ></script>
-    <script src="phones.js"></script>
+    <script src="categories.js"></script>
+    <script src = "loginheader.js"></script>
 </body>
 </html>
