@@ -14,7 +14,7 @@
   .product-img {
     width: auto;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
   }
   
   /* Badges (Discount / New) */
