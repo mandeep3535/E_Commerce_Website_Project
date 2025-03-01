@@ -1,21 +1,17 @@
-/********************************
-  General Styles
-********************************/
+/*General Styles*/
 body {
     background-color: #f9f9f9;
     font-family: Arial, sans-serif;
   }
   
-  /* Category Label (the red bar next to heading) */
+  /* Category Label*/
   .category-label {
     width: 4px;
     height: 25px;
     border-radius: 2px;
   }
   
-  /********************************
-    Sidebar
-  ********************************/
+  /* Sidebar*/
   .list-group-item {
     cursor: pointer;
     border: none;
@@ -24,9 +20,7 @@ body {
     background-color: #f1f1f1;
   }
   
-  /********************************
-    Carousel
-  ********************************/
+  /*Carousel*/
   .carousel-inner img {
     height: auto;
     object-fit: fill;
@@ -34,9 +28,7 @@ body {
     padding: 1px;
   }
   
-  /********************************
-    Category Cards
-  ********************************/
+  /*Category Cards*/
   .cat-card {
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -57,9 +49,7 @@ body {
     border-color: #c0392b;
   }
   
-  /********************************
-    Product Cards
-  ********************************/
+  /*Product Cards*/
   .product-card {
     position: relative;
     border-radius: 8px;
@@ -69,21 +59,17 @@ body {
     color: #333;
   }
   .product-icons .bi:hover {
-    color: #dc3545; /* red hover */
+    color: #dc3545;
   }
   
-  /********************************
-    Dark Banner (Music Experience)
-  ********************************/
+  /*  Dark Banner (Music)*/
   .banner-dark {
-    background-color: #000; /* black background */
+    background-color: #000; 
     color: #fff;
     overflow: hidden;
   }
   
-  /********************************
-    Features Section
-  ********************************/
+  /* Features Section*/
   .bi {
     color: #c0392b;
   }

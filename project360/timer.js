@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function startCountdown() {
         let now = new Date();
         let targetTime = new Date();
-        targetTime.setHours(24, 0, 0, 0); // Set countdown to reset at the next 24-hour mark
+        targetTime.setHours(24, 0, 0, 0); //  reset at the next 24-hour mark
 
         function updateCountdown() {
             let now = new Date().getTime();
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("seconds").textContent = seconds;
         }
 
-        updateCountdown(); // Initial call
+        updateCountdown(); 
         setInterval(updateCountdown, 1000); // Update every second
     }
 

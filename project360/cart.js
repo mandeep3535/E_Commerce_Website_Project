@@ -222,7 +222,7 @@ function addToCart() {
     name: document.getElementById("productName").textContent, // Get from HTML element
     price: parseFloat(document.getElementById("productPrice").textContent.replace("$", "")), 
     quantity: parseInt(document.getElementById("quantityInput").value),
-    image:  relativeImagePath // Updated ID
+    image:  relativeImagePath 
   };
 
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -239,17 +239,17 @@ function addToCart() {
 }
 
 function updateWishlistCount() {
-    // 1. Read the wishlist from localStorage
+    // getting the wishlist from localStorage
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   
-    // 2. The total number of items is just the length
+    // The total number of items is just the length
     let totalItems = wishlist.length;
   
-    // 3. Get references to the desktop & mobile badges
+    // Get references to the desktop & mobile badges
     const wishlistBadgeDesktop = document.getElementById("wishlistCountBadge");
     const wishlistBadgeMobile = document.getElementById("wishlistCountBadgeMobile");
   
-    // 4. Show or hide each badge
+    // Show or hide each badge
     if (totalItems > 0) {
       if (wishlistBadgeDesktop) {
         wishlistBadgeDesktop.innerText = totalItems;
@@ -265,7 +265,6 @@ function updateWishlistCount() {
     }
 }
   
-// Run once DOM is loaded for wishlist
 document.addEventListener("DOMContentLoaded", function () {
     updateWishlistCount();
 });
@@ -278,7 +277,7 @@ window.addEventListener("storage", function () {
 wishlistBtn.addEventListener("click", function () {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   
-    // ... check if product is already in the wishlist ...
+    // check if product is already in the wishlist ...
     wishlist.push(product);
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   

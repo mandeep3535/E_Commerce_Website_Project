@@ -1,11 +1,10 @@
-// phone.js
 
-// Function to update the cart count badge(s)
+// Function to update the cart count badge
 function updateCartCount() {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     let totalQuantity = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
   
-    // Update both desktop and mobile cart count badges (if they exist)
+    // Update both desktop and mobile cart count badges 
     let cartBadge = document.getElementById("cartCountBadge");
     let cartBadgeMobile = document.getElementById("cartCountBadgeMobile");
   
@@ -24,7 +23,7 @@ function updateCartCount() {
     }
   }
   
-  // Function to update the wishlist count badge(s)
+  // Function to update the wishlist count badge
   function updateWishlistCount() {
     let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     let totalItems = wishlist.length;
@@ -66,7 +65,7 @@ function updateCartCount() {
         const productNameEl = card.querySelector("p.fw-semibold");
         const productName = productNameEl ? productNameEl.innerText.trim() : "Unknown Product";
   
-        // Extract the price from the price element (using regex to handle discounted prices)
+        // Extract the price from the price element 
         const priceEl = card.querySelector("p.text-danger.mb-1");
         const priceText = priceEl ? priceEl.innerText.trim() : "";
         const priceMatch = priceText.match(/\$(\d+(\.\d+)?)/);
@@ -76,7 +75,7 @@ function updateCartCount() {
         const productImageEl = card.querySelector("img.product-img");
         const productImage = productImageEl ? productImageEl.getAttribute("src") : "";
   
-        // Create a product object (default quantity is 1)
+        // Create a product object 
         const product = {
           name: productName,
           price: productPrice,
@@ -99,7 +98,7 @@ function updateCartCount() {
         // Update the cart count on the page
         updateCartCount();
   
-        // Show a confirmation modal if available (using Bootstrap), or fallback to an alert
+        // Show a confirmation modal 
         if (typeof bootstrap !== "undefined") {
           const cartModalElement = document.getElementById("cartModal");
           if (cartModalElement) {

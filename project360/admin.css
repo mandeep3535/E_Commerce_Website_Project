@@ -10,7 +10,7 @@
     border: 2px solid white;
 }
 
-/* Fix Profile Dropdown Overlap on Mobile */
+/* Profile Dropdown Overlap on Mobile */
 @media (max-width: 992px) {
     .navbar {
         flex-direction: row;
@@ -22,14 +22,14 @@
         padding: 10px;
     }
 
-    /* Move profile below navbar in mobile */
+    /* Moving profile below navbar in mobile */
     .profile-dropdown {
         width: 100%;
         text-align: center;
         margin-top: 10px;
     }
 
-    /* Center profile dropdown properly */
+    /* Center profile dropdown */
     .profile-dropdown .nav-link {
         display: flex;
         align-items: center;

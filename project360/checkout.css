@@ -44,7 +44,7 @@ body {
     background-color: #a93226;
 }
 
-/* Responsive Adjustments */
+/* Responsive for mobile */
 @media (max-width: 992px) {
     .order-summary {
         margin-top: 20px;

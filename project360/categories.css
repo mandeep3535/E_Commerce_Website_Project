@@ -17,7 +17,7 @@
     cursor:pointer;
   }
   
-  /* Product images - standardized height */
+  /* Product images */
   .product-img {
     max-height: 150px;
     object-fit: contain;
@@ -34,7 +34,7 @@
     color: red;
   }
   
-  /* Discount or NEW badge (optional) */
+  /* Discount  */
   .discount-badge,
   .new-badge {
     position: absolute;
@@ -46,19 +46,19 @@
     border-radius: 4px;
   }
   .discount-badge {
-    background-color: #dc3545; /* Red discount */
+    background-color: #dc3545; 
   }
   .new-badge {
-    background-color: #198754; /* Green new */
+    background-color: #198754;
   }
   
-  /* Star rating color */
+
   .star-rating i {
-    color: #f1c40f; /* Gold stars */
+    color: #f1c40f;
     margin-right: 2px;
   }
   
-  /* Heart icon (wishlist icon), no border, no background */
+  /* Heart icon (wishlist), no border, no background */
   .icon-btn.wishlist-icon {
     position: absolute;
     top: 10px;
@@ -67,19 +67,18 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    color: #666; /* Default color */
+    color: #666; 
   }
   .icon-btn.wishlist-icon:hover {
-    color: #dc3545; /* Turn red on hover */
+    color: #dc3545; 
   }
 
-  /* Optional: remove focus outlines */
   .icon-btn.wishlist-icon:focus {
     outline: none;
     box-shadow: none;
   }
   
-  /* Smaller screen tweaks */
+  /* Smaller screen fixes */
   @media (max-width: 576px) {
     .product-img {
       max-height: 130px;
@@ -98,7 +97,6 @@
     flex: 1;
   }
   
-  /* Ensure footer does not grow */
   #footer {
     flex-shrink: 0;
   }

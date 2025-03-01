@@ -80,11 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return order;
         });
 
-        // Refresh the table
+        // To refresh the table
         orderTableBody.innerHTML = "";
         displayOrders();
     }
 
-    // Display orders on page load
+    //To  display orders on page load
     displayOrders();
 });

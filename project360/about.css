@@ -1,4 +1,4 @@
-/* Centered statistics section */
+
 .stat-card {
     background: #fff;
     padding: 20px;
@@ -37,21 +37,6 @@ i {
     color: #dc3545;
 }
 
-/* Breadcrumb */
-.breadcrumb {
-    font-size: 14px;
-    color: gray;
-}
-
-.breadcrumb-item a {
-    text-decoration: none;
-    color: gray;
-}
-
-.breadcrumb-item.active {
-    color: black;
-    font-weight: bold;
-}
 /* Breadcrumb */
 .breadcrumb {
     font-size: 14px;
