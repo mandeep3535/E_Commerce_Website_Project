@@ -138,13 +138,15 @@
       <div class="product-card p-3 bg-white">
         <!-- Icons (Wishlist, QuickView) -->
         <div class="product-icons position-absolute top-0 end-0 m-2">
-          <i class="bi bi-heart fs-5 me-2"></i>
+          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
+            <i class="bi bi-heart fs-5"></i>
+          </button>
           
         </div>
         <img
           src="images/asusevo.jpg"
           alt="Asus evo"
-          class="img-fluid mb-3"
+          class="img-fluid mb-3 product-img"
         />
         <h6 class="mb-1">Asus evo</h6>
         <p class="text-danger mb-0">$260 <span class="text-muted text-decoration-line-through">$360</span></p>
@@ -157,19 +159,24 @@
           <i class="bi bi-star-fill"></i>
           <span class="text-muted">(65)</span>
         </div>
-      </div>
+         <!-- Add To Cart Button -->
+         <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
+ 
+            </div>
+            
     </div>
     <!-- Product Card 2 -->
     <div class="col-6 col-md-4 col-lg-3">
       <div class="product-card p-3 bg-white">
         <div class="product-icons position-absolute top-0 end-0 m-2">
-          <i class="bi bi-heart fs-5 me-2"></i>
-        
+          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
+            <i class="bi bi-heart fs-5"></i>
+          </button>
         </div>
         <img
           src="images/16pro.webp"
           alt="Iphone 16"
-          class="img-fluid mb-3"
+          class="img-fluid mb-3 product-img"
         />
         <h6 class="mb-1">Iphone 16</h6>
         <p class="text-danger mb-0">$960 <span class="text-muted text-decoration-line-through">$1160</span></p>
@@ -181,19 +188,24 @@
           <i class="bi bi-star-fill"></i>
           <span class="text-muted">(65)</span>
         </div>
-      </div>
+          <!-- Add To Cart Button -->
+          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
+    
+          </div>
+         
     </div>
     <!-- Product Card 3 -->
     <div class="col-6 col-md-4 col-lg-3">
       <div class="product-card p-3 bg-white">
         <div class="product-icons position-absolute top-0 end-0 m-2">
-          <i class="bi bi-heart fs-5 me-2"></i>
-         
+          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
+            <i class="bi bi-heart fs-5"></i>
+          </button>
         </div>
         <img
           src="images/rbgcooler.jpg"
           alt="RGB liquid CPU Cooler"
-          class="img-fluid mb-3"
+          class="img-fluid mb-3 product-img"
         />
         <h6 class="mb-1">RGB liquid CPU Cooler</h6>
         <p class="text-danger mb-0">$160 <span class="text-muted text-decoration-line-through">$170</span></p>
@@ -205,19 +217,24 @@
           <i class="bi bi-star-fill"></i>
           <span class="text-muted">(65)</span>
         </div>
-      </div>
+          <!-- Add To Cart Button -->
+          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
+   
+           </div>
+          
     </div>
     <!-- Product Card 4 -->
     <div class="col-6 col-md-4 col-lg-3">
       <div class="product-card p-3 bg-white">
         <div class="product-icons position-absolute top-0 end-0 m-2">
-          <i class="bi bi-heart fs-5 me-2"></i>
-         
+          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
+            <i class="bi bi-heart fs-5"></i>
+          </button>
         </div>
         <img
           src="images/keyboard.jpg"
           alt="Keyboard"
-          class="img-fluid mb-3"
+          class="img-fluid mb-3 product-img"
         />
         <h6 class="mb-1">Roccat mechanical keyboard</h6>
         <p class="text-danger mb-0">$200 <span class="text-muted text-decoration-line-through">$220</span></p>
@@ -229,7 +246,11 @@
           <i class="bi bi-star-fill"></i>
           <span class="text-muted">(65)</span>
         </div>
-      </div>
+            <!-- Add To Cart Button -->
+            <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
+   
+          </div>
+        
     </div>
   </div>
 </section>
@@ -311,11 +332,53 @@
   </div>
 </section>
 
-<!-- Bootstrap JS -->
+
 <div id = "footer"></div>
+
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="cartModalLabel">Cart Update</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="cartModalBody">
+        <!-- Confirmation message will be inserted here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+        <a href="cart.html" class="btn btn-danger">Go to Cart</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Wishlist Modal -->
+<div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="wishlistModalLabel">Wishlist</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="wishlistModalBody">
+        <!-- Confirmation message will be inserted here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="wishlist.html" class="btn btn-primary">View Wishlist</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src = "hfload.js"></script>
+<script src = "bestSeller.js"></script>
+<!-- Bootstrap JS -->
 <script
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 ></script>
+
 </body>
 </html>
