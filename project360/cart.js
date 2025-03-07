@@ -4,6 +4,15 @@ let couponUsed = false;
 function updateCart() {
     const cartRows = document.querySelectorAll(".cart-table tbody tr");
     let originalTotal = 0;
+    
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+if (cart.length === 0) {
+    document.getElementById("cartSubtotal").textContent = "$0.00";
+    document.getElementById("cartTotal").textContent = "$0.00";
+    localStorage.setItem("cartSubtotal", 0);
+    return;
+}
+    
 
     cartRows.forEach((row) => {
         if (!row.isConnected) return;
@@ -123,6 +132,7 @@ function loadCart() {
 
     if (cart.length === 0) {
         cartBody.innerHTML = `<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>`;
+        updateCart();
         updateCartCount();
         return;
     }
@@ -167,9 +177,22 @@ function loadCart() {
 
 // Item management functions
 function removeItem(event) {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(event.target.dataset.index, 1);
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const index = event.target.dataset.index;
+
+    // Remove the item from cart
+    cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
+    if (cart.length === 0) {
+        document.getElementById("cartBody").innerHTML = `<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>`;
+        
+        // Reset totals
+        document.getElementById("cartSubtotal").textContent = "$0.00";
+        document.getElementById("cartTotal").textContent = "$0.00";
+        localStorage.setItem("cartSubtotal", 0);
+    }
+
+    // Reload the cart UI
     loadCart();
 }
 
