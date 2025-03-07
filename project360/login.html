@@ -25,12 +25,12 @@
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center text-md-start py-4 p-md-0 ">
                 <h2>Log in to MV Electronics</h2>
                 <p>Enter your details below</p>
-                <form class="w-75">
+                <form class="w-75" action="login.php" method="post">
                     <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="Email or Phone Number" required>
+                        <input type="email" name="email" class="form-control" placeholder="Email or Phone Number" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" placeholder="Password" required>
+                        <input type="password" name = "password" class="form-control" placeholder="Password" required>
                     </div>
                     <button type="submit" class="btn btn-danger w-100">Log In</button>
                     <div class = "row">
