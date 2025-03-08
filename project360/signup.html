@@ -39,19 +39,19 @@
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center text-center text-md-start py-4 p-md-0">
                 <h2>Create an account</h2>
                 <p>Enter your details below</p>
-                <form class="w-75">
+                <form class="w-75" action="signup.php" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         
-                        <input type="text" class="form-control" placeholder="Enter your name" required>
+                        <input type="text" class="form-control" placeholder="Enter your name" name = "user_name" required>
                     </div>
                     <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="Email" required>
+                        <input type="email" class="form-control" placeholder="Email" name = "email" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" placeholder="Password" required>
+                        <input type="password" class="form-control" placeholder="Password" name = "password" required>
                     </div>
                     <div class="mb-3">
-                        <input type="file" id="customFile" class="d-none" accept="image/*" capture="environment" required onchange="updateFileName()">
+                        <input type="file" id="customFile" name = "image" class="d-none" accept="image/*" capture="environment" required onchange="updateFileName()">
                         <button type="button" class="btn btn-secondary w-100" onclick="document.getElementById('customFile').click();">
                             <span id="fileLabel">Upload Your Image</span>
                         </button>
