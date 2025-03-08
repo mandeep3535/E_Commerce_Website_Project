@@ -1,4 +1,5 @@
 <?php
+
 header('Content-Type: application/json'); // Ensure proper JSON response
 
 include 'db_connection.php'; // Make sure db_connection.php has no echo
