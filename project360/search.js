@@ -12,7 +12,7 @@ function getQueryParam(param) {
       id: "1", 
       title: "Home", 
       content: "Welcome to MV Electronics. Discover the latest tech products.", 
-      url: "home.html" 
+      url: "home.php" 
     },
     { 
       id: "2", 
