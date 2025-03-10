@@ -1,53 +1,42 @@
 <?php
-// Include your database connection
-include_once 'db_connection.php';
-
-// Set header to return JSON
+require_once 'db_connection.php';
 header('Content-Type: application/json');
 
-// Check if request is POST and product_id is set
+$response = array("status" => "error", "message" => "Failed to delete product.");
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['product_id'])) {
-    $productId = $_POST['product_id'];
+    $product_id = $conn->real_escape_string($_POST['product_id']);
     
-    // Get product images before deleting
-    $sql = "SELECT images FROM Products WHERE product_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $productId);
+    // Get image paths before deleting to remove files
+    $stmt = $conn->prepare("SELECT images FROM products WHERE product_id = ?");
+    $stmt->bind_param("s", $product_id);
     $stmt->execute();
     $result = $stmt->get_result();
     
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $images = json_decode($row['images'], true);
+    if ($row = $result->fetch_assoc()) {
+        // Delete the product from database
+        $delete_stmt = $conn->prepare("DELETE FROM products WHERE product_id = ?");
+        $delete_stmt->bind_param("s", $product_id);
         
-        // Delete product from database
-        $sql = "DELETE FROM Products WHERE product_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $productId);
-        
-        if ($stmt->execute()) {
-            // Delete associated image files
-            if (!empty($images) && is_array($images)) {
-                foreach ($images as $image) {
-                    $imagePath = "uploads/products/" . $image;
-                    if (file_exists($imagePath)) {
-                        unlink($imagePath);
-                    }
+        if ($delete_stmt->execute()) {
+            // Delete image files
+            $imagePaths = explode(',', $row['images']);
+            foreach ($imagePaths as $path) {
+                if (file_exists($path)) {
+                    unlink($path);
                 }
             }
             
-            echo json_encode(["success" => true, "message" => "Product deleted successfully"]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Failed to delete product: " . $stmt->error]);
+            $response["status"] = "success";
+            $response["message"] = "Product deleted successfully!";
         }
-    } else {
-        echo json_encode(["success" => false, "message" => "Product not found"]);
+        
+        $delete_stmt->close();
     }
     
     $stmt->close();
-} else {
-    echo json_encode(["success" => false, "message" => "Invalid request"]);
 }
 
+echo json_encode($response);
 $conn->close();
 ?>

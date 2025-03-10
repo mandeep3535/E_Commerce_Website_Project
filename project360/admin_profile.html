@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold" href="admin.html">
+            <i class="bi bi-speedometer2 me-2"></i> Admin Panel
+        </a>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Admin Profile</h2>
+        <div class="card p-4">
+            <div class="text-center position-relative">
+                <img id="profileImage" src="images/default_profile.jpg" alt="Admin Profile" class="rounded-circle" width="100" height="100">
+                <label for="imageUpload" class="position-absolute bottom-0 end-0 bg-light rounded-circle p-1" style="cursor: pointer;">
+                    <i class="bi bi-camera"></i>
+                </label>
+                <input type="file" id="imageUpload" class="d-none" accept="image/*">
+                <h3 class="mt-2" id="displayName">Admin</h3>
+                <p class="text-muted" id="displayRole">Administrator</p>
+            </div>
+            <hr>
+            <form id="profileForm" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>User ID:</strong></label>
+                        <input type="text" id="user_id" name="user_id" class="form-control" readonly>
+                        
+                        <label class="form-label mt-2"><strong>Full Name:</strong></label>
+                        <input type="text" id="full_name" name="full_name" class="form-control" disabled>
+                        
+                        <label class="form-label mt-2"><strong>Email:</strong></label>
+                        <input type="email" id="email" name="email" class="form-control" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><strong>Phone:</strong></label>
+                        <input type="text" id="phone" name="phone" class="form-control" disabled>
+                        
+                        <label class="form-label mt-2"><strong>Role:</strong></label>
+                        <input type="text" id="role" name="role" class="form-control" disabled>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <button type="button" id="editButton" class="btn btn-danger">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                    </button>
+                    <button type="submit" id="saveButton" class="btn btn-success d-none">
+                        <i class="bi bi-check-circle me-2"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fetch admin data when page loads
+            fetchAdminData();
+            
+            // Edit button functionality
+            $('#editButton').click(function() {
+                let inputs = $('#profileForm input').not('#user_id'); // Don't allow editing user_id
+                inputs.prop('disabled', false);
+                $('#editButton').addClass('d-none');
+                $('#saveButton').removeClass('d-none');
+            });
+
+            // Image upload and immediate update functionality
+            $('#imageUpload').change(function(event) {
+                if (event.target.files && event.target.files[0]) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#profileImage').attr('src', e.target.result);
+                        
+                        // Immediately upload the image to server
+                        let formData = new FormData();
+                        formData.append('profile_image', event.target.files[0]);
+                        formData.append('user_id', $('#user_id').val());
+                        
+                        $.ajax({
+                            url: 'admin_profile.php?action=update_image',
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                let result = JSON.parse(response);
+                                if (result.success) {
+                                    // Show success message
+                                    alert('Profile picture updated successfully!');
+                                } else {
+                                    alert('Failed to update profile picture: ' + result.message);
+                                }
+                            },
+                            error: function() {
+                                alert('An error occurred while updating the profile picture.');
+                            }
+                        });
+                    }
+                    reader.readAsDataURL(event.target.files[0]);
+                }
+            });
+
+            // Submit form functionality
+            $('#profileForm').submit(function(event) {
+                event.preventDefault();
+                
+                // Create FormData object for form data
+                let formData = new FormData(this);
+                
+                // Send AJAX request to update profile
+                $.ajax({
+                    url: 'admin_profile.php?action=update',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        let result = JSON.parse(response);
+                        if (result.success) {
+                            alert('Profile updated successfully!');
+                            
+                            // Update display name and role
+                            $('#displayName').text($('#full_name').val());
+                            $('#displayRole').text($('#role').val());
+                            
+                            // Disable form fields again
+                            $('#profileForm input').not('#user_id').prop('disabled', true);
+                            $('#editButton').removeClass('d-none');
+                            $('#saveButton').addClass('d-none');
+                            
+                            // Refresh data
+                            fetchAdminData();
+                        } else {
+                            alert('Failed to update profile. Please try again.');
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+        
+        // Function to fetch admin data
+        function fetchAdminData() {
+            // You can specify the admin ID in the URL, or default to ID 1
+            $.ajax({
+                url: 'admin_profile.php?action=fetch&id=12345678', // Change ID if needed
+                type: 'GET',
+                success: function(response) {
+                    try {
+                        let data = JSON.parse(response);
+                        if (!data.error) {
+                            // Populate form fields
+                            $('#user_id').val(data.user_id);
+                            $('#full_name').val(data.full_name);
+                            $('#email').val(data.email);
+                            $('#phone').val(data.phone);
+                            $('#role').val(data.role);
+                            
+                            // Update display name and role
+                            $('#displayName').text(data.full_name);
+                            $('#displayRole').text(data.role);
+                            
+                            // Update profile image if available
+                            if (data.profile_image) {
+                                $('#profileImage').attr('src', data.profile_image);
+                            }
+                        } else {
+                            alert('Failed to load admin data: ' + data.error);
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                    }
+                },
+                error: function() {
+                    alert('Failed to connect to the server. Please try again.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
