@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $targetFilePath = $uploadDir . $fileName;
             $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
             
-            $allowTypes = ["jpg", "jpeg", "png", "gif"];
+            $allowTypes = ["jpg", "jpeg", "png", "gif","avif","webp"];
             if (in_array(strtolower($fileType), $allowTypes)) {
                 if (move_uploaded_file($_FILES["productImages"]["tmp_name"][$i], $targetFilePath)) {
                     $uploadedImages[] = $fileName;
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     exit();
                 }
             } else {
-                echo "<script>alert('Only JPG, JPEG, PNG, GIF files are allowed'); window.location='admin.product.html';</script>";
+                echo "<script>alert('Only JPG, JPEG, PNG, GIF, AVIF, WEBP files are allowed'); window.location='admin.product.html';</script>";
                 exit();
             }
         }
@@ -58,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("issdiss", $productID, $productName, $description, $stock, $price, $category, $imagesJson);
     
     if (!$stmt->execute()) {
-    die("❌ Database Insert Error: " . $stmt->error);
+    die("Database Insert Error: " . $stmt->error);
   } else {
-    echo "<script>alert('✅ Product added successfully'); window.location='admin.product.html';</script>";
+    echo "<script>alert(' Product added successfully'); window.location='admin.product.html';</script>";
    }
     
     echo "<pre>";
