@@ -36,11 +36,11 @@ require_once "header-loader.php";
     <!-- Sidebar -->
     <div class="col-lg-2 d-none d-lg-block ms-5">
       <ul class="list-group border-0">
-        <a href = "phone.html"><li class="list-group-item border-0 py-2 ">Phones</li></a>
-        <a href = "computer.html"><li class="list-group-item border-0 py-2 ">Computers</li></a>
-        <a href = "smartwatch.html"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
-          <a href = "headphones.html"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
-          <a href = "gaming.html"> <li class="list-group-item border-0 py-2">Gaming</li></a>
+        <a href = "phones.php"><li class="list-group-item border-0 py-2 ">Phones</li></a>
+        <a href = "computers.php"><li class="list-group-item border-0 py-2 ">Computers</li></a>
+        <a href = "smartwatch.php"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
+          <a href = "headphones.php"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
+          <a href = "gaming.php"> <li class="list-group-item border-0 py-2">Gaming</li></a>
        
       </ul>
     </div>
@@ -82,21 +82,21 @@ require_once "header-loader.php";
   <h2 class="fw-bold">Browse By Category</h2>
   <div class="row mt-4 g-3 justify-content-center">
     <!-- Category Card 1 -->
-  <div class="col-6 col-md-4 col-lg-2" onclick=location.href="phone.html">
+  <div class="col-6 col-md-4 col-lg-2" onclick=location.href="phones.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-phone fs-1"></i>
         <p class="mt-2">Phones</p>
       </div>
     </div>
     <!-- Category Card 2 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="computer.html">                   
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="computers.php">                   
       <div class="cat-card text-center p-3">
         <i class="bi bi-laptop fs-1"></i>
         <p class="mt-2">Computers</p>
       </div>
     </div>
     <!-- Category Card 3 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="smartwatch.html">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="smartwatch.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-watch fs-1"></i>
         <p class="mt-2">SmartWatch</p>
@@ -104,14 +104,14 @@ require_once "header-loader.php";
     </div>
 
     <!-- Category Card 4 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="headphones.html">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="headphones.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-headphones fs-1"></i>
         <p class="mt-2">HeadPhones</p>
       </div>
     </div>
     <!-- Category Card 5 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="gaming.html">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="gaming.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-controller fs-1"></i>
         <p class="mt-2">Gaming</p>
