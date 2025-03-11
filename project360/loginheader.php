@@ -3,23 +3,33 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Include your database connection
+require_once 'db_connection.php';
+
+// Initialize variables
+$userName = 'User';
+$profileImage = '';  // This can be a path, e.g. "uploads/default.png" if you want a default
+
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+
+    // Prepare and execute query to get user data
+    $sql = "SELECT user_name, profile_image FROM users WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch user data if it exists
+    if ($row = $result->fetch_assoc()) {
+        $userName = $row['user_name'];
+        $profileImage = $row['profile_image']; // e.g. "uploads/profile123.jpg"
+    }
+    $stmt->close();
+}
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($pageTitle) ? $pageTitle . ' - MV Electronics' : 'MV Electronics'; ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <?php if(isset($additionalCss)): ?>
-        <?php foreach($additionalCss as $css): ?>
-            <link rel="stylesheet" href="<?php echo $css; ?>">
-        <?php endforeach; ?>
-    <?php endif; ?>
-</head>
-<body>
+
 <header>
     <!-- Top Banner -->
     <div class="top-banner text-center py-2">
@@ -34,7 +44,9 @@ if (session_status() === PHP_SESSION_NONE) {
             <a class="navbar-brand fw-bold" href="home.php">
                 <img src="images/logo1.png" alt="MV Electronics" width="135">
             </a>
-            <a href="cart.php" class="d-flex d-lg-none position-relative">
+            
+            <!-- Mobile Cart and Wishlist -->
+            <a href="cart.html" class="d-flex d-lg-none position-relative me-3">
                 <i class="bi bi-cart fs-4"></i>
                 <span 
                   id="cartCountBadgeMobile"
@@ -43,7 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 >0</span>
             </a>
             
-            <a href="wishlist.php" class="d-flex d-lg-none position-relative">
+            <a href="wishlist.html" class="d-flex d-lg-none position-relative me-3">
                 <i class="bi bi-heart fs-4"></i>
                 <span 
                   id="wishlistCountBadgeMobile"
@@ -51,19 +63,34 @@ if (session_status() === PHP_SESSION_NONE) {
                   style="display:none;"
                 >0</span>
             </a>
-            <!-- Mobile Profile Icon with Clickable Dropdown -->
+            
+            <!-- Mobile Profile Dropdown -->
             <div class="dropdown d-flex d-lg-none">
-                <button class="btn border-0" id="mobileProfileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person fs-4"></i>
+                <button class="btn border-0 d-flex align-items-center" 
+                        id="mobileProfileDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                    
+                    <?php if (!empty($profileImage)): ?>
+                        <img 
+                            src="<?php echo htmlspecialchars($profileImage); ?>" 
+                            alt="Profile" 
+                            class="rounded-circle me-2" 
+                            style="width: 30px; height: 30px; object-fit: cover;"
+                        >
+                    <?php else: ?>
+                        <i class="bi bi-person fs-4 me-2"></i>
+                    <?php endif; ?>
+                    
+                    <span><?php echo htmlspecialchars($userName); ?></span>
                 </button>
+                
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileProfileDropdown">
                     <li><a class="dropdown-item" href="Account.php">Manage My Account</a></li>
-                    <li><a class="dropdown-item" href="cart.php">Cart</a></li>
-                    <li><a class="dropdown-item" href="wishlist.php">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="cart.html">Cart</a></li>
+                    <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="<?php echo isset($_SESSION['user_id']) ? 'logout.php' : 'login.php'; ?>">
-                        <?php echo isset($_SESSION['user_id']) ? 'Logout' : 'Login'; ?>
-                    </a></li>
+                    <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
                 </ul>
             </div>
 
@@ -81,61 +108,58 @@ if (session_status() === PHP_SESSION_NONE) {
             <!-- Navbar Links -->
             <div class="collapse navbar-collapse text-center" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-5">
-                    <li class="nav-item"><a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'home.php') ? 'active' : ''; ?>" href="home.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'contact.php') ? 'active' : ''; ?>" href="contact.php">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'about.php') ? 'active' : ''; ?>" href="about.php">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                 </ul>
             </div>
 
-            <!-- Icons Section (Wishlist, Cart, Profile) -->
+            <!-- Desktop Icons Section (Wishlist, Cart, Profile) -->
             <div class="d-none d-lg-flex align-items-center">
-                <a href="wishlist.php" class="me-3 position-relative">
+                <a href="wishlist.html" class="me-3 position-relative">
                     <i class="bi bi-heart fs-4"></i>
-                    <span 
-                      id="wishlistCountBadge" 
-                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                      style="display:none;"
-                    >0</span>
+                    <span id="wishlistCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
                 </a>
 
-                <!-- Mobile Wishlist Icon -->
-                <a href="wishlist.php" class="d-flex d-lg-none position-relative me-2">
-                    <i class="bi bi-heart fs-4"></i>
-                    <span 
-                      id="wishlistCountBadgeMobile"
-                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                      style="display:none;"
-                    >0</span>
-                </a>
-                <a href="cart.php" class="me-3 position-relative">
+                <a href="cart.html" class="me-3 position-relative">
                     <i class="bi bi-cart fs-4"></i>
                     <span id="cartCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
                 </a>
 
-                <!-- Profile Dropdown with Clickable Button -->
+                <!-- Desktop Profile Dropdown -->
                 <div class="dropdown">
-                    <button class="btn border-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person fs-4"></i>
+                    <button class="btn border-0 d-flex align-items-center" 
+                            id="profileDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                        
+                        <?php if (!empty($profileImage)): ?>
+                            <img 
+                                src="<?php echo htmlspecialchars($profileImage); ?>" 
+                                alt="Profile" 
+                                class="rounded-circle me-2" 
+                                style="width: 30px; height: 30px; object-fit: cover;"
+                            >
+                        <?php else: ?>
+                            <i class="bi bi-person fs-4 me-2"></i>
+                        <?php endif; ?>
+                        
+                        <span><?php echo htmlspecialchars($userName); ?></span>
                     </button>
+
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="Account.php">Manage My Account</a></li>
-                        <li><a class="dropdown-item" href="cart.php"> Cart </a></li>
-                        <li><a class="dropdown-item" href="wishlist.php">Wishlist</a></li>
+                        <li><a class="dropdown-item" href="Account.html">Manage My Account</a></li>
+                        <li><a class="dropdown-item" href="cart.html">Cart</a></li>
+                        <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="<?php echo isset($_SESSION['user_id']) ? 'logout.php' : 'login.php'; ?>">
-                            <?php echo isset($_SESSION['user_id']) ? 'Logout' : 'Login'; ?>
-                        </a></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="logout.php">
+                                Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </nav>
 </header>
-
-<?php if(isset($headerContent) && $headerContent): ?>
-    <?php echo $headerContent; ?>
-<?php endif; ?>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="loginheader.js"></script>
