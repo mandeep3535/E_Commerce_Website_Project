@@ -64,7 +64,7 @@ try {
             <li class="nav-item"><a href="admin.php" class="nav-link active"><i class="bi bi-house-door me-2"></i> Dashboard</a></li>
             <li class="nav-item"><a href="admin.product.html" class="nav-link"><i class="bi bi-box me-2"></i> Products</a></li>
             <li class="nav-item"><a href="admin.order.html" class="nav-link"><i class="bi bi-cart me-2"></i> Orders</a></li>
-            <li class="nav-item"><a href="admin.user.html" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>
+            <li class="nav-item"><a href="admin_user.php" class="nav-link"><i class="bi bi-people me-2"></i> Users</a></li>
         </ul>
 
         <!-- Profile Dropdown --> 
