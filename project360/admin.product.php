@@ -1,14 +1,11 @@
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-
+<?php
 
 include_once 'db_connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $productID = (int)$_POST["productID"]; // Ensure it matches INT type
+    $productID = (int)$_POST["productID"]; 
     $productName = $_POST["productName"];
-    $price = (float)$_POST["productPrice"]; // Ensure price is FLOAT
+    $price = (float)$_POST["productPrice"]; 
     $stock = (int)$_POST["productStock"];
     $category = $_POST["productCategory"];
     $description = $_POST["productDescription"];
@@ -62,12 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     echo "<script>alert(' Product added successfully'); window.location='admin.product.html';</script>";
    }
-    
-    echo "<pre>";
-print_r($_POST); // Check if form data is being received
-print_r($_FILES); // Check if images are being uploaded
-echo "</pre>";
-exit();
 
 
     $stmt->close();
@@ -76,3 +67,4 @@ exit();
 
 
 }
+?>
