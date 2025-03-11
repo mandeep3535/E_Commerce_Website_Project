@@ -36,11 +36,11 @@ require_once "header-loader.php";
     <!-- Sidebar -->
     <div class="col-lg-2 d-none d-lg-block ms-5">
       <ul class="list-group border-0">
-        <a href = "phone.html"><li class="list-group-item border-0 py-2 ">Phones</li></a>
-        <a href = "computer.html"><li class="list-group-item border-0 py-2 ">Computers</li></a>
-        <a href = "smartwatch.html"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
-          <a href = "headphones.html"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
-          <a href = "gaming.html"> <li class="list-group-item border-0 py-2">Gaming</li></a>
+        <a href = "phone.php"><li class="list-group-item border-0 py-2 ">Phones</li></a>
+        <a href = "computer.php"><li class="list-group-item border-0 py-2 ">Computers</li></a>
+        <a href = "smartwatch.php"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
+          <a href = "headphones.php"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
+          <a href = "gaming.php"> <li class="list-group-item border-0 py-2">Gaming</li></a>
        
       </ul>
     </div>
