@@ -25,16 +25,16 @@
 <div class="container-fluid my-4">
  <!-- Breadcrumb -->
  <nav class="breadcrumb mb-4">
-  <span class="breadcrumb-item text-secondary fw-bold" href="home.html">Home</span></nav>
+  <span class="breadcrumb-item text-secondary fw-bold" href="home.php">Home</span></nav>
   <div class="row">
     <!-- Sidebar -->
     <div class="col-lg-2 d-none d-lg-block ms-5">
       <ul class="list-group border-0">
-        <a href = "phone.html"><li class="list-group-item border-0 py-2 ">Phones</li></a>
-        <a href = "computer.html"><li class="list-group-item border-0 py-2 ">Computers</li></a>
-        <a href = "smartwatch.html"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
-          <a href = "headphones.html"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
-          <a href = "gaming.html"> <li class="list-group-item border-0 py-2">Gaming</li></a>
+        <a href = "phones.php"><li class="list-group-item border-0 py-2 ">Phones</li></a>
+        <a href = "computers.php"><li class="list-group-item border-0 py-2 ">Computers</li></a>
+        <a href = "smartwatch.php"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
+          <a href = "headphones.php"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
+          <a href = "gaming.php"> <li class="list-group-item border-0 py-2">Gaming</li></a>
        
       </ul>
     </div>
@@ -76,21 +76,21 @@
   <h2 class="fw-bold">Browse By Category</h2>
   <div class="row mt-4 g-3 justify-content-center">
     <!-- Category Card 1 -->
-  <div class="col-6 col-md-4 col-lg-2" onclick=location.href="phone.html">
+  <div class="col-6 col-md-4 col-lg-2" onclick=location.href="phones.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-phone fs-1"></i>
         <p class="mt-2">Phones</p>
       </div>
     </div>
     <!-- Category Card 2 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="computer.html">                   
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="computers.php">                   
       <div class="cat-card text-center p-3">
         <i class="bi bi-laptop fs-1"></i>
         <p class="mt-2">Computers</p>
       </div>
     </div>
     <!-- Category Card 3 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="smartwatch.html">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="smartwatch.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-watch fs-1"></i>
         <p class="mt-2">SmartWatch</p>
@@ -98,14 +98,14 @@
     </div>
 
     <!-- Category Card 4 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="headphones.html">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="headphones.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-headphones fs-1"></i>
         <p class="mt-2">HeadPhones</p>
       </div>
     </div>
     <!-- Category Card 5 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="gaming.html">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="gaming.php">
       <div class="cat-card text-center p-3">
         <i class="bi bi-controller fs-1"></i>
         <p class="mt-2">Gaming</p>
@@ -114,7 +114,6 @@
   </div>
 
 </section>
-
 <!--  BEST SELLING PRODUCTS-->
 <section class="container my-5">
   <div class="d-flex align-items-center mb-3">
@@ -124,129 +123,74 @@
   <div class="d-flex justify-content-between align-items-center">
     <h2 class="fw-bold">Best Selling Products</h2>
   </div>
+
   <!-- Products Row -->
   <div class="row mt-4 g-3">
-    <!-- Product Card 1 -->
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="product-card p-3 bg-white">
-        <!-- Icons -->
-        <div class="product-icons position-absolute top-0 end-0 m-2">
-          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
-            <i class="bi bi-heart fs-5"></i>
-          </button>
-          
-        </div>
-        <img
-          src="images/asusevo.jpg"
-          alt="Asus evo"
-          class="img-fluid mb-3 product-img"
-        />
-        <h6 class="mb-1">Asus evo</h6>
-        <p class="text-danger mb-0">$260 <span class="text-muted text-decoration-line-through">$360</span></p>
-        <!-- Star Rating -->
-        <div class="text-warning small mb-1">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <span class="text-muted">(65)</span>
-        </div>
-         <!-- Add To Cart Button -->
-         <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
- 
+    <?php
+      //Include your database connection
+      require_once 'db_connection.php';
+
+      // Fetch best-selling products (example: only those with best_seller = 1)
+      $sql = "SELECT * FROM products WHERE best_seller = 1 LIMIT 4";
+      $result = $conn->query($sql);
+
+      if ($result && $result->num_rows > 0):
+        while ($row = $result->fetch_assoc()):
+    ?>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="product-card p-3 bg-white position-relative">
+              <!-- Icons -->
+              <div class="product-icons position-absolute top-0 end-0 m-2">
+                <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
+                  <i class="bi bi-heart fs-5"></i>
+                </button>
+              </div>
+              
+              <!-- Product Image -->
+              <img
+                src="<?php echo htmlspecialchars($row['images']); ?>"
+                alt="<?php echo htmlspecialchars($row['name']); ?>"
+                class="img-fluid mb-3 product-img"
+              />
+
+              <!-- Product Name -->
+              <h6 class="mb-1"><?php echo htmlspecialchars($row['name']); ?></h6>
+
+              <!-- Product Price  -->
+              <p class="text-danger mb-0">
+                $<?php echo number_format($row['price'], 2); ?>
+                <!-- Optional  discount -->
+                <span class="text-muted text-decoration-line-through">$<?php echo number_format($row['price'] + 100, 2); ?></span>
+              </p>
+
+              <!-- Static star rating  -->
+              <div class="text-warning small mb-1">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <span class="text-muted">(65)</span>
+              </div>
+
+              <!-- Add To Cart Button -->
+              <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">
+                Add To Cart
+              </button>
             </div>
-            
-    </div>
-    <!-- Product Card 2 -->
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="product-card p-3 bg-white">
-        <div class="product-icons position-absolute top-0 end-0 m-2">
-          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
-            <i class="bi bi-heart fs-5"></i>
-          </button>
-        </div>
-        <img
-          src="images/16pro.webp"
-          alt="Iphone 16"
-          class="img-fluid mb-3 product-img"
-        />
-        <h6 class="mb-1">Iphone 16</h6>
-        <p class="text-danger mb-0">$960 <span class="text-muted text-decoration-line-through">$1160</span></p>
-        <div class="text-warning small mb-1">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <span class="text-muted">(65)</span>
-        </div>
-          <!-- Add To Cart Button -->
-          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
-    
           </div>
-         
-    </div>
-    <!-- Product Card 3 -->
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="product-card p-3 bg-white">
-        <div class="product-icons position-absolute top-0 end-0 m-2">
-          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
-            <i class="bi bi-heart fs-5"></i>
-          </button>
-        </div>
-        <img
-          src="images/rbgcooler.jpg"
-          alt="RGB liquid CPU Cooler"
-          class="img-fluid mb-3 product-img"
-        />
-        <h6 class="mb-1">RGB liquid CPU Cooler</h6>
-        <p class="text-danger mb-0">$160 <span class="text-muted text-decoration-line-through">$170</span></p>
-        <div class="text-warning small mb-1">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <span class="text-muted">(65)</span>
-        </div>
-          <!-- Add To Cart Button -->
-          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
-   
-           </div>
-          
-    </div>
-    <!-- Product Card 4 -->
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="product-card p-3 bg-white">
-        <div class="product-icons position-absolute top-0 end-0 m-2">
-          <button class="btn btn-link p-0 wishlist-icon" title="Add to Wishlist">
-            <i class="bi bi-heart fs-5"></i>
-          </button>
-        </div>
-        <img
-          src="images/keyboard.jpg"
-          alt="Keyboard"
-          class="img-fluid mb-3 product-img"
-        />
-        <h6 class="mb-1">Roccat mechanical keyboard</h6>
-        <p class="text-danger mb-0">$200 <span class="text-muted text-decoration-line-through">$220</span></p>
-        <div class="text-warning small mb-1">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <span class="text-muted">(65)</span>
-        </div>
-            <!-- Add To Cart Button -->
-            <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart">Add To Cart</button>
-   
-          </div>
-        
-    </div>
+    <?php
+        endwhile;
+      else:
+        echo "<p>No best-selling products found.</p>";
+      endif;
+
+      // Close the DB connection
+      $conn->close();
+    ?>
   </div>
 </section>
+
 
 <!--   BIG BANNER (Music)-->
 <section class="container-fluid my-5">

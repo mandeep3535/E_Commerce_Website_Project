@@ -1,14 +1,11 @@
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-
+<?php
 
 include_once 'db_connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $productID = (int)$_POST["productID"]; // Ensure it matches INT type
+    $productID = (int)$_POST["productID"]; 
     $productName = $_POST["productName"];
-    $price = (float)$_POST["productPrice"]; // Ensure price is FLOAT
+    $price = (float)$_POST["productPrice"]; 
     $stock = (int)$_POST["productStock"];
     $category = $_POST["productCategory"];
     $description = $_POST["productDescription"];
@@ -34,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $targetFilePath = $uploadDir . $fileName;
             $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
             
-            $allowTypes = ["jpg", "jpeg", "png", "gif"];
+            $allowTypes = ["jpg", "jpeg", "png", "gif","avif","webp"];
             if (in_array(strtolower($fileType), $allowTypes)) {
                 if (move_uploaded_file($_FILES["productImages"]["tmp_name"][$i], $targetFilePath)) {
                     $uploadedImages[] = $fileName;
@@ -43,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     exit();
                 }
             } else {
-                echo "<script>alert('Only JPG, JPEG, PNG, GIF files are allowed'); window.location='admin.product.html';</script>";
+                echo "<script>alert('Only JPG, JPEG, PNG, GIF, AVIF, WEBP files are allowed'); window.location='admin.product.html';</script>";
                 exit();
             }
         }
@@ -58,16 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("issdiss", $productID, $productName, $description, $stock, $price, $category, $imagesJson);
     
     if (!$stmt->execute()) {
-    die("❌ Database Insert Error: " . $stmt->error);
+    die("Database Insert Error: " . $stmt->error);
   } else {
-    echo "<script>alert('✅ Product added successfully'); window.location='admin.product.html';</script>";
+    echo "<script>alert(' Product added successfully'); window.location='admin.product.html';</script>";
    }
-    
-    echo "<pre>";
-print_r($_POST); // Check if form data is being received
-print_r($_FILES); // Check if images are being uploaded
-echo "</pre>";
-exit();
 
 
     $stmt->close();
@@ -76,3 +67,4 @@ exit();
 
 
 }
+?>
