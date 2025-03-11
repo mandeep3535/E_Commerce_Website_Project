@@ -3,6 +3,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+
 ?>
 
 <!-- Footer -->
@@ -27,12 +29,13 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="col-md-3 col-sm-6 mb-3 text-center">
                 <h5>Account</h5>
                 <ul class="list-unstyled">
-                    <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
-                        <li><a href="dashboard.php" class="text-white">My Account</a></li>
-                        <li><a href="logout.php" class="text-white">Logout</a></li>
-                    <?php else: ?>
-                        <li><a href="login.php" class="text-white">Login / Register</a></li>
-                    <?php endif; ?>
+                <li>
+                        <?php if (isset($_SESSION["user_id"])): ?>
+                            <a href="logout.php" class="text-white">Logout</a>
+                        <?php else: ?>
+                            <a href="login.php" class="text-white">Login / Register</a>
+                        <?php endif; ?>
+                    </li>
                     <li><a href="Admin_login.html" class="text-white">Admin Login</a></li>
                     <li><a href="home.html" class="text-white">Shop</a></li>
                 </ul>
