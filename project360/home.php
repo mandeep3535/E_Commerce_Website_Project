@@ -2,6 +2,7 @@
 // Ensure session is available
 require_once "session_handler.php";
 require_once "header-loader.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -11,8 +12,13 @@ require_once "header-loader.php";
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MV Electronics - Homepage</title>
 
-  <!-- Bootstrap CSS -->
-  <link
+ 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="header.css" />
+  <link rel = "stylesheet" href = "footer.css">
+   <!-- Bootstrap CSS -->
+   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
   />
@@ -21,9 +27,6 @@ require_once "header-loader.php";
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
   />
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="home.css" />
-  <link rel="stylesheet" href="header.css" />
 </head>
 <body>
 
@@ -271,8 +274,11 @@ require_once "header-loader.php";
   </div>
 </section>
 
-
-<div id = "footer"></div>
+<!---
+<div id = "footer"></div> --->
+<?php
+require_once "footer.php";
+?>
 
 <!-- Cart Modal -->
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
@@ -319,5 +325,7 @@ require_once "header-loader.php";
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 ></script>
 <script src="loginheader.js"></script>
+
 </body>
 </html>
+ 
