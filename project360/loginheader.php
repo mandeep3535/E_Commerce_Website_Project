@@ -46,7 +46,7 @@ if (isset($_SESSION['user_id'])) {
             </a>
             
             <!-- Mobile Cart and Wishlist -->
-            <a href="cart.html" class="d-flex d-lg-none position-relative me-3">
+            <a href="cart.php" class="d-flex d-lg-none position-relative me-3">
                 <i class="bi bi-cart fs-4"></i>
                 <span 
                   id="cartCountBadgeMobile"
@@ -55,7 +55,7 @@ if (isset($_SESSION['user_id'])) {
                 >0</span>
             </a>
             
-            <a href="wishlist.html" class="d-flex d-lg-none position-relative me-3">
+            <a href="wishlist.php" class="d-flex d-lg-none position-relative me-3">
                 <i class="bi bi-heart fs-4"></i>
                 <span 
                   id="wishlistCountBadgeMobile"
@@ -87,8 +87,8 @@ if (isset($_SESSION['user_id'])) {
                 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileProfileDropdown">
                     <li><a class="dropdown-item" href="account.php">Manage My Account</a></li>
-                    <li><a class="dropdown-item" href="cart.html">Cart</a></li>
-                    <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
+                    <li><a class="dropdown-item" href="cart.php">Cart</a></li>
+                    <li><a class="dropdown-item" href="wishlist.php">Wishlist</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
                 </ul>
@@ -116,12 +116,12 @@ if (isset($_SESSION['user_id'])) {
 
             <!-- Desktop Icons Section (Wishlist, Cart, Profile) -->
             <div class="d-none d-lg-flex align-items-center">
-                <a href="wishlist.html" class="me-3 position-relative">
+                <a href="wishlist.php" class="me-3 position-relative">
                     <i class="bi bi-heart fs-4"></i>
                     <span id="wishlistCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
                 </a>
 
-                <a href="cart.html" class="me-3 position-relative">
+                <a href="cart.php" class="me-3 position-relative">
                     <i class="bi bi-cart fs-4"></i>
                     <span id="cartCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
                 </a>
@@ -149,8 +149,8 @@ if (isset($_SESSION['user_id'])) {
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item" href="account.php">Manage My Account</a></li>
-                        <li><a class="dropdown-item" href="cart.html">Cart</a></li>
-                        <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
+                        <li><a class="dropdown-item" href="cart.php">Cart</a></li>
+                        <li><a class="dropdown-item" href="wishlist.php">Wishlist</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item text-danger" href="logout.php">

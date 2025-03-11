@@ -1,3 +1,10 @@
+<?php
+// Ensure session is available
+require_once "session_handler.php";
+require_once "header-loader.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +26,7 @@
   <link rel="stylesheet" href="wishlist.css"/>
 </head>
 <body>
-<div id = "loginheader"></div>
+
 <div class="container my-4">
   <!-- Breadcrumb -->
  <nav class="breadcrumb mb-4">
@@ -151,7 +158,9 @@
 </div>
 
 <!-- Bootstrap JavaScript -->
-<div id = "footer"></div>
+<?php
+require_once "footer.php";
+?>
 <!-- Add to Cart Modal -->
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
   <div class="modal-dialog">

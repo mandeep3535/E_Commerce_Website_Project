@@ -1,0 +1,138 @@
+<?php
+// Ensure session is available
+require_once "session_handler.php";
+require_once "header-loader.php";
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="cart.css" />
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  />
+
+</head>
+<body>
+
+
+  <div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb mb-4">
+      <a class="breadcrumb-item text-decoration-none text-muted" href="home.php">Home</a>
+      <span class="breadcrumb-item active text-secondary fw-bold" >Cart</span>
+    </nav>
+
+    <div class="row gy-4">
+      <!-- Left Section: Cart Table and Actions -->
+      <div class="col-lg-8">
+        <!-- Cart Table -->
+        <div class="table-responsive shadow-sm rounded bg-white p-3">
+          <table class="table table-borderless align-middle cart-table mb-0">
+            <thead class="border-bottom">
+              <tr class="text-uppercase text-muted small">
+                <th class="fw-semibold">Remove</th>
+                <th class="fw-semibold">Product</th>
+                <th class="fw-semibold">Price</th>
+                <th class="fw-semibold">Quantity</th>
+                <th class="fw-semibold">Subtotal</th>
+              </tr>
+              <tbody id="cartBody">
+                <tr>
+                  <td>
+                    <button class="btn btn-sm btn-outline-danger remove-item">&times;</button>
+                  </td>
+                  <td>Sample Product</td>
+                  <td class="product-price">$50</td>
+                  <td>
+                    <select class="form-select quantity-select">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </td>
+                  <td class="subtotal">$50</td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
+
+        <!-- Cart Buttons -->
+        <div class="mt-3 d-flex flex-wrap justify-content-center justify-content-md-between">
+          <a href = "home.php"><button class="btn btn-danger mb-2">Return To Shop</button></a>
+        </div>
+
+        <!-- Coupon Section -->
+        <div class="mt-5 mb-2 mb-md-5 d-flex flex-wrap align-items-center gap-2">
+          <input
+            type="text"
+            class="form-control flex-grow-1"
+            placeholder="Coupon Code"
+            id="couponCodeInput"
+          />
+          <button class="btn btn-danger" id="applyCouponBtn">Apply Coupon</button>
+            <!-- Coupon Message -->
+          <div id="couponMessage" class="mt-2"></div>
+        </div>
+
+      </div>
+
+      <!-- Right Section: Cart Total -->
+      <div class="col-lg-4">
+        <div class="bg-white p-4 rounded shadow-sm">
+          <h5 class="fw-bold mb-3">Cart Total</h5>
+          <!-- Subtotal -->
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span class="fw-semibold" id="cartSubtotal"></span>
+          </div>
+          <!-- Shipping -->
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping:</span>
+            <span class="fw-semibold">Free</span>
+          </div>
+          <hr />
+          <!-- Total -->
+          <div class="d-flex justify-content-between mb-3">
+            <span>Total:</span>
+            <span class="fw-semibold" id="cartTotal"></span>
+          </div>
+          <a href="checkout.php" class="btn btn-danger w-100">
+            Proceed to Checkout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Footer-->
+  <?php
+require_once "footer.php";
+?>
+
+  <!-- JS to load header/footer -->
+  <script src="hfload.js"></script>
+
+  <!-- Bootstrap Bundle (JS) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+
+  <!-- main Cart Script -->
+  <script src="cart.js"></script>
+</body>
+</html>
