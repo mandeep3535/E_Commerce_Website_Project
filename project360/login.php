@@ -23,47 +23,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return $data;
     }
 
-    // Get and sanitize user inputs
-    $user_input = sanitize_input($_POST["email"]); // Expecting only email
-    $password = $_POST["password"]; // Don't sanitize password before verification
+    // Get and sanitize user inputs (username/email and password)
+    $user_input = sanitize_input($_POST["user_input"]); // Can be email or username
+    $password = $_POST["password"]; 
 
-    // Validate email format
-    if (!filter_var($user_input, FILTER_VALIDATE_EMAIL)) {
-        $login_err = "Invalid email format";
-    } else {
-        // Prepare SQL statement
-        $sql = "SELECT * FROM users WHERE email = ?";
+ 
+    $sql = "SELECT * FROM users WHERE email = ? OR user_name = ?";
+    
+    // Prepare and bind
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $user_input, $user_input);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows == 1) {
+        // User found
+        $user = $result->fetch_assoc();
         
-        // Prepare and bind
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $user_input);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows == 1) {
-            // User found
-            $user = $result->fetch_assoc();
-            
-            // Verify password
-            if (password_verify($password, $user["password"])) {
-                // Password is correct - set session variables
-                $_SESSION["loggedin"] = true;
-                $_SESSION["user_id"] = $user["user_id"]; 
-                $_SESSION["email"] = $user["email"];
+        // Verify password
+        if (password_verify($password, $user["password"])) {
+            // Password is correct - set session variables
+            $_SESSION["loggedin"] = true;
+            $_SESSION["user_id"] = $user["user_id"]; 
+            $_SESSION["email"] = $user["email"];
 
-                // Redirect to dashboard
-                header("Location: home.php");
-                exit;
-            } else {
-                $login_err = "Invalid password";
-            }
+            // Redirect to dashboard
+            header("Location: home.php");
+            exit;
         } else {
-            $login_err = "No account found with that email";
+            $login_err = "Invalid password";
         }
-
-        // Close statement
-        $stmt->close();
+    } else {
+        $login_err = "No account found with that email/username";
     }
+
+    // Close statement
+    $stmt->close();
 }
 ?>
 
@@ -79,15 +74,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <!--Header - Conditionally loaded based on login status-->
-
-    <?php
-    if (isset($_SESSION["user_id"])) {
-        include "loginheader.php";
-    } else {
-        include "header.php";
-    }
-    ?>
-</div>
+<?php
+if (isset($_SESSION["user_id"])) {
+    include "loginheader.php";
+} else {
+    include "header.php";
+}
+?>
 
 <nav class="breadcrumb mt-4 ms-5">
     <a class="breadcrumb-item text-decoration-none text-muted" href="home.html">Home</a>
@@ -112,7 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <form class="w-75" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <div class="mb-3">
-                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                    <!-- Changed input type to text and name to "user_input" -->
+                    <input type="text" name="user_input" class="form-control" placeholder="Email or Username" required>
                 </div>
                 <div class="mb-3">
                     <input type="password" name="password" class="form-control" placeholder="Password" required>
@@ -134,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- Footer -->
 <div id="footer"></div>
 
- <script src="hfload.js"></script>
+<script src="hfload.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

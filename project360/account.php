@@ -1,7 +1,7 @@
 <?php
-// 1. Include essential files that do not output HTML (or check them carefully):
-require_once 'session_handler.php'; // Make sure this doesn't echo or print anything
-require_once 'db_connection.php';   // Database connection only, no HTML
+
+require_once 'session_handler.php'; 
+require_once 'db_connection.php';   // Database connection 
 
 // Initialize variables
 $userName     = '';
@@ -108,8 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 4. Now that we've done all PHP logic (including possible redirects),
-//    include the file that outputs the HTML header (loginheader.php)
+
 require_once 'header-loader.php';
 ?>
 
@@ -127,7 +126,7 @@ require_once 'header-loader.php';
 </head>
 <body>
 
-<!-- Now the rest of your page’s HTML -->
+
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
