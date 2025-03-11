@@ -1,3 +1,9 @@
+<?php
+// Ensure session is available
+require_once "session_handler.php";
+require_once "header-loader.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,9 +23,9 @@
   />
   <!-- Custom CSS -->
   <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="header.css" />
 </head>
 <body>
-    <div id = "header"></div>
 
 <!--  MAIN SECTION WITH SIDEBAR & CAROUSEL -->
 <div class="container-fluid my-4">
@@ -30,11 +36,11 @@
     <!-- Sidebar -->
     <div class="col-lg-2 d-none d-lg-block ms-5">
       <ul class="list-group border-0">
-        <a href = "phones.php"><li class="list-group-item border-0 py-2 ">Phones</li></a>
-        <a href = "computers.php"><li class="list-group-item border-0 py-2 ">Computers</li></a>
-        <a href = "smartwatch.php"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
-          <a href = "headphones.php"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
-          <a href = "gaming.php"> <li class="list-group-item border-0 py-2">Gaming</li></a>
+        <a href = "phone.html"><li class="list-group-item border-0 py-2 ">Phones</li></a>
+        <a href = "computer.html"><li class="list-group-item border-0 py-2 ">Computers</li></a>
+        <a href = "smartwatch.html"><li class="list-group-item border-0 py-2 ">SmartWatch</li></a>
+          <a href = "headphones.html"><li class="list-group-item border-0 py-2 ">Headphones</li></a>    
+          <a href = "gaming.html"> <li class="list-group-item border-0 py-2">Gaming</li></a>
        
       </ul>
     </div>
@@ -76,21 +82,21 @@
   <h2 class="fw-bold">Browse By Category</h2>
   <div class="row mt-4 g-3 justify-content-center">
     <!-- Category Card 1 -->
-  <div class="col-6 col-md-4 col-lg-2" onclick=location.href="phones.php">
+  <div class="col-6 col-md-4 col-lg-2" onclick=location.href="phone.html">
       <div class="cat-card text-center p-3">
         <i class="bi bi-phone fs-1"></i>
         <p class="mt-2">Phones</p>
       </div>
     </div>
     <!-- Category Card 2 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="computers.php">                   
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="computer.html">                   
       <div class="cat-card text-center p-3">
         <i class="bi bi-laptop fs-1"></i>
         <p class="mt-2">Computers</p>
       </div>
     </div>
     <!-- Category Card 3 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="smartwatch.php">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="smartwatch.html">
       <div class="cat-card text-center p-3">
         <i class="bi bi-watch fs-1"></i>
         <p class="mt-2">SmartWatch</p>
@@ -98,14 +104,14 @@
     </div>
 
     <!-- Category Card 4 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="headphones.php">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="headphones.html">
       <div class="cat-card text-center p-3">
         <i class="bi bi-headphones fs-1"></i>
         <p class="mt-2">HeadPhones</p>
       </div>
     </div>
     <!-- Category Card 5 -->
-    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="gaming.php">
+    <div class="col-6 col-md-4 col-lg-2" onclick=location.href="gaming.html">
       <div class="cat-card text-center p-3">
         <i class="bi bi-controller fs-1"></i>
         <p class="mt-2">Gaming</p>
@@ -127,10 +133,10 @@
   <!-- Products Row -->
   <div class="row mt-4 g-3">
     <?php
-      //Include your database connection
+      // 1. Include your database connection
       require_once 'db_connection.php';
 
-      // Fetch best-selling products (example: only those with best_seller = 1)
+      // 2. Fetch best-selling products (example: only those with best_seller = 1)
       $sql = "SELECT * FROM products WHERE best_seller = 1 LIMIT 4";
       $result = $conn->query($sql);
 
@@ -156,14 +162,14 @@
               <!-- Product Name -->
               <h6 class="mb-1"><?php echo htmlspecialchars($row['name']); ?></h6>
 
-              <!-- Product Price  -->
+              <!-- Product Price (you can add discount logic if you like) -->
               <p class="text-danger mb-0">
                 $<?php echo number_format($row['price'], 2); ?>
                 <!-- Optional  discount -->
                 <span class="text-muted text-decoration-line-through">$<?php echo number_format($row['price'] + 100, 2); ?></span>
               </p>
 
-              <!-- Static star rating  -->
+              <!-- Static star rating or dynamic if you store ratings in DB -->
               <div class="text-warning small mb-1">
                 <i class="bi bi-star-fill"></i>
                 <i class="bi bi-star-fill"></i>
@@ -185,7 +191,7 @@
         echo "<p>No best-selling products found.</p>";
       endif;
 
-      // Close the DB connection
+      // 3. Close the DB connection
       $conn->close();
     ?>
   </div>
@@ -312,6 +318,6 @@
 <script
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
 ></script>
-
+<script src="loginheader.js"></script>
 </body>
 </html>
