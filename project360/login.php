@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <!--Header - Conditionally loaded based on login status-->
-<div id="header">
+
     <?php
     if (isset($_SESSION["user_id"])) {
         include "loginheader.php";
