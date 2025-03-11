@@ -86,7 +86,7 @@ if (isset($_SESSION['user_id'])) {
                 </button>
                 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileProfileDropdown">
-                    <li><a class="dropdown-item" href="Account.html">Manage My Account</a></li>
+                    <li><a class="dropdown-item" href="account.php">Manage My Account</a></li>
                     <li><a class="dropdown-item" href="cart.html">Cart</a></li>
                     <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
                     <li><hr class="dropdown-divider"></li>
@@ -148,7 +148,7 @@ if (isset($_SESSION['user_id'])) {
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="Account.html">Manage My Account</a></li>
+                        <li><a class="dropdown-item" href="account.php">Manage My Account</a></li>
                         <li><a class="dropdown-item" href="cart.html">Cart</a></li>
                         <li><a class="dropdown-item" href="wishlist.html">Wishlist</a></li>
                         <li><hr class="dropdown-divider"></li>
