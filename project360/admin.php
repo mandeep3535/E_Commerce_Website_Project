@@ -208,10 +208,13 @@ $conn->close();
             <!-- Stats Overview -->
             <div class="row g-4 mb-5">
                 <div class="col-md-3 col-sm-6">
-                    <div class="card text-white bg-primary p-3">
-                        <h5>Active Listings</h5>
-                        <h3 id="activeListings"><?php echo $activeListings; ?></h3>
-                    </div>
+                <div class="card text-white bg-primary p-3">
+  <h5>Active Listings</h5>
+  <a href="admin.product.html" class="text-white text-decoration-none">
+    <h3 id="activeListings"><?php echo $activeListings; ?></h3>
+  </a>
+</div>
+
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="card text-white bg-danger p-3">
@@ -222,7 +225,9 @@ $conn->close();
                 <div class="col-md-3 col-sm-6">
                     <div class="card text-white bg-success p-3">
                         <h5>Total Orders</h5>
+                        <a href="admin_order.php" class="text-white text-decoration-none">
                         <h3 id="totalOrders"><?php echo $totalOrders; ?></h3>
+</a>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
