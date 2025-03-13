@@ -3,7 +3,7 @@ let monthlySalesChartInstance = null;
 let customerRevenueChartInstance = null;
 let categoryChartInstance = null;
 
-// Wait for the DOM to be fully loaded
+// DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all charts
     initializeCharts();
@@ -251,7 +251,7 @@ function generateColors(count) {
         'rgba(210, 99, 132, 1)'
     ];
     
-    // If we need more colors than in our predefined array, generate them
+    // more colors than in our predefined array
     if (count > backgroundColors.length) {
         for (let i = backgroundColors.length; i < count; i++) {
             const r = Math.floor(Math.random() * 255);

@@ -36,7 +36,7 @@ try {
 }
 
 // Fetch dashboard data
-// 1. Active Listings (Total number of products)
+// Active Listings (Total number of products)
 $activeListings = 0;
 try {
     $query = "SELECT COUNT(*) as count FROM products";
@@ -49,7 +49,7 @@ try {
     // Error handling
 }
 
-// 2. Out of Stock Products
+//  Out of Stock Products
 $outOfStock = 0;
 try {
     $query = "SELECT COUNT(*) as count FROM products WHERE stock = 0";
@@ -62,7 +62,7 @@ try {
     // Error handling
 }
 
-// 3. Total Orders
+// Total Orders
 $totalOrders = 0;
 try {
     $query = "SELECT COUNT(*) as count FROM orders";
@@ -75,7 +75,7 @@ try {
     // Error handling
 }
 
-// 4. Total Revenue
+// Total Revenue
 $totalRevenue = 0;
 try {
     $query = "SELECT SUM(total_price) as revenue FROM orders";
@@ -88,7 +88,7 @@ try {
     // Error handling
 }
 
-// 5. Fetch data for revenue by customer chart
+// Fetch data for revenue by customer chart
 $revenueByCustomer = [];
 try {
     $query = "SELECT u.user_id, CONCAT(u.first_name, ' ', u.last_name) as customer_name, 
@@ -108,7 +108,7 @@ try {
     // Error handling
 }
 
-// 6. Fetch data for category distribution chart
+// Fetch data for category distribution chart
 $categoryData = [];
 try {
     $query = "SELECT category, COUNT(*) as product_count 
@@ -274,7 +274,7 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Pass PHP data to JavaScript -->
+    
     <script>
         // Passing PHP data to JavaScript variables
         const revenueByCustomer = <?php echo json_encode($revenueByCustomer); ?>;
