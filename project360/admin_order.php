@@ -47,7 +47,7 @@ if (!$result) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin.product.php" class="nav-link">
+                    <a href="admin.product.html" class="nav-link">
                         <i class="bi bi-box me-2"></i> Products
                     </a>
                 </li>

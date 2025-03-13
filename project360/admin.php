@@ -11,8 +11,10 @@ $adminRole = $_SESSION['admin_role'] ?? '';
 // Get profile image path 
 $profileImage = ""; // Default image path
 
-// Try to fetch profile image from database
+// Database connection
 require_once 'db_connection.php';
+
+// Try to fetch profile image from database
 try {
     $stmt = $conn->prepare("SELECT profile_image FROM admins WHERE user_id = ?");
     $stmt->bind_param("s", $adminId);
@@ -32,6 +34,117 @@ try {
     // If there's an error, use default image
     $profileImage = "images/default_admin.jpg";
 }
+
+// Fetch dashboard data
+// 1. Active Listings (Total number of products)
+$activeListings = 0;
+try {
+    $query = "SELECT COUNT(*) as count FROM products";
+    $result = $conn->query($query);
+    if ($result) {
+        $row = $result->fetch_assoc();
+        $activeListings = $row['count'];
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// 2. Out of Stock Products
+$outOfStock = 0;
+try {
+    $query = "SELECT COUNT(*) as count FROM products WHERE stock = 0";
+    $result = $conn->query($query);
+    if ($result) {
+        $row = $result->fetch_assoc();
+        $outOfStock = $row['count'];
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// 3. Total Orders
+$totalOrders = 0;
+try {
+    $query = "SELECT COUNT(*) as count FROM orders";
+    $result = $conn->query($query);
+    if ($result) {
+        $row = $result->fetch_assoc();
+        $totalOrders = $row['count'];
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// 4. Total Revenue
+$totalRevenue = 0;
+try {
+    $query = "SELECT SUM(total_price) as revenue FROM orders";
+    $result = $conn->query($query);
+    if ($result) {
+        $row = $result->fetch_assoc();
+        $totalRevenue = $row['revenue'] ?? 0;
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// 5. Fetch data for revenue by customer chart
+$revenueByCustomer = [];
+try {
+    $query = "SELECT u.user_id, CONCAT(u.first_name, ' ', u.last_name) as customer_name, 
+              SUM(o.total_price) as total_spent 
+              FROM orders o 
+              JOIN users u ON o.user_id = u.user_id 
+              GROUP BY o.user_id 
+              ORDER BY total_spent DESC 
+              LIMIT 10";
+    $result = $conn->query($query);
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $revenueByCustomer[] = $row;
+        }
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// 6. Fetch data for category distribution chart
+$categoryData = [];
+try {
+    $query = "SELECT category, COUNT(*) as product_count 
+              FROM products 
+              GROUP BY category";
+    $result = $conn->query($query);
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $categoryData[] = $row;
+        }
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// 7. Fetch monthly sales data
+$monthlySales = [];
+try {
+    $query = "SELECT DATE_FORMAT(order_date, '%Y-%m') as month, 
+              SUM(total_price) as sales 
+              FROM orders 
+              GROUP BY DATE_FORMAT(order_date, '%Y-%m') 
+              ORDER BY month ASC 
+              LIMIT 12";
+    $result = $conn->query($query);
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $monthlySales[] = $row;
+        }
+    }
+} catch (Exception $e) {
+    // Error handling
+}
+
+// Close the database connection
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,6 +157,8 @@ try {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="admin.css">
 </head>
@@ -91,60 +206,87 @@ try {
             <h2 class="mb-4">Dashboard</h2>
 
             <!-- Stats Overview -->
-            <div class="row g-4">
+            <div class="row g-4 mb-5">
                 <div class="col-md-3 col-sm-6">
                     <div class="card text-white bg-primary p-3">
                         <h5>Active Listings</h5>
-                        <h3 id="activeListings">0</h3>
+                        <h3 id="activeListings"><?php echo $activeListings; ?></h3>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="card text-white bg-danger p-3">
                         <h5>Out of Stock</h5>
-                        <h3 id="outOfStock">0</h3>
+                        <h3 id="outOfStock"><?php echo $outOfStock; ?></h3>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="card text-white bg-success p-3">
                         <h5>Total Orders</h5>
-                        <h3 id="totalOrders">0</h3>
+                        <h3 id="totalOrders"><?php echo $totalOrders; ?></h3>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="card text-white bg-warning p-3">
                         <h5>Total Revenue</h5>
-                        <h3 id="totalRevenue">$0</h3>
+                        <h3 id="totalRevenue">$<?php echo number_format($totalRevenue, 2); ?></h3>
                     </div>
                 </div>
             </div>
-
-            <!-- Orders Table -->
-            <div class="mt-4">
-                <h4>Recent Orders</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover mt-3">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer ID</th>
-                                <th>Customer</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orderTableBody">
-                            <!--Our Future Step : Orders will be dynamically can be added in further steps here -->
-                        </tbody>
-                    </table>
+            
+            <!-- Analytics Charts -->
+            <div class="row g-4">
+                <!-- Monthly Sales Chart -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Monthly Sales</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="monthlySalesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Customer Revenue Chart -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Top Customers by Revenue</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="customerRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Category Distribution Chart -->
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Product Categories</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="admin.js"></script>
+    <!-- Pass PHP data to JavaScript -->
+    <script>
+        // Passing PHP data to JavaScript variables
+        const revenueByCustomer = <?php echo json_encode($revenueByCustomer); ?>;
+        const categoryData = <?php echo json_encode($categoryData); ?>;
+        const monthlySales = <?php echo json_encode($monthlySales); ?>;
+    </script>
 
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    <script src="admin.js"></script>
+    
 </body>
 </html>
