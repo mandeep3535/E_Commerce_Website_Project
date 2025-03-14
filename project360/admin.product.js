@@ -126,7 +126,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     addProductForm.dataset.mode = 'add';
                     const submitButton = addProductForm.querySelector('button[type="submit"]');
                     submitButton.textContent = 'Add Product';
-                    
+                       // Clear and hide existing images container
+                    const existingImagesContainer = document.getElementById('existingImagesContainer');
+                    const existingImagesDiv = document.getElementById('existingImages');
+                    existingImagesDiv.innerHTML = '';
+                    existingImagesContainer.style.display = 'none';
+        
+                  // Remove hidden input for current images if it exists
+                    const currentImagesInput = document.getElementById('currentImages');
+                   if (currentImagesInput) {
+                     currentImagesInput.remove();
+                   }
+                   // Make file input required again
+                     document.getElementById('productImages').required = true;
+        
                     loadProducts(); // Refresh the product list
                 } else {
                     // Provide more specific error feedback
@@ -320,6 +333,9 @@ function alertError(message) {
 }
 
 function loadProductForEdit(productId) {
+    // Get the form reference at the beginning
+    const form = document.getElementById('addProductForm');
+    
     fetch(`get_single_product.php?id=${productId}`)
         .then(response => {
             if (!response.ok) {
@@ -347,8 +363,47 @@ function loadProductForEdit(productId) {
             document.getElementById('productCategory').value = product.category;
             document.getElementById('productDescription').value = product.description;
             
+            // Display existing images if available
+            const existingImagesContainer = document.getElementById('existingImagesContainer');
+            const existingImagesDiv = document.getElementById('existingImages');
+            
+            // Clear previous images
+            existingImagesDiv.innerHTML = '';
+            
+            if (product.images && product.images.length > 0) {
+                // Make the container visible
+                existingImagesContainer.style.display = 'block';
+                
+                // Split images string into array
+                const images = product.images.split(',');
+                
+                // Display each image
+                images.forEach(imagePath => {
+                    if (imagePath.trim()) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = imagePath;
+                        imgElement.className = 'img-thumbnail';
+                        imgElement.style.height = '100px';
+                        imgElement.alt = 'Product image';
+                        existingImagesDiv.appendChild(imgElement);
+                    }
+                });
+                
+                // Store original images data in a hidden field
+                const hiddenImagesInput = document.getElementById('currentImages') || document.createElement('input');
+                hiddenImagesInput.type = 'hidden';
+                hiddenImagesInput.id = 'currentImages';
+                hiddenImagesInput.name = 'currentImages';
+                hiddenImagesInput.value = product.images;
+                form.appendChild(hiddenImagesInput);
+                
+                // Make file input optional in edit mode
+                document.getElementById('productImages').required = false;
+            } else {
+                existingImagesContainer.style.display = 'none';
+            }
+            
             // Change form submission behavior
-            const form = document.getElementById('addProductForm');
             form.dataset.mode = 'edit';
             form.dataset.editId = productId;
             
