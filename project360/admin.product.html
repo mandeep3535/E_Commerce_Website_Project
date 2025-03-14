@@ -92,6 +92,11 @@
                         <input type="file" class="form-control" id="productImages" name="productImages[]" accept="image/*" multiple required>
                         <small class="text-danger" id="fileError" style="display: none;">You can only upload up to 3 images.</small>
                     </div>
+                    <div class="col-md-12 mt-2" id="existingImagesContainer" style="display: none;">
+                        <label class="form-label">Current Images:</label>
+                        <div id="existingImages" class="d-flex gap-2"></div>
+                        <small class="text-muted">Upload new images to replace these, or leave empty to keep the current ones.</small>
+                    </div>
                     <div class="col-md-12">
                         <label class="form-label">Description</label>
                         <textarea class="form-control" id="productDescription" name="productDescription" rows="3" required></textarea>

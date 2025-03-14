@@ -46,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    $imagesJson = json_encode($uploadedImages);
+    //$imagesJson = json_encode($uploadedImages);
+    $imagesString = implode(',', $uploadedImages);
     
     $sql = "INSERT INTO products (product_id, name, description, stock, price, category, images) 
         VALUES (?, ?, ?, ?, ?, ?, ?)";
