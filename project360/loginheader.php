@@ -57,11 +57,14 @@ if (isset($_SESSION['user_id'])) {
             
             <a href="wishlist.php" class="d-flex d-lg-none position-relative me-3">
                 <i class="bi bi-heart fs-4"></i>
-                <span 
-                  id="wishlistCountBadgeMobile"
-                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                  style="display:none;"
-                >0</span>
+                     <span 
+         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+        id="wishlistCountBadgeMobile"
+         style="display: none;"
+      >
+      0
+      </span>
+
             </a>
             
             <!-- Mobile Profile Dropdown -->
@@ -118,7 +121,7 @@ if (isset($_SESSION['user_id'])) {
             <div class="d-none d-lg-flex align-items-center">
                 <a href="wishlist.php" class="me-3 position-relative">
                     <i class="bi bi-heart fs-4"></i>
-                    <span id="wishlistCountBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
+                    <span id="wishlistCountBadgeDesktop" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">0</span>
                 </a>
 
                 <a href="cart.php" class="me-3 position-relative">

@@ -163,14 +163,14 @@ function updateCartCount() {
               const wishlistModal = new bootstrap.Modal(wishlistModalElement);
               const wishlistModalBody = document.getElementById("wishlistModalBody");
               if (wishlistModalBody) {
-                wishlistModalBody.textContent = `${product.name} has been added to your wishlist!`;
+           //     wishlistModalBody.textContent = `${product.name} has been added to your wishlist!`;
               }
               wishlistModal.show();
             } else {
-              alert(`${product.name} has been added to your wishlist!`);
+            //  alert(`${product.name} has been added to your wishlist!`);
             }
           } else {
-            alert(`${product.name} has been added to your wishlist!`);
+        //    alert(`${product.name} has been added to your wishlist!`);
           }
         } else {
           // If already in wishlist, notify the user
@@ -184,10 +184,10 @@ function updateCartCount() {
               }
               wishlistModal.show();
             } else {
-              alert(`${product.name} is already in your wishlist!`);
+            //  alert(`${product.name} is already in your wishlist!`);
             }
           } else {
-            alert(`${product.name} is already in your wishlist!`);
+           // alert(`${product.name} is already in your wishlist!`);
           }
         }
       });

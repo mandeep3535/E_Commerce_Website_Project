@@ -83,7 +83,7 @@ if (isset($_SESSION["user_id"])) {
 ?>
 
 <nav class="breadcrumb mt-4 ms-5">
-    <a class="breadcrumb-item text-decoration-none text-muted" href="home.html">Home</a>
+    <a class="breadcrumb-item text-decoration-none text-muted" href="home.php">Home</a>
     <span class="breadcrumb-item active text-secondary fw-bold">Login</span>
 </nav>
 
