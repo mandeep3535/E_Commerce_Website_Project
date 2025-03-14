@@ -24,3 +24,5 @@ fetch("loginheader.html")
                 mobileWishlist.addEventListener("click", () => window.location.href = "wishlist.html");
             }
         }
+
+        

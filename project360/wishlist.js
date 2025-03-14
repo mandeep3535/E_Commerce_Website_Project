@@ -1,146 +1,220 @@
+// Ensure the DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
-    const wishlistContainer = document.getElementById("wishlistContainer");
-    const wishlistHeader = document.getElementById("wishlistHeader");
-    const moveAllBtn = document.getElementById("moveAllButton");
-  
-    // Initializing Data
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  
-    // Update wishlist count display
-    const updateWishlistCount = () => {
-      wishlistHeader.textContent = `Wishlist (${wishlist.length})`;
-    };
-  
-    // Render wishlist items
-    const renderWishlist = () => {
-      wishlistContainer.innerHTML = wishlist.length === 0 
-        ? `<div class="col">Your wishlist is empty!</div>`
-        : wishlist.map(item => `
-            <div class="col">
-              <div class="product-card h-100 p-3 position-relative d-flex flex-column">
-                <button class="icon-btn remove-wishlist-item">
-                  <i class="bi bi-trash"></i>
-                </button>
-                <div class="text-center mb-2">
-                  <img src="${item.image}" alt="${item.name}" class="img-fluid product-img" />
-                </div>
-                <button class="btn btn-danger btn-sm mb-1 add-to-cart-btn">Add To Cart</button>
-                <p class="mb-0 fw-semibold">${item.name}</p>
-                <p class="text-danger mb-0">$${item.price}</p>
-              </div>
-            </div>
-          `).join('');
-    };
-  
-    // Remove item from wishlist
-    const removeItem = (productName) => {
-      wishlist = wishlist.filter(item => item.name !== productName);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      renderWishlist();
-      updateWishlistCount();
-    };
-  
-    // Add item to cart
-    const addToCart = (product) => {
-      const existingProduct = cart.find(item => item.name === product.name);
-      existingProduct ? existingProduct.quantity += 1 : cart.push({...product, quantity: 1});
-      localStorage.setItem("cart", JSON.stringify(cart));
-      // Remove it from the wishlist as well
-    removeItem(product.name);
-      // Show confirmation modal
-      new bootstrap.Modal(document.getElementById('cartModal')).show();
-      document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
-    };
-  
-    // Event Delegation
-    wishlistContainer.addEventListener('click', (e) => {
-      const card = e.target.closest('.product-card');
-      if (!card) return;
-  
-      // Handle remove button
-      if (e.target.closest('.remove-wishlist-item')) {
-        const productName = card.querySelector('.product-img').alt;
-        removeItem(productName);
-      }
-  
-      // Handle add to cart button
-      if (e.target.closest('.add-to-cart-btn')) {
-        const product = wishlist.find(item => item.name === card.querySelector('.product-img').alt);
-        addToCart(product);
+ 
+  const wishlistContainer = document.getElementById("wishlistContainer");
+  const wishlistHeader    = document.getElementById("wishlistHeader");
+  const moveAllBtn        = document.getElementById("moveAllButton");
+
+  // We keep the cart in localStorage
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  //-----------------------------------
+  // UTILITY: Update cart in localStorage, then update the top icon
+  //-----------------------------------
+  function saveCartAndUpdateCount() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    if (typeof window.updateCartCount === "function") {
+      window.updateCartCount(); 
+    }
+  }
+
+  //-----------------------------------
+  // UTILITY: Recount how many items are in the wishlist DOM (local count)
+  //-----------------------------------
+  function updateWishlistCount() {
+    const itemCount = wishlistContainer.querySelectorAll(".product-card").length;
+    wishlistHeader.textContent = `Wishlist (${itemCount})`;
+    if (typeof window.updateWishlistIconCount === "function") {
+      window.updateWishlistIconCount(itemCount);
+    }
+  }
+
+  //-----------------------------------
+  // FUNCTION: Refresh header wishlist count from server
+  //-----------------------------------
+  function refreshHeaderWishlistCount() {
+    fetch("wishlist-count.php")
+      .then(res => res.json())
+      .then(data => {
+        const newCount = data.count || 0;
+        // Update Mobile Badge
+        const wishlistBadgeMobile = document.getElementById("wishlistCountBadgeMobile");
+        if (wishlistBadgeMobile) {
+          if (newCount > 0) {
+            wishlistBadgeMobile.innerText = newCount;
+            wishlistBadgeMobile.style.display = "inline-block";
+          } else {
+            wishlistBadgeMobile.style.display = "none";
+          }
+        }
+        // Update Desktop Badge
+        const wishlistBadgeDesktop = document.getElementById("wishlistCountBadgeDesktop");
+        if (wishlistBadgeDesktop) {
+          if (newCount > 0) {
+            wishlistBadgeDesktop.innerText = newCount;
+            wishlistBadgeDesktop.style.display = "inline-block";
+          } else {
+            wishlistBadgeDesktop.style.display = "none";
+          }
+        }
+      })
+      .catch(err => console.error("Error fetching wishlist count:", err));
+  }
+
+  //-----------------------------------
+  // REMOVE an item from DB & DOM (trash icon)
+  //-----------------------------------
+  function removeItemFromDB(productId, colEl) {
+    fetch(`wishlist.php?action=remove&product_id=${productId}`)
+      .then(response => response.text())
+      .then(data => {
+        console.log("Server remove response:", data);
+        // Remove from DOM
+        colEl.remove();
+        // Update local DOM count
+        updateWishlistCount();
+        // Refresh header wishlist count from server
+        refreshHeaderWishlistCount();
+      })
+      .catch(err => {
+        console.error("Error removing wishlist item:", err);
+      });
+  }
+
+  //-----------------------------------
+  // ADD an item to localStorage CART
+  //-----------------------------------
+  function addToCart(product) {
+    const existingProduct = cart.find(item => item.name === product.name);
+    if (existingProduct) {
+      existingProduct.quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    saveCartAndUpdateCount();
+
+    // Show confirmation modal
+    const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+    document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
+    cartModal.show();
+  }
+
+  //-----------------------------------
+  // EVENT: Clicking inside the wishlistContainer
+  //-----------------------------------
+  wishlistContainer.addEventListener("click", function(e) {
+    const removeBtn = e.target.closest(".remove-wishlist-item");
+    if (removeBtn) {
+      // TRASH ICON was clicked
+      const productId = removeBtn.getAttribute("data-product-id");
+      const colEl = removeBtn.closest(".col");
+      removeItemFromDB(productId, colEl);
+      return;
+    }
+
+    const addCartBtn = e.target.closest(".add-to-cart-btn");
+    if (addCartBtn) {
+      // ADD TO CART was clicked
+      const productName  = addCartBtn.getAttribute("data-product-name");
+      const productPrice = parseFloat(addCartBtn.getAttribute("data-product-price")) || 0;
+      const productImage = addCartBtn.getAttribute("data-product-image");
+
+      addToCart({ name: productName, price: productPrice, image: productImage });
+      return;
+    }
+  });
+
+  //-----------------------------------
+  // EVENT: "Move All To Bag" => remove each from DB, add to cart
+  //-----------------------------------
+  moveAllBtn.addEventListener("click", function() {
+    const allCols = wishlistContainer.querySelectorAll(".col");
+    if (!allCols.length) return;
+
+    allCols.forEach(col => {
+      const removeBtn  = col.querySelector(".remove-wishlist-item");
+      const cartBtn    = col.querySelector(".add-to-cart-btn");
+      if (!removeBtn || !cartBtn) return;
+
+      // 1) Remove from DB
+      const productId = removeBtn.getAttribute("data-product-id");
+      fetch(`wishlist.php?action=remove&product_id=${productId}`)
+        .then(r => r.text())
+        .then(resp => {
+          console.log("MoveAll => server says:", resp);
+        })
+        .catch(err => console.error("MoveAll => error:", err));
+
+      // 2) Add to localStorage cart
+      const productName  = cartBtn.getAttribute("data-product-name");
+      const productPrice = parseFloat(cartBtn.getAttribute("data-product-price")) || 0;
+      const productImage = cartBtn.getAttribute("data-product-image");
+
+      const existingProduct = cart.find(item => item.name === productName);
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+      } else {
+        cart.push({ name: productName, price: productPrice, image: productImage, quantity: 1 });
       }
     });
-  
-    // Move all to cart
-    moveAllBtn.addEventListener('click', () => {
-      cart = [...cart, ...wishlist.map(item => ({...item, quantity: 1}))];
-      localStorage.setItem("cart", JSON.stringify(cart));
-      wishlist = [];
-      localStorage.removeItem("wishlist");
-      renderWishlist();
-      updateWishlistCount();
-    });
-  
-    // Initial render
-    renderWishlist();
+
+    // Clear the DOM
+    wishlistContainer.innerHTML = `<p class="text-muted">You have no items in your wishlist.</p>`;
     updateWishlistCount();
+    saveCartAndUpdateCount();
+    
+    // Refresh header wishlist count from server after move all
+    refreshHeaderWishlistCount();
+
+    // Possibly show a message
+    alert("All items moved to cart!");
   });
-  
-/*Just for you section*/
-  document.addEventListener("DOMContentLoaded", function() {
-    //  Select the "Just For You" container
-    const justForYouContainer = document.getElementById("justForYouContainer");
-  
-    // Attach an event listener for clicks on any "Add To Cart" button inside
-    justForYouContainer.addEventListener("click", function(e) {
-      // Check if the click was on (or inside) a button that says "Add To Cart"
-      if (e.target.closest(".btn.btn-danger")) {
-        // Find the closest .product-card
-        const productCard = e.target.closest(".product-card");
-        if (!productCard) return;
-  
-        // Extract product info from the DOM
-        const imgEl = productCard.querySelector(".product-img");
-        const titleEl = productCard.querySelector(".fw-semibold"); 
-        const priceEl = productCard.querySelector(".text-danger");
-  
-        // Name 
-        const productName = titleEl ? titleEl.textContent.trim() : imgEl.alt;
-        // Price 
-        const rawPrice = priceEl ? priceEl.textContent.replace("$", "").trim() : "0";
-        const productPrice = parseFloat(rawPrice) || 0;
-        // Image src
-        const productImage = imgEl ? imgEl.src : "";
-  
-        // Build the product object
-        const product = {
-          name: productName,
-          price: productPrice,
-          image: productImage,
-          quantity: 1 // Default quantity
-        };
-  
-        // Add to cart in localStorage
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        // Check if item already in cart
-        const existingItem = cart.find(item => item.name === productName);
-        if (existingItem) {
-          existingItem.quantity += 1; 
-        } else {
-          cart.push(product);
-        }
-        localStorage.setItem("cart", JSON.stringify(cart));
-  
-        // Show add to cart modal 
-        const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
-        document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
-        cartModal.show();
-        
-        // if you have a global function to update cart count in the navbar:
-        if (window.updateCartCount) {
-          window.updateCartCount();
-        }
+
+  //-----------------------------------
+  // On load, do a final local count and update header from server
+  //-----------------------------------
+  updateWishlistCount();
+  refreshHeaderWishlistCount();
+  saveCartAndUpdateCount(); // updates cart count if you have one
+});
+
+/* "Just for you" remains the same (adds to localStorage cart) */
+document.addEventListener("DOMContentLoaded", function() {
+  const justForYouContainer = document.getElementById("justForYouContainer");
+
+  justForYouContainer.addEventListener("click", function(e) {
+    if (e.target.closest(".btn.btn-danger")) {
+      const productCard = e.target.closest(".product-card");
+      if (!productCard) return;
+
+      const imgEl   = productCard.querySelector(".product-img");
+      const titleEl = productCard.querySelector(".fw-semibold");
+      const priceEl = productCard.querySelector(".text-danger");
+
+      const productName  = titleEl ? titleEl.textContent.trim() : (imgEl ? imgEl.alt : "Unknown");
+      const rawPrice     = priceEl ? priceEl.textContent.replace("$", "").trim() : "0";
+      const productPrice = parseFloat(rawPrice) || 0;
+      const productImage = imgEl ? imgEl.src : "";
+
+      const product = { name: productName, price: productPrice, image: productImage, quantity: 1 };
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = cart.find(item => item.name === productName);
+      if (existingItem) {
+        existingItem.quantity += 1; 
+      } else {
+        cart.push(product);
       }
-    });
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      if (typeof window.updateCartCount === "function") {
+        window.updateCartCount();
+      }
+
+      // Show add to cart modal 
+      const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+      document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
+      cartModal.show();
+    }
   });
-  
+}); 
