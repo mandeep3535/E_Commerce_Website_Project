@@ -49,7 +49,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <li><a href="privacy.html" class="text-white">Privacy Policy</a></li>
                     <li><a href="terms.html" class="text-white">Terms of Use</a></li>
                     <li><a href="faq.html" class="text-white">FAQ</a></li>
-                    <li><a href="contact.html" class="text-white">Contact</a></li>
+                    <li><a href="contact.php" class="text-white">Contact</a></li>
                 </ul>
             </div>
         </div>

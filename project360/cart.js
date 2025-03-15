@@ -1,6 +1,4 @@
-let couponUsed = false;
-
-// Instantiate the modal only once (ensure the element is available)
+// Instantiate the modal 
 const feedbackModalElement = document.getElementById('feedbackModal');
 const feedbackModal = new bootstrap.Modal(feedbackModalElement);
 
@@ -31,80 +29,18 @@ function updateCart() {
         originalTotal += rowSubtotal;
     });
 
-    const finalTotal = couponUsed ? originalTotal / 2 : originalTotal;
     const formatTotal = (amount) => `$${amount.toFixed(2)}`;
 
     const cartSubtotalEl = document.getElementById("cartSubtotal");
     const cartTotalEl = document.getElementById("cartTotal");
     
-    if (couponUsed) {
-        const strikeThrough = (amount) => `<span style="text-decoration: line-through; color:red;">$${amount.toFixed(2)}</span>`;
-        cartSubtotalEl.innerHTML = `${strikeThrough(originalTotal)} ${formatTotal(finalTotal)}`;
-        cartTotalEl.innerHTML = `${strikeThrough(originalTotal)} ${formatTotal(finalTotal)}`;
-    } else {
-        cartSubtotalEl.textContent = formatTotal(originalTotal);
-        cartTotalEl.textContent = formatTotal(originalTotal);
-    }
-    
-    localStorage.setItem("cartSubtotal", originalTotal);
+    cartSubtotalEl.textContent = formatTotal(originalTotal);
+    cartTotalEl.textContent = formatTotal(originalTotal);
+  
 }
 
 // -----------------------------------------------------
-// Coupon Handling (remains unchanged)
-// -----------------------------------------------------
-function applyCoupon() {
-    const couponInput = document.getElementById("couponCodeInput");
-    const couponMessageEl = document.getElementById("couponMessage");
-    const applyCouponBtn = document.getElementById("applyCouponBtn");
-    const couponCode = couponInput.value.trim();
-    
-    if (couponUsed) {
-        couponUsed = false;
-        localStorage.removeItem("appliedCoupon");
-        couponInput.value = "";
-        couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
-        couponMessageEl.classList.remove("text-success");
-        couponMessageEl.classList.add("text-danger");
-        applyCouponBtn.textContent = "Apply Coupon";
-        updateCart();
-        return;
-    }
-    if (couponCode === "") return;
-
-    if (couponCode.toUpperCase() === "MV50") {
-        couponUsed = true;
-        localStorage.setItem("appliedCoupon", couponCode.toUpperCase());
-        couponInput.value = couponCode.toUpperCase();
-        couponMessageEl.textContent = `Coupon code ${couponCode.toUpperCase()} is applied.`;
-        couponMessageEl.classList.remove("text-danger");
-        couponMessageEl.classList.add("text-success");
-        applyCouponBtn.textContent = "Remove Coupon";
-        alert("Coupon MV50 applied! Prices reduced by half.");
-    } else {
-        couponUsed = false;
-        localStorage.removeItem("appliedCoupon");
-        couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
-        couponMessageEl.classList.remove("text-success");
-        couponMessageEl.classList.add("text-danger");
-        applyCouponBtn.textContent = "Apply Coupon";
-        alert("Invalid coupon code!");
-    }
-    updateCart();
-}
-
-document.getElementById("couponCodeInput").addEventListener("blur", () => {
-    const couponInput = document.getElementById("couponCodeInput");
-    const couponMessageEl = document.getElementById("couponMessage");
-    if (couponInput.value.trim() === "") {
-        couponUsed = false;
-        localStorage.removeItem("appliedCoupon");
-        couponMessageEl.textContent = "";
-        updateCart();
-    }
-});
-
-// -----------------------------------------------------
-// Update Cart Count (summing quantity from the DOM)
+// Update Cart Count 
 // -----------------------------------------------------
 function updateCartCount() {
     let totalQuantity = 0;
@@ -132,7 +68,7 @@ function updateCartCount() {
 }
 
 // -----------------------------------------------------
-// Load Cart: Now relies on server-rendered table rows
+// Load Cart
 // -----------------------------------------------------
 function loadCart() {
     updateCart();
@@ -141,7 +77,7 @@ function loadCart() {
 }
 
 // -----------------------------------------------------
-// Remove an Item from the Cart (database-driven)
+// Remove an Item from the Cart
 // -----------------------------------------------------
 function removeItem(event) {
     const row = event.target.closest("tr");
@@ -153,7 +89,6 @@ function removeItem(event) {
         .then(response => response.text())
         .then(data => {
             console.log("Server remove response:", data);
-            // Show a generic removal confirmation instead of product details.
             showModal("Product Removed", "The item has been removed from your cart.");
             row.remove();
             updateCart();
@@ -164,7 +99,6 @@ function removeItem(event) {
             showModal("Error", "There was an error removing the cart item. Please try again.");
         });
 }
-
 
 // -----------------------------------------------------
 // Update Quantity: Send an AJAX request to update DB
@@ -220,41 +154,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Use our dedicated handler for quantity changes
     bindQuantityListeners();
 
-    document.getElementById("applyCouponBtn").addEventListener("click", applyCoupon);
-    
     loadCart();
-
-    const couponInput = document.getElementById("couponCodeInput");
-    const couponMessageEl = document.getElementById("couponMessage");
-    const applyCouponBtn = document.getElementById("applyCouponBtn");
-    const storedCoupon = localStorage.getItem("appliedCoupon");
-    if (storedCoupon && storedCoupon.toUpperCase() === "MV50") {
-        couponUsed = true;
-        couponInput.value = storedCoupon;
-        couponMessageEl.textContent = `Coupon code ${storedCoupon} is applied.`;
-        couponMessageEl.classList.remove("text-danger");
-        couponMessageEl.classList.add("text-success");
-        applyCouponBtn.textContent = "Remove Coupon";
-        updateCart();
-    } else {
-        couponMessageEl.textContent = "Apply Coupon MV50 for 50% off";
-        couponMessageEl.classList.remove("text-success");
-        couponMessageEl.classList.add("text-danger");
-        applyCouponBtn.textContent = "Apply Coupon";
-    }
 });
 
 // -----------------------------------------------------
-// (Optional) Add to Cart function if needed elsewhere
+//  Add to Cart function if needed elsewhere
 // -----------------------------------------------------
 function addToCart() {
     const productImage = document.getElementById("mainProductImage");
     const relativeImagePath = productImage.getAttribute('src');
-    // Added: retrieve product id from a DOM element
+    // Retrieve product id from a DOM element
     const productId = document.getElementById("productID").value;
   
     const product = {
-        id: productId, // now defined so fetch uses the proper value
+        id: productId,
         name: document.getElementById("productName").textContent,
         price: parseFloat(document.getElementById("productPrice").textContent.replace("$", "")), 
         quantity: parseInt(document.getElementById("quantityInput").value),
@@ -270,12 +183,9 @@ function addToCart() {
         .catch(err => console.error("Error adding to cart:", err));
 }
 
-
-// -----------------------------------------------------
-// Wishlist Count (remains unchanged)
-// -----------------------------------------------------
+/*
 function updateWishlistCount() {
-    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    let wishlist = []; // localStorage handling removed
     let totalItems = wishlist.length;
   
     const wishlistBadgeDesktop = document.getElementById("wishlistCountBadge");
@@ -306,9 +216,9 @@ window.addEventListener("storage", function () {
   
 if (typeof wishlistBtn !== "undefined") {
     wishlistBtn.addEventListener("click", function () {
-        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+        let wishlist = []; // localStorage handling removed
         wishlist.push(product);
-        localStorage.setItem("wishlist", JSON.stringify(wishlist));
         updateWishlistCount();
     });
 }
+*/

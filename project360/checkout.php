@@ -14,78 +14,84 @@ if (!isset($_SESSION['user_id'])) {
 // Process order submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   error_log("Raw cart_items POST data: " . $_POST['cart_items']);
-    $user_id = $_SESSION['user_id'];
-    $province = $_POST['province'];
-    $street_address = $_POST['street_address'];
-    $apartment_info = isset($_POST['apartment_info']) ? $_POST['apartment_info'] : '';
-    $city = $_POST['city'];
-    $payment_method = $_POST['payment_method'];
-    $total_price = $_POST['total_price'];
-    
-    // Combine address parts into one string
-    $delivery_address = "$street_address, " . 
-                        ($apartment_info ? "$apartment_info, " : "") . 
-                        "$city, $province";
-    
-    // Insert into orders table
-    $orderSql = "INSERT INTO orders (user_id, delivery_address, payment_method, total_price, status) 
-                VALUES (?, ?, ?, ?, 'pending')";
-    
-    $stmt = $conn->prepare($orderSql);
-    $stmt->bind_param("issd", $user_id, $delivery_address, $payment_method, $total_price);
-    
-    if ($stmt->execute()) {
-        $order_id = $conn->insert_id; 
-        
-        
-        
-        // Insert each item into the orderitems table
-        $itemSql = "INSERT INTO orderitems (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
-        $itemStmt = $conn->prepare($itemSql);
-        
-        
-     $cart_items = json_decode($_POST['cart_items'], true);
-if (!is_array($cart_items) || empty($cart_items)) {
-    $error = "Your cart appears to be empty or invalid. Please try again.";
-    
-} else {
-  foreach ($cart_items as $item) {
-    if (!isset($item['id'])) {
-      $findProductSql = "SELECT product_id FROM products WHERE name = ?";
-      $findStmt = $conn->prepare($findProductSql);
-      $findStmt->bind_param("s", $item['name']);
-      $findStmt->execute();
-      $findResult = $findStmt->get_result();
+  $user_id = $_SESSION['user_id'];
+  $province = $_POST['province'];
+  $street_address = $_POST['street_address'];
+  $apartment_info = isset($_POST['apartment_info']) ? $_POST['apartment_info'] : '';
+  $city = $_POST['city'];
+  $payment_method = $_POST['payment_method'];
+  $total_price = $_POST['total_price'];
+  
+  // Combine address parts into one string
+  $delivery_address = "$street_address, " . 
+                      ($apartment_info ? "$apartment_info, " : "") . 
+                      "$city, $province";
+  
+  // Insert into orders table
+  $orderSql = "INSERT INTO orders (user_id, delivery_address, payment_method, total_price, status) 
+              VALUES (?, ?, ?, ?, 'pending')";
+  $stmt = $conn->prepare($orderSql);
+  $stmt->bind_param("issd", $user_id, $delivery_address, $payment_method, $total_price);
+  
+  if ($stmt->execute()) {
+      $order_id = $conn->insert_id; 
       
-      if ($findResult->num_rows > 0) {
-        $productRow = $findResult->fetch_assoc();
-        $product_id = $productRow['product_id'];
+      // Insert each item into the orderitems table
+      $itemSql = "INSERT INTO orderitems (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+      $itemStmt = $conn->prepare($itemSql);
+      
+      $cart_items = json_decode($_POST['cart_items'], true);
+      if (!is_array($cart_items) || empty($cart_items)) {
+          $error = "Your cart appears to be empty or invalid. Please try again.";
       } else {
-        error_log("Could not find product ID for: " . $item['name']);
-        continue; // Skip this item
+          foreach ($cart_items as $item) {
+              if (!isset($item['id'])) {
+                  $findProductSql = "SELECT product_id FROM products WHERE name = ?";
+                  $findStmt = $conn->prepare($findProductSql);
+                  $findStmt->bind_param("s", $item['name']);
+                  $findStmt->execute();
+                  $findResult = $findStmt->get_result();
+                  
+                  if ($findResult->num_rows > 0) {
+                      $productRow = $findResult->fetch_assoc();
+                      $product_id = $productRow['product_id'];
+                  } else {
+                      error_log("Could not find product ID for: " . $item['name']);
+                      continue; // Skip this item
+                  }
+              } else {
+                  $product_id = $item['id'];
+              }
+              
+              $quantity = isset($item['quantity']) ? $item['quantity'] : 1;
+              $price = isset($item['price']) ? $item['price'] : 0;
+              
+              $itemStmt->bind_param("iiid", $order_id, $product_id, $quantity, $price);
+              $itemStmt->execute();
+          } 
       }
-    } else {
-      $product_id = $item['id'];
-    }
-    
-    $quantity = isset($item['quantity']) ? $item['quantity'] : 1;
-    $price = isset($item['price']) ? $item['price'] : 0;
-    
-    $itemStmt->bind_param("iiid", $order_id, $product_id, $quantity, $price);
-    $itemStmt->execute();
-  } 
+      
+      $itemStmt->close();
+      
+      // *** Remove all items from the cart for this user ***
+      $deleteSql = "DELETE FROM cart WHERE user_id = ?";
+      $deleteStmt = $conn->prepare($deleteSql);
+      $deleteStmt->bind_param("i", $user_id);
+      $deleteStmt->execute();
+      $deleteStmt->close();
+      
+      // Clear client-side cart (if using localStorage) and redirect
+      echo "<script>
+          localStorage.removeItem('cart');
+          localStorage.removeItem('appliedCoupon');
+          window.location.href = 'order_confirmation.php?order_id=$order_id';
+      </script>";
+      exit();
+  } else {
+      $error = "Error processing your order. Please try again.";
+  }
 }
-        // Clear the cart after successful order
-        echo "<script>
-            localStorage.removeItem('cart');
-            localStorage.removeItem('appliedCoupon');
-            window.location.href = 'order_confirmation.php?order_id=$order_id';
-        </script>";
-        exit();
-    } else {
-        $error = "Error processing your order. Please try again.";
-    }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -231,6 +237,25 @@ if (!is_array($cart_items) || empty($cart_items)) {
     </div>
   </div>
 </div>
+
+<!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="feedbackModalLabel">Notification</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Modal message will be inserted here by JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <?php
 require_once "footer.php";
