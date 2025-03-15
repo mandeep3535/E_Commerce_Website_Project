@@ -1,44 +1,229 @@
-// Global variables to store chart instances
+/**************************************************
+ * 1) REGISTER PLUGINS & SET GLOBALS ON DOM LOADED
+ **************************************************/
+document.addEventListener('DOMContentLoaded', function() {
+    // Register the data labels plugin globally (required in Chart.js 2.x)
+    Chart.plugins.register(ChartDataLabels);
+
+    // Make copies of your original data so we can reset after filtering
+    originalMonthlySales = Array.isArray(monthlySales) ? [...monthlySales] : [];
+    originalRevenueByCustomer = Array.isArray(revenueByCustomer) ? [...revenueByCustomer] : [];
+    originalCategoryData = Array.isArray(categoryData) ? [...categoryData] : [];
+
+    // Initialize charts
+    initializeCharts();
+
+    // Initialize all filter controls
+    initializeFilters();
+});
+
+/**************************************************
+ * 2) GLOBAL VARIABLES (chart instances + data copies)
+ **************************************************/
 let monthlySalesChartInstance = null;
 let customerRevenueChartInstance = null;
 let categoryChartInstance = null;
 
-// DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all charts
-    initializeCharts();
-});
+// These originals are used for resetting filters:
+let originalMonthlySales = [];
+let originalRevenueByCustomer = [];
+let originalCategoryData = [];
 
-// Function to initialize all charts
+/**************************************************
+ * 3) INITIALIZE ALL CHARTS
+ **************************************************/
 function initializeCharts() {
-    // Monthly Sales Chart
     initializeMonthlySalesChart();
-    
-    // Customer Revenue Chart
     initializeCustomerRevenueChart();
-    
-    // Product Categories Chart
     initializeCategoryChart();
 }
 
-// Function to initialize Monthly Sales Chart
+/**************************************************
+ * 4) INITIALIZE ALL FILTERS
+ **************************************************/
+function initializeFilters() {
+    addMonthlyChartFilters();
+    addCustomerRevenueFilters();
+    addCategoryFilters();
+}
+
+/**************************************************
+ * 5) MONTHLY SALES FILTERS
+ **************************************************/
+function addMonthlyChartFilters() {
+    const chartCard = document.querySelector('#monthlySalesChart').closest('.card');
+    const cardHeader = chartCard.querySelector('.card-header');
+    
+    const filterDiv = document.createElement('div');
+    filterDiv.className = 'mt-2 d-flex align-items-center';
+    filterDiv.innerHTML = `
+        <label for="monthlyDateRange" class="me-2">Date Range:</label>
+        <select id="monthlyDateRange" class="form-select form-select-sm me-2" style="width: auto;">
+            <option value="all">All Time</option>
+            <option value="last3">Last 3 Months</option>
+            <option value="last6">Last 6 Months</option>
+            <option value="last12">Last 12 Months</option>
+        </select>
+        <button id="resetMonthlySalesFilter" class="btn btn-sm btn-outline-secondary">Reset</button>
+    `;
+    cardHeader.appendChild(filterDiv);
+    
+    document.getElementById('monthlyDateRange').addEventListener('change', function() {
+        filterMonthlySalesChart(this.value);
+    });
+    
+    document.getElementById('resetMonthlySalesFilter').addEventListener('click', function() {
+        document.getElementById('monthlyDateRange').value = 'all';
+        filterMonthlySalesChart('all');
+    });
+}
+
+function filterMonthlySalesChart(rangeValue) {
+    let filteredData = [...originalMonthlySales];
+    
+    if (rangeValue !== 'all') {
+        const months = parseInt(rangeValue.replace('last', ''));
+        // Take only the last X months
+        filteredData = filteredData.slice(-months);
+    }
+    
+    // Update global monthlySales and re-init chart
+    monthlySales = filteredData;
+    initializeMonthlySalesChart();
+}
+
+/**************************************************
+ * 6) CUSTOMER REVENUE FILTERS
+ **************************************************/
+function addCustomerRevenueFilters() {
+    const chartCard = document.querySelector('#customerRevenueChart').closest('.card');
+    const cardHeader = chartCard.querySelector('.card-header');
+    
+    const filterDiv = document.createElement('div');
+    filterDiv.className = 'mt-2 d-flex align-items-center';
+    filterDiv.innerHTML = `
+        <label for="customerCount" class="me-2">Top:</label>
+        <select id="customerCount" class="form-select form-select-sm me-2" style="width: auto;">
+            <option value="5">5 Customers</option>
+            <option value="10" selected>10 Customers</option>
+            <option value="15">15 Customers</option>
+            <option value="all">All Customers</option>
+        </select>
+        <div class="me-3">
+            <label for="minRevenue" class="me-2">Min Revenue:</label>
+            <input type="number" id="minRevenue" class="form-control form-control-sm" style="width: 100px;" placeholder="Min $">
+        </div>
+        <button id="resetCustomerFilter" class="btn btn-sm btn-outline-secondary">Reset</button>
+    `;
+    cardHeader.appendChild(filterDiv);
+    
+    document.getElementById('customerCount').addEventListener('change', applyCustomerRevenueFilter);
+    document.getElementById('minRevenue').addEventListener('input', applyCustomerRevenueFilter);
+    document.getElementById('resetCustomerFilter').addEventListener('click', function() {
+        document.getElementById('customerCount').value = '10';
+        document.getElementById('minRevenue').value = '';
+        applyCustomerRevenueFilter();
+    });
+}
+
+function applyCustomerRevenueFilter() {
+    const customerCount = document.getElementById('customerCount').value;
+    const minRevenue = document.getElementById('minRevenue').value;
+    
+    let filteredData = [...originalRevenueByCustomer];
+    
+    // Filter by minimum revenue
+    if (minRevenue && !isNaN(minRevenue) && minRevenue > 0) {
+        filteredData = filteredData.filter(item => parseFloat(item.total_spent) >= parseFloat(minRevenue));
+    }
+    
+    // Slice top X customers
+    if (customerCount !== 'all') {
+        filteredData = filteredData.slice(0, parseInt(customerCount));
+    }
+    
+    // Update global data, re-init chart
+    revenueByCustomer = filteredData;
+    initializeCustomerRevenueChart();
+}
+
+/**************************************************
+ * 7) CATEGORY FILTERS
+ **************************************************/
+function addCategoryFilters() {
+    const chartCard = document.querySelector('#categoryChart').closest('.card');
+    const cardHeader = chartCard.querySelector('.card-header');
+    
+    const filterDiv = document.createElement('div');
+    filterDiv.className = 'mt-2 d-flex align-items-center';
+    
+    // Generate a unique list of categories
+    const categories = [...new Set(originalCategoryData.map(item => item.category))];
+    let categoryOptions = '<option value="all">All Categories</option>';
+    categories.forEach(category => {
+        categoryOptions += `<option value="${category}">${category}</option>`;
+    });
+    
+    filterDiv.innerHTML = `
+        <label for="categoryFilter" class="me-2">Category:</label>
+        <select id="categoryFilter" class="form-select form-select-sm me-2" style="width: auto;">
+            ${categoryOptions}
+        </select>
+        <div class="me-3">
+            <label for="minProducts" class="me-2">Min Products:</label>
+            <input type="number" id="minProducts" class="form-control form-control-sm" style="width: 100px;" placeholder="Min">
+        </div>
+        <button id="resetCategoryFilter" class="btn btn-sm btn-outline-secondary">Reset</button>
+    `;
+    cardHeader.appendChild(filterDiv);
+    
+    document.getElementById('categoryFilter').addEventListener('change', applyCategoryFilter);
+    document.getElementById('minProducts').addEventListener('input', applyCategoryFilter);
+    document.getElementById('resetCategoryFilter').addEventListener('click', function() {
+        document.getElementById('categoryFilter').value = 'all';
+        document.getElementById('minProducts').value = '';
+        applyCategoryFilter();
+    });
+}
+
+function applyCategoryFilter() {
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    const minProducts = document.getElementById('minProducts').value;
+    
+    let filteredData = [...originalCategoryData];
+    
+    // Filter by category
+    if (categoryFilter !== 'all') {
+        filteredData = filteredData.filter(item => item.category === categoryFilter);
+    }
+    
+    // Filter by minimum product count
+    if (minProducts && !isNaN(minProducts) && minProducts > 0) {
+        filteredData = filteredData.filter(item => parseInt(item.product_count) >= parseInt(minProducts));
+    }
+    
+    // Update global data, re-init chart
+    categoryData = filteredData;
+    initializeCategoryChart();
+}
+
+/**************************************************
+ * 8) INITIALIZE MONTHLY SALES CHART (LINE)
+ *    (Chart.js 2.9.4 style)
+ **************************************************/
 function initializeMonthlySalesChart() {
-    // Get canvas element
     const canvas = document.getElementById('monthlySalesChart');
     const ctx = canvas.getContext('2d');
     
-    // Destroy previous chart instance if it exists
     if (monthlySalesChartInstance) {
         monthlySalesChartInstance.destroy();
     }
     
-    // Check if monthlySales data exists
     if (!monthlySales || monthlySales.length === 0) {
         console.error("Monthly sales data is missing or empty");
         return;
     }
     
-    // Extract labels and data from monthlySales
     const labels = monthlySales.map(item => {
         const [year, month] = item.month.split('-');
         return new Date(year, month - 1).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -46,7 +231,6 @@ function initializeMonthlySalesChart() {
     
     const data = monthlySales.map(item => parseFloat(item.sales));
     
-    // Create chart
     monthlySalesChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -54,30 +238,31 @@ function initializeMonthlySalesChart() {
             datasets: [{
                 label: 'Monthly Sales',
                 data: data,
+                borderWidth: 2,
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true
+                fill: true,
+                lineTension: 0.4 // Chart.js 2.x
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true,
+                yAxes: [{
                     ticks: {
+                        beginAtZero: true,
                         callback: function(value) {
                             return '$' + value.toLocaleString();
                         }
                     }
-                }
+                }]
             },
             tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
-                        return '$' + parseFloat(tooltipItem.value).toLocaleString();
+                        const val = tooltipItem.yLabel || 0;
+                        return '$' + parseFloat(val).toLocaleString();
                     }
                 }
             }
@@ -85,28 +270,25 @@ function initializeMonthlySalesChart() {
     });
 }
 
-// Function to initialize Customer Revenue Chart
+/**************************************************
+ * 9) INITIALIZE CUSTOMER REVENUE CHART (BAR)
+ **************************************************/
 function initializeCustomerRevenueChart() {
-    // Get canvas element
     const canvas = document.getElementById('customerRevenueChart');
     const ctx = canvas.getContext('2d');
     
-    // Destroy previous chart instance if it exists
     if (customerRevenueChartInstance) {
         customerRevenueChartInstance.destroy();
     }
     
-    // Check if revenueByCustomer data exists
     if (!revenueByCustomer || revenueByCustomer.length === 0) {
         console.error("Customer revenue data is missing or empty");
         return;
     }
     
-    // Extract data for chart
     const labels = revenueByCustomer.map(item => item.customer_name);
     const data = revenueByCustomer.map(item => parseFloat(item.total_spent));
     
-    // Create chart
     customerRevenueChartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -123,25 +305,26 @@ function initializeCustomerRevenueChart() {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: {
-                    beginAtZero: true,
+                yAxes: [{
                     ticks: {
+                        beginAtZero: true,
                         callback: function(value) {
                             return '$' + value.toLocaleString();
                         }
                     }
-                },
-                x: {
+                }],
+                xAxes: [{
                     ticks: {
                         maxRotation: 45,
                         minRotation: 45
                     }
-                }
+                }]
             },
             tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
-                        return '$' + parseFloat(tooltipItem.value).toLocaleString();
+                        const val = tooltipItem.yLabel || 0;
+                        return '$' + parseFloat(val).toLocaleString();
                     }
                 }
             }
@@ -149,33 +332,28 @@ function initializeCustomerRevenueChart() {
     });
 }
 
+/**************************************************
+ * 10) INITIALIZE CATEGORY CHART (PIE)
+ **************************************************/
 function initializeCategoryChart() {
-    // Get canvas element
     const canvas = document.getElementById('categoryChart');
     const ctx = canvas.getContext('2d');
     
-    // Destroy previous chart instance if it exists
     if (categoryChartInstance) {
         categoryChartInstance.destroy();
     }
     
-    // Check if categoryData exists
     if (!categoryData || categoryData.length === 0) {
         console.error("Category data is missing or empty");
         return;
     }
     
-    // Extract data for chart
     const labels = categoryData.map(item => item.category);
     const data = categoryData.map(item => parseInt(item.product_count));
-    
-    // Calculate total for percentage computation
-    const total = data.reduce((sum, value) => sum + value, 0);
-    
-    // Create color array
+    const total = data.reduce((sum, val) => sum + val, 0);
+
     const colors = generateColors(data.length);
     
-    // Create chart
     categoryChartInstance = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -195,19 +373,18 @@ function initializeCategoryChart() {
             },
             tooltips: {
                 callbacks: {
-                    label: function(tooltipItem, data) {
-                        const dataset = data.datasets[tooltipItem.datasetIndex];
-                        const index = tooltipItem.index;
-                        const value = dataset.data[index];
-                        const label = data.labels[index];
-                        const percentage = Math.round((value / data.datasets[0].data.reduce((a, b) => a + b, 0)) * 100);
-                        return `${label}: ${value} (${percentage}%)`;
+                    label: function(tooltipItem, chartData) {
+                        const i = tooltipItem.index;
+                        const val = chartData.datasets[0].data[i];
+                        const lbl = chartData.labels[i];
+                        const percentage = Math.round((val / total) * 100);
+                        return `${lbl}: ${val} (${percentage}%)`;
                     }
                 }
             },
             plugins: {
                 datalabels: {
-                    formatter: (value, ctx) => {
+                    formatter: function(value, ctx) {
                         const percentage = Math.round((value / total) * 100);
                         return percentage + '%';
                     },
@@ -218,12 +395,13 @@ function initializeCategoryChart() {
                     }
                 }
             }
-        },
-        plugins: [ChartDataLabels]
+        }
     });
 }
 
-// Helper function to generate colors for charts
+/**************************************************
+ * 11) COLOR HELPER
+ **************************************************/
 function generateColors(count) {
     const backgroundColors = [
         'rgba(255, 99, 132, 0.7)',
@@ -237,7 +415,6 @@ function generateColors(count) {
         'rgba(40, 159, 64, 0.7)',
         'rgba(210, 99, 132, 0.7)'
     ];
-    
     const borderColors = [
         'rgba(255, 99, 132, 1)',
         'rgba(54, 162, 235, 1)',
@@ -251,7 +428,6 @@ function generateColors(count) {
         'rgba(210, 99, 132, 1)'
     ];
     
-    // more colors than in our predefined array
     if (count > backgroundColors.length) {
         for (let i = backgroundColors.length; i < count; i++) {
             const r = Math.floor(Math.random() * 255);
