@@ -202,13 +202,15 @@ require_once "header-loader.php";
         </div>
 
         <?php if ($is_logged_in): ?>
-          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart" data-product-id="<?php echo $row['product_id']; ?>">
-            Add To Cart
-          </button>
+          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart" data-product-id="<?php echo $row['product_id']; ?>" onclick="event.stopPropagation();">
+  Add To Cart
+</button>
+
         <?php else: ?>
-          <button class="btn btn-danger w-100 btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#loginModal">
-            Add To Cart
-          </button>
+          <button class="btn btn-danger w-100 btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#loginModal" onclick="event.stopPropagation();">
+  Add To Cart
+</button>
+
         <?php endif; ?>
       </div>
     </div>

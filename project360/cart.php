@@ -1,8 +1,141 @@
 <?php
-// Ensure session is available
-require_once "session_handler.php";
-require_once "header-loader.php";
+// cart.php
 
+// 1) Ensure session is available
+require_once "session_handler.php";
+
+// 2) If user not logged in, redirect or show error
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    $_SESSION["flash_message"] = "You must be logged in to access this page.";
+    header("Location: home.php");
+    exit;
+}
+
+/********************************************************
+ * (A) Handle "Remove from Cart" if ?action=remove&product_id=...
+ ********************************************************/
+if (
+    isset($_GET['action']) && $_GET['action'] === 'remove'
+    && isset($_GET['product_id']) && !empty($_GET['product_id'])
+) {
+    require_once "db_connection.php";
+    $user_id    = (int) $_SESSION["user_id"];
+    $product_id = (int) $_GET["product_id"];
+
+    $sql = "DELETE FROM cart WHERE user_id = ? AND product_id = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $user_id, $product_id);
+    if ($stmt->execute()) {
+        if ($stmt->affected_rows > 0) {
+            echo "Item removed from cart.";
+        } else {
+            echo "Item not found or already removed.";
+        }
+    } else {
+        echo "Error removing item: " . $conn->error;
+    }
+    $stmt->close();
+    $conn->close();
+    exit; // Stop here so we don't show the cart page HTML after removing
+}
+
+/********************************************************
+ * (B) Handle "Update Quantity" if ?action=update&product_id=...&quantity=...
+ ********************************************************/
+if (
+    isset($_GET['action']) && $_GET['action'] === 'update'
+    && isset($_GET['product_id']) && !empty($_GET['product_id'])
+    && isset($_GET['quantity'])
+) {
+    require_once "db_connection.php";
+    $user_id    = (int) $_SESSION["user_id"];
+    $product_id = (int) $_GET["product_id"];
+    $newQty     = (int) $_GET["quantity"];
+
+    // Ensure quantity is at least 1
+    if ($newQty < 1) {
+        $newQty = 1;
+    }
+
+    $sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iii", $newQty, $user_id, $product_id);
+    if ($stmt->execute()) {
+        if ($stmt->affected_rows > 0) {
+            echo "Quantity updated to $newQty for product $product_id";
+        } else {
+            echo "Item not found or no change in quantity.";
+        }
+    } else {
+        echo "Error updating quantity: " . $conn->error;
+    }
+    $stmt->close();
+    $conn->close();
+    exit; // Stop here so we don't show the cart page HTML after updating
+}
+
+/********************************************************
+ * (C) Handle "Add to Cart" if ?product_id=...
+ *  (No "action" param => just product_id)
+ ********************************************************/
+if (isset($_GET['product_id']) && !empty($_GET['product_id'])) {
+    require_once "db_connection.php";
+    $user_id    = (int) $_SESSION["user_id"];
+    $product_id = (int) $_GET["product_id"];
+
+    // Check if item is already in the cart
+    // Check if item is already in the cart
+$check_sql = "SELECT quantity FROM cart WHERE user_id = ? AND product_id = ?";
+$stmt = $conn->prepare($check_sql);
+$stmt->bind_param("ii", $user_id, $product_id);
+$stmt->execute();
+$res = $stmt->get_result();
+
+if ($res->num_rows > 0) {
+    // Item already exists, update quantity
+    $row = $res->fetch_assoc();
+    $newQuantity = $row['quantity'] + 1;
+    
+     // Enforce maximum quantity limit of 10
+     if ($newQuantity > 10) {
+      echo "Item already reached maximum quantity.";
+      exit;
+  }
+  
+    // Update quantity
+    $update_sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
+    $update_stmt = $conn->prepare($update_sql);
+    $update_stmt->bind_param("iii", $newQuantity, $user_id, $product_id);
+    
+    if ($update_stmt->execute()) {
+        echo "Added to cart";
+    } else {
+        echo "Error updating quantity: " . $conn->error;
+    }
+    $update_stmt->close();
+} else {
+    // Insert the item with quantity = 1
+    $insert_sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, 1)";
+    $insert_stmt = $conn->prepare($insert_sql);
+    $insert_stmt->bind_param("ii", $user_id, $product_id);
+    
+    if ($insert_stmt->execute()) {
+        echo "Item added successfully";
+    } else {
+        echo "Error inserting item: " . $conn->error;
+    }
+    $insert_stmt->close();
+}
+
+    $stmt->close();
+    $conn->close();
+    exit; // Stop here so we don't show the cart page HTML after an AJAX call
+}
+
+/********************************************************
+ * (D) If no add/remove/update action => show the cart page
+ ********************************************************/
+require_once "header-loader.php";
 ?>
 
 <!DOCTYPE html>
@@ -11,29 +144,43 @@ require_once "header-loader.php";
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Shopping Cart</title>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="cart.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="cart.css" />
   <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-  />
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
 </head>
 <body>
-
-
   <div class="container mt-4">
     <!-- Breadcrumb -->
     <nav class="breadcrumb mb-4">
       <a class="breadcrumb-item text-decoration-none text-muted" href="home.php">Home</a>
-      <span class="breadcrumb-item active text-secondary fw-bold" >Cart</span>
+      <span class="breadcrumb-item active text-secondary fw-bold">Cart</span>
     </nav>
+
+    <?php
+    // 6) Display the cart items from the DB
+    require_once 'db_connection.php';
+    $cartItems = [];
+    $subtotalTotal = 0; // Used to compute overall subtotal
+    $user_id = (int) $_SESSION["user_id"];
+
+    $sql = "SELECT c.product_id, c.quantity, p.name, p.price, p.images
+            FROM cart c 
+            INNER JOIN products p ON c.product_id = p.product_id
+            WHERE c.user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $cartItems[] = $row;
+        $subtotalTotal += $row['price'] * $row['quantity'];
+    }
+    $stmt->close();
+    $conn->close();
+    ?>
 
     <div class="row gy-4">
       <!-- Left Section: Cart Table and Actions -->
@@ -49,46 +196,69 @@ require_once "header-loader.php";
                 <th class="fw-semibold">Quantity</th>
                 <th class="fw-semibold">Subtotal</th>
               </tr>
-              <tbody id="cartBody">
+            </thead>
+            <tbody id="cartBody">
+              <?php if(count($cartItems) > 0): ?>
+                <?php foreach($cartItems as $item): ?>
+                  <tr data-product-id="<?php echo $item['product_id']; ?>">
+                    <td>
+                      <button class="btn btn-sm btn-outline-danger remove-item" data-product-id="<?php echo $item['product_id']; ?>">&times;</button>
+                    </td>
+                    <td>
+                      <!-- Display product image + name -->
+                      <img 
+                        src="<?php echo htmlspecialchars($item['images']); ?>" 
+                        alt="<?php echo htmlspecialchars($item['name']); ?>" 
+                        style="width: 60px; height: auto; margin-right:8px;"
+                      />
+                      <?php echo htmlspecialchars($item['name']); ?>
+                    </td>
+                    <td 
+                      class="product-price" 
+                      data-price="<?php echo $item['price']; ?>"
+                    >
+                      $<?php echo number_format($item['price'], 2); ?>
+                    </td>
+                    <td>
+                      <select 
+                        class="quantity-select" 
+                        data-product-id="<?php echo $item['product_id']; ?>"
+                      >
+                        <?php for ($i = 1; $i <= 10; $i++): ?>
+                          <option value="<?php echo $i; ?>" 
+                            <?php echo ($i == $item['quantity']) ? 'selected' : ''; ?>
+                          >
+                            <?php echo $i; ?>
+                          </option>
+                        <?php endfor; ?>
+                      </select>
+                    </td>
+                    <td class="subtotal">
+                      $<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
                 <tr>
-                  <td>
-                    <button class="btn btn-sm btn-outline-danger remove-item">&times;</button>
-                  </td>
-                  <td>Sample Product</td>
-                  <td class="product-price">$50</td>
-                  <td>
-                    <select class="form-select quantity-select">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                  </td>
-                  <td class="subtotal">$50</td>
+                  <td colspan="5" class="text-center">Your cart is empty.</td>
                 </tr>
-              </tbody>
+              <?php endif; ?>
+            </tbody>
           </table>
         </div>
 
         <!-- Cart Buttons -->
         <div class="mt-3 d-flex flex-wrap justify-content-center justify-content-md-between">
-          <a href = "home.php"><button class="btn btn-danger mb-2">Return To Shop</button></a>
+          <a href="home.php"><button class="btn btn-danger mb-2">Return To Shop</button></a>
         </div>
 
         <!-- Coupon Section -->
         <div class="mt-5 mb-2 mb-md-5 d-flex flex-wrap align-items-center gap-2">
-          <input
-            type="text"
-            class="form-control flex-grow-1"
-            placeholder="Coupon Code"
-            id="couponCodeInput"
-          />
+          <input type="text" class="form-control flex-grow-1" placeholder="Coupon Code" id="couponCodeInput" />
           <button class="btn btn-danger" id="applyCouponBtn">Apply Coupon</button>
-            <!-- Coupon Message -->
+          <!-- Coupon Message -->
           <div id="couponMessage" class="mt-2"></div>
         </div>
-
       </div>
 
       <!-- Right Section: Cart Total -->
@@ -98,7 +268,7 @@ require_once "header-loader.php";
           <!-- Subtotal -->
           <div class="d-flex justify-content-between mb-2">
             <span>Subtotal:</span>
-            <span class="fw-semibold" id="cartSubtotal"></span>
+            <span class="fw-semibold" id="cartSubtotal">$<?php echo number_format($subtotalTotal, 2); ?></span>
           </div>
           <!-- Shipping -->
           <div class="d-flex justify-content-between mb-2">
@@ -109,30 +279,40 @@ require_once "header-loader.php";
           <!-- Total -->
           <div class="d-flex justify-content-between mb-3">
             <span>Total:</span>
-            <span class="fw-semibold" id="cartTotal"></span>
+            <span class="fw-semibold" id="cartTotal">$<?php echo number_format($subtotalTotal, 2); ?></span>
           </div>
-          <a href="checkout.php" class="btn btn-danger w-100">
-            Proceed to Checkout
-          </a>
+          <a href="checkout.php" class="btn btn-danger w-100">Proceed to Checkout</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!--Footer-->
-  <?php
-require_once "footer.php";
-?>
+  <!-- Footer -->
+  <?php require_once "footer.php"; ?>
+
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="feedbackModalLabel">Notification</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Modal message will be inserted here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- JS to load header/footer -->
   <script src="hfload.js"></script>
-
   <!-- Bootstrap Bundle (JS) -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-  ></script>
-
-  <!-- main Cart Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- main Cart Script (handles remove actions, quantity updates, etc.) -->
   <script src="cart.js"></script>
 </body>
 </html>

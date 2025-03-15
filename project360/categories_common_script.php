@@ -132,9 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <?php endif; ?>
 
 <!-- Cart Script - Only for logged-in users -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  <?php if ($is_logged_in): ?>
+<?php if ($is_logged_in): ?>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll(".btn-add-to-cart").forEach(function(button) {
@@ -148,14 +146,13 @@ document.addEventListener("DOMContentLoaded", function() {
       fetch('cart.php?product_id=' + productId)
         .then(response => response.text())
         .then(data => {
-          if (data.includes("already")) {
-            cartModalBody.innerHTML = "This product is already in your cart!";
-          } else if (data.includes("successfully")) {
+          if (data.includes("Item already reached maximum quantity.")) {
+            cartModalBody.innerHTML = "Error: Maximum quantity(10) reached for the product";
+          } else if (data.includes("Added to cart") || data.includes("Item added successfully")) {
             cartModalBody.innerHTML = "Added to cart successfully!";
           } else {
-            cartModalBody.innerHTML = "Error updating your cart.";
+            cartModalBody.innerHTML = "Error updating cart.";
           }
-
           cartModalInstance.show();
         })
         .catch(error => {
@@ -177,8 +174,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
-</script>
+
 </script>
 <?php endif; ?>
-});
-</script>

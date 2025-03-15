@@ -11,6 +11,7 @@ echo '<link rel="stylesheet" href="footer.css" type="text/css">';
 
 // Default to 0
 $wishlistCount = 0;
+$cartCount = 0;
 
 // If user is logged in => fetch wishlistCount from DB
 if (isset($_SESSION["user_id"])) {
@@ -31,6 +32,18 @@ if (isset($_SESSION["user_id"])) {
     // Store it in a session or pass it to loginheader 
     $_SESSION['wishlist_count'] = $wishlistCount;
 
+    $cartSql = "SELECT IFNULL(SUM(quantity), 0) AS total FROM cart WHERE user_id = ?";
+    $stmt = $conn->prepare($cartSql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($row = $res->fetch_assoc()) {
+        $cartCount = (int)$row["total"];
+    }
+    $stmt->close();
+    $_SESSION['cart_count'] = $cartCount;
+
+    
     // Now include loginheader
     include "loginheader.php";
 
