@@ -46,9 +46,9 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="col-md-3 col-sm-6 mb-3 text-center">
                 <h5>Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="privacy.html" class="text-white">Privacy Policy</a></li>
-                    <li><a href="terms.html" class="text-white">Terms of Use</a></li>
-                    <li><a href="faq.html" class="text-white">FAQ</a></li>
+                    <li><a href="privacy.php" class="text-white">Privacy Policy</a></li>
+                    <li><a href="terms.php" class="text-white">Terms of Use</a></li>
+                    <li><a href="faq.php" class="text-white">FAQ</a></li>
                     <li><a href="contact.php" class="text-white">Contact</a></li>
                 </ul>
             </div>
