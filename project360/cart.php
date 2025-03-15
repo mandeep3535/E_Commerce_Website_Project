@@ -1,6 +1,4 @@
 <?php
-// cart.php
-
 // 1) Ensure session is available
 require_once "session_handler.php";
 
