@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="row">
             <div class="col-md-3 col-sm-6 mb-3 px-5 p-md-5">
                <figure>
-                <a href="#"><img class="figure-img img-fluid rounded" src="images/Logo.png" alt="website logo"></a>
+                <a href="home.php"><img class="figure-img img-fluid rounded" src="images/Logo.png" alt="website logo"></a>
                </figure>
             </div>
             
@@ -29,16 +29,19 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="col-md-3 col-sm-6 mb-3 text-center">
                 <h5>Account</h5>
                 <ul class="list-unstyled">
-                <li>
-                        <?php if (isset($_SESSION["user_id"])): ?>
-                            <a href="logout.php" class="text-white">Logout</a>
-                        <?php else: ?>
-                            <a href="login.php" class="text-white">Login / Register</a>
-                        <?php endif; ?>
-                    </li>
-                    <li><a href="Admin_login.html" class="text-white">Admin Login</a></li>
-                    <li><a href="home.html" class="text-white">Shop</a></li>
-                </ul>
+    <li>
+        <?php if (isset($_SESSION["user_id"])): ?>
+            <a href="logout.php" class="text-white">Logout</a>
+        <?php else: ?>
+            <a href="login.php" class="text-white">Login / Register</a>
+        <?php endif; ?>
+    </li>
+    <?php if (!isset($_SESSION["user_id"])): ?>
+        <li><a href="Admin_login.html" class="text-white">Admin Login</a></li>
+    <?php endif; ?>
+    <li><a href="home.php" class="text-white">Shop</a></li>
+</ul>
+
             </div>
             <div class="col-md-3 col-sm-6 mb-3 text-center">
                 <h5>Quick Links</h5>

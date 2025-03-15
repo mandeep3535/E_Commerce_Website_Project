@@ -89,3 +89,17 @@ html, body {
 ul a{
   text-decoration: none;
 }
+
+.product-link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-link:hover {
+  color: red;
+}
+
+text-dark:hover{
+  color: red !important;
+}

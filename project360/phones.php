@@ -46,8 +46,7 @@ require_once "header-loader.php";
 
           // Fetch phone products
           $sql = "SELECT * FROM products 
-                  WHERE category = 'Phones' 
-                    ";
+                  WHERE category = 'Phones'";
           $result = $conn->query($sql);
 
           // For logged-in users, fetch their wishlist items to know what's already in wishlist
@@ -70,6 +69,11 @@ require_once "header-loader.php";
             while ($row = $result->fetch_assoc()):
               // Check if this product is in the user's wishlist
               $in_wishlist = in_array($row['product_id'], $wishlist_items);
+
+              // --- NEW: Parse comma-separated images and take the first one ---
+              $imagePaths = explode(',', $row['images']);
+              // Use a fallback if empty
+              $firstImage = !empty($imagePaths[0]) ? trim($imagePaths[0]) : 'images/default-placeholder.jpg';
         ?>
               <div class="col">
                 <div 
@@ -112,7 +116,7 @@ require_once "header-loader.php";
                   <!-- Product Image -->
                   <div class="text-center mb-2">
                     <img
-                      src="<?php echo htmlspecialchars($row['images']); ?>"
+                      src="<?php echo htmlspecialchars($firstImage); ?>"
                       alt="<?php echo htmlspecialchars($row['name']); ?>"
                       class="img-fluid product-img"
                     />

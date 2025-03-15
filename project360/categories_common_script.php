@@ -131,40 +131,48 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <?php endif; ?>
 
-<!-- Cart Script - Only for logged-in users -->
+<!-- Cart Script - Only for logged-in users --->
 <?php if ($is_logged_in): ?>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll(".btn-add-to-cart").forEach(function(button) {
-    button.addEventListener("click", function(e) {
-      e.preventDefault();
-      const productId = this.getAttribute("data-product-id");
-      const cartModalEl = document.getElementById("cartModal");
-      const cartModalInstance = bootstrap.Modal.getOrCreateInstance(cartModalEl);
-      const cartModalBody = document.getElementById("cartModalBody");
+document.querySelectorAll(".btn-add-to-cart").forEach(function(button) {
+  button.addEventListener("click", function(e) {
+    e.preventDefault();
+    const productId = this.getAttribute("data-product-id");
+    // Get quantity from the quantity input (default to 1 if not found)
+    let quantity = 1;
+    const quantityInput = document.getElementById("quantityInput");
+    if (quantityInput) {
+      quantity = parseInt(quantityInput.value) || 1;
+    }
+    const cartModalEl = document.getElementById("cartModal");
+    const cartModalInstance = bootstrap.Modal.getOrCreateInstance(cartModalEl);
+    const cartModalBody = document.getElementById("cartModalBody");
 
-      fetch('cart.php?product_id=' + productId)
-        .then(response => response.text())
-        .then(data => {
-          if (data.includes("Item already reached maximum quantity.")) {
-            cartModalBody.innerHTML = "Error: Maximum quantity(10) reached for the product";
-          } else if (data.includes("Added to cart") || data.includes("Item added successfully")) {
-            cartModalBody.innerHTML = "Added to cart successfully!";
-          } else {
-            cartModalBody.innerHTML = "Error updating cart.";
-          }
-          cartModalInstance.show();
-        })
-        .catch(error => {
-          console.error("Error:", error);
+    // Append quantity to the URL query string
+    fetch('cart.php?product_id=' + productId + '&quantity=' + quantity)
+      .then(response => response.text())
+      .then(data => {
+        if (data.includes("Item already reached maximum quantity.")) {
+          cartModalBody.innerHTML = "Error: Maximum quantity(10) reached for the product";
+        } else if (data.includes("Added to cart") || data.includes("Item added successfully")) {
+          cartModalBody.innerHTML = "Added to cart successfully!";
+        } else {
           cartModalBody.innerHTML = "Error updating cart.";
-          cartModalInstance.show();
-        });
-    });
+        }
+        cartModalInstance.show();
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        cartModalBody.innerHTML = "Error updating cart.";
+        cartModalInstance.show();
+      });
   });
+});
 
-  const cartModalEl = document.getElementById('cartModal');
-  cartModalEl.addEventListener('hidden.bs.modal', function () {
+// Add event listener for when the cart modal is hidden, then update the cart count
+const cartModalEl = document.getElementById('cartModal');
+cartModalEl.addEventListener('hidden.bs.modal', function () {
+    // Perform your cleanup if needed
     document.body.classList.remove('modal-open');
     document.body.style.overflow = '';
     document.body.style.paddingRight = '';
@@ -172,8 +180,9 @@ document.addEventListener("DOMContentLoaded", function() {
     while(backdrops.length > 0) {
       backdrops[0].parentNode.removeChild(backdrops[0]);
     }
-  });
+    // NEW: Refresh the cart count
+    refreshCartCount();
 });
-
 </script>
 <?php endif; ?>
+

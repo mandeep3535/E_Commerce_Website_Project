@@ -182,8 +182,11 @@ require_once "header-loader.php";
           alt="<?php echo htmlspecialchars($row['name']); ?>"
           class="img-fluid mb-3 product-img"
         />
-
-        <h6 class="mb-1"><?php echo htmlspecialchars($row['name']); ?></h6>
+        <p class="mb-0 fw-semibold">
+                    <a href="product_info.php?id=<?php echo $row['product_id']; ?>" class="text-dark text-decoration-none product-link">
+                      <?php echo htmlspecialchars($row['name']); ?>
+                    </a>
+                  </p>
 
         <p class="text-danger mb-0">
           $<?php echo number_format($row['price'], 2); ?>

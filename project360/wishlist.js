@@ -5,18 +5,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const wishlistHeader    = document.getElementById("wishlistHeader");
   const moveAllBtn        = document.getElementById("moveAllButton");
 
-  // We keep the cart in localStorage
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  //-----------------------------------
-  // UTILITY: Update cart in localStorage, then update the top icon
-  //-----------------------------------
-  function saveCartAndUpdateCount() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-    if (typeof window.updateCartCount === "function") {
-      window.updateCartCount(); 
-    }
-  }
+  // ----------------------------------------------------------------
+  // ORIGINAL localStorage cart code (disabled):
+  // let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  // function saveCartAndUpdateCount() {
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  //   if (typeof window.updateCartCount === "function") {
+  //     window.updateCartCount(); 
+  //   }
+  // }
+  // ----------------------------------------------------------------
 
   //-----------------------------------
   // UTILITY: Recount how many items are in the wishlist DOM (local count)
@@ -82,23 +80,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   //-----------------------------------
-  // ADD an item to localStorage CART
-  //-----------------------------------
-  function addToCart(product) {
-    const existingProduct = cart.find(item => item.name === product.name);
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-    saveCartAndUpdateCount();
-
-    // Show confirmation modal
-    const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
-    document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
-    cartModal.show();
-  }
-
+  // ORIGINAL function to add an item to localStorage CART (disabled):
+  // function addToCart(product) {
+  //   const existingProduct = cart.find(item => item.name === product.name);
+  //   if (existingProduct) {
+  //     existingProduct.quantity += 1;
+  //   } else {
+  //     cart.push({ ...product, quantity: 1 });
+  //   }
+  //   saveCartAndUpdateCount();
+  //
+  //   // Show confirmation modal
+  //   const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+  //   document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
+  //   cartModal.show();
+  // }
   //-----------------------------------
   // EVENT: Clicking inside the wishlistContainer
   //-----------------------------------
@@ -115,11 +111,28 @@ document.addEventListener("DOMContentLoaded", function () {
     const addCartBtn = e.target.closest(".add-to-cart-btn");
     if (addCartBtn) {
       // ADD TO CART was clicked
-      const productName  = addCartBtn.getAttribute("data-product-name");
+      const productId   = addCartBtn.getAttribute("data-product-id");
+      const productName = addCartBtn.getAttribute("data-product-name");
       const productPrice = parseFloat(addCartBtn.getAttribute("data-product-price")) || 0;
       const productImage = addCartBtn.getAttribute("data-product-image");
-
-      addToCart({ name: productName, price: productPrice, image: productImage });
+    
+      // Use fetch to add the item to the cart DB (like on Phones)
+      fetch(`cart.php?product_id=${productId}&quantity=1`)
+        .then(response => response.text())
+        .then(data => {
+          console.log("Add to cart response:", data);
+          refreshCartCount();
+          // remove the item from the wishlist 
+          const colEl = addCartBtn.closest(".col");
+    if (colEl) {
+      removeItemFromDB(productId, colEl);
+    }
+          // Show confirmation modal
+          const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+          document.getElementById('cartModalBody').textContent = "Added to cart successfully!";
+          cartModal.show();
+        })
+        .catch(err => console.error("Error adding to cart:", err));
       return;
     }
   });
@@ -145,23 +158,36 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(err => console.error("MoveAll => error:", err));
 
-      // 2) Add to localStorage cart
-      const productName  = cartBtn.getAttribute("data-product-name");
-      const productPrice = parseFloat(cartBtn.getAttribute("data-product-price")) || 0;
-      const productImage = cartBtn.getAttribute("data-product-image");
+      // ----------------------------------------------------------------
+      // ORIGINAL localStorage update for cart (disabled):
+      // const productName  = cartBtn.getAttribute("data-product-name");
+      // const productPrice = parseFloat(cartBtn.getAttribute("data-product-price")) || 0;
+      // const productImage = cartBtn.getAttribute("data-product-image");
+      //
+      // const existingProduct = cart.find(item => item.name === productName);
+      // if (existingProduct) {
+      //   existingProduct.quantity += 1;
+      // } else {
+      //   cart.push({ name: productName, price: productPrice, image: productImage, quantity: 1 });
+      // }
+      // ----------------------------------------------------------------
 
-      const existingProduct = cart.find(item => item.name === productName);
-      if (existingProduct) {
-        existingProduct.quantity += 1;
-      } else {
-        cart.push({ name: productName, price: productPrice, image: productImage, quantity: 1 });
-      }
+      // Instead, add each product to the cart DB via fetch:
+      fetch(`cart.php?product_id=${productId}&quantity=1`)
+        .then(r => r.text())
+        .then(resp => {
+          console.log("MoveAll => add to cart response:", resp);
+        })
+        .catch(err => console.error("MoveAll => add to cart error:", err));
     });
 
     // Clear the DOM
     wishlistContainer.innerHTML = `<p class="text-muted">You have no items in your wishlist.</p>`;
     updateWishlistCount();
-    saveCartAndUpdateCount();
+    // ----------------------------------------------------------------
+    // ORIGINAL: saveCartAndUpdateCount();
+    // ----------------------------------------------------------------
+    // (Now the cart count is updated via server-side fetch calls)
     
     // Refresh header wishlist count from server after move all
     refreshHeaderWishlistCount();
@@ -175,7 +201,9 @@ document.addEventListener("DOMContentLoaded", function () {
   //-----------------------------------
   updateWishlistCount();
   refreshHeaderWishlistCount();
-  saveCartAndUpdateCount(); // updates cart count if you have one
+  // ----------------------------------------------------------------
+  // ORIGINAL: saveCartAndUpdateCount(); // updates cart count if you have one
+  // ----------------------------------------------------------------
 });
 
 /* "Just for you" remains the same (adds to localStorage cart) */
@@ -196,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const productPrice = parseFloat(rawPrice) || 0;
       const productImage = imgEl ? imgEl.src : "";
 
+      // This section still uses localStorage for the "Just for you" section
       const product = { name: productName, price: productPrice, image: productImage, quantity: 1 };
 
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -217,4 +246,4 @@ document.addEventListener("DOMContentLoaded", function() {
       cartModal.show();
     }
   });
-}); 
+});
