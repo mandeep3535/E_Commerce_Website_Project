@@ -79,58 +79,64 @@ if (
  *  (No "action" param => just product_id)
  ********************************************************/
 if (isset($_GET['product_id']) && !empty($_GET['product_id'])) {
-    require_once "db_connection.php";
-    $user_id    = (int) $_SESSION["user_id"];
-    $product_id = (int) $_GET["product_id"];
-
-    // Check if item is already in the cart
-    // Check if item is already in the cart
-$check_sql = "SELECT quantity FROM cart WHERE user_id = ? AND product_id = ?";
-$stmt = $conn->prepare($check_sql);
-$stmt->bind_param("ii", $user_id, $product_id);
-$stmt->execute();
-$res = $stmt->get_result();
-
-if ($res->num_rows > 0) {
-    // Item already exists, update quantity
-    $row = $res->fetch_assoc();
-    $newQuantity = $row['quantity'] + 1;
-    
-     // Enforce maximum quantity limit of 10
-     if ($newQuantity > 10) {
-      echo "Item already reached maximum quantity.";
-      exit;
-  }
+  require_once "db_connection.php";
+  $user_id    = (int) $_SESSION["user_id"];
+  $product_id = (int) $_GET["product_id"];
   
-    // Update quantity
-    $update_sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
-    $update_stmt = $conn->prepare($update_sql);
-    $update_stmt->bind_param("iii", $newQuantity, $user_id, $product_id);
-    
-    if ($update_stmt->execute()) {
-        echo "Added to cart";
-    } else {
-        echo "Error updating quantity: " . $conn->error;
-    }
-    $update_stmt->close();
-} else {
-    // Insert the item with quantity = 1
-    $insert_sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, 1)";
-    $insert_stmt = $conn->prepare($insert_sql);
-    $insert_stmt->bind_param("ii", $user_id, $product_id);
-    
-    if ($insert_stmt->execute()) {
-        echo "Item added successfully";
-    } else {
-        echo "Error inserting item: " . $conn->error;
-    }
-    $insert_stmt->close();
+  // Read the quantity from the URL, default to 1 if not provided
+  $quantityToAdd = isset($_GET['quantity']) ? (int)$_GET['quantity'] : 1;
+  if ($quantityToAdd < 1) {
+      $quantityToAdd = 1;
+  }
+
+  // Check if item is already in the cart
+  $check_sql = "SELECT quantity FROM cart WHERE user_id = ? AND product_id = ?";
+  $stmt = $conn->prepare($check_sql);
+  $stmt->bind_param("ii", $user_id, $product_id);
+  $stmt->execute();
+  $res = $stmt->get_result();
+
+  if ($res->num_rows > 0) {
+      // Item already exists, update quantity
+      $row = $res->fetch_assoc();
+      $newQuantity = $row['quantity'] + $quantityToAdd;
+  
+      // Enforce maximum quantity limit of 10
+      if ($newQuantity > 10) {
+          echo "Item already reached maximum quantity.";
+          exit;
+      }
+
+      // Update quantity
+      $update_sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
+      $update_stmt = $conn->prepare($update_sql);
+      $update_stmt->bind_param("iii", $newQuantity, $user_id, $product_id);
+  
+      if ($update_stmt->execute()) {
+          echo "Added to cart";
+      } else {
+          echo "Error updating quantity: " . $conn->error;
+      }
+      $update_stmt->close();
+  } else {
+      // Insert the item with the given quantity
+      $insert_sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)";
+      $insert_stmt = $conn->prepare($insert_sql);
+      $insert_stmt->bind_param("iii", $user_id, $product_id, $quantityToAdd);
+  
+      if ($insert_stmt->execute()) {
+          echo "Item added successfully";
+      } else {
+          echo "Error inserting item: " . $conn->error;
+      }
+      $insert_stmt->close();
+  }
+
+  $stmt->close();
+  $conn->close();
+  exit; // Stop here so we don't show the cart page HTML after an AJAX call
 }
 
-    $stmt->close();
-    $conn->close();
-    exit; // Stop here so we don't show the cart page HTML after an AJAX call
-}
 
 /********************************************************
  * (D) If no add/remove/update action => show the cart page
@@ -206,8 +212,20 @@ require_once "header-loader.php";
                     </td>
                     <td>
                       <!-- Display product image + name -->
+                      <?php 
+                        // Attempt to decode images as JSON
+                        $decoded = json_decode($item['images'], true);
+                        if (is_array($decoded)) {
+                            $firstImage = trim($decoded[0]);
+                        } else if (strpos($item['images'], ',') !== false) {
+                            $parts = explode(',', $item['images']);
+                            $firstImage = trim($parts[0]);
+                        } else {
+                            $firstImage = $item['images'];
+                        }
+                      ?>
                       <img 
-                        src="<?php echo htmlspecialchars($item['images']); ?>" 
+                        src="<?php echo htmlspecialchars($firstImage); ?>" 
                         alt="<?php echo htmlspecialchars($item['name']); ?>" 
                         style="width: 60px; height: auto; margin-right:8px;"
                       />

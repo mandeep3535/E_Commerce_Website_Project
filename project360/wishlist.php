@@ -160,22 +160,34 @@ if (isset($_SESSION["user_id"])) {
 
               <!-- Product Image -->
               <div class="text-center mb-2">
-                <img 
-                  src="<?php echo htmlspecialchars($item['images']); ?>" 
-                  alt="<?php echo htmlspecialchars($item['name']); ?>" 
-                  class="img-fluid product-img"
-                />
-              </div>
-
-              <!-- Add to Cart (using localStorage) -->
+  <?php 
+    //decode images
+    $decoded = json_decode($item['images'], true);
+    if (is_array($decoded)) {
+        $firstImage = trim($decoded[0]);
+    } else if (strpos($item['images'], ',') !== false) {
+        $parts = explode(',', $item['images']);
+        $firstImage = trim($parts[0]);
+    } else {
+        $firstImage = $item['images'];
+    }
+  ?>
+  <img 
+    src="<?php echo htmlspecialchars($firstImage); ?>" 
+    alt="<?php echo htmlspecialchars($item['name']); ?>" 
+    class="img-fluid product-img"
+  />
+</div>
+              <!-- Add to Cart  -->
               <button 
-                class="btn btn-danger w-100 btn-sm mb-1 add-to-cart-btn"
-                data-product-name="<?php echo htmlspecialchars($item['name']); ?>"
-                data-product-price="<?php echo $item['price']; ?>"
-                data-product-image="<?php echo htmlspecialchars($item['images']); ?>"
-              >
-                Add To Cart
-              </button>
+  class="btn btn-danger w-100 btn-sm mb-1 add-to-cart-btn"
+  data-product-id="<?php echo $item['product_id']; ?>"
+  data-product-name="<?php echo htmlspecialchars($item['name']); ?>"
+  data-product-price="<?php echo $item['price']; ?>"
+  data-product-image="<?php echo htmlspecialchars($item['images']); ?>"
+>
+  Add To Cart
+</button>
 
               <p class="mb-0 fw-semibold"><?php echo htmlspecialchars($item['name']); ?></p>
               <p class="text-danger mb-1">

@@ -8,7 +8,7 @@ require_once "header-loader.php";
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Phones</title>
+  <title>Computers</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Bootstrap CSS -->
@@ -46,8 +46,7 @@ require_once "header-loader.php";
 
           // Fetch computer products
           $sql = "SELECT * FROM products 
-                  WHERE category = 'Computers' 
-                    ";
+                  WHERE category = 'Computers'";
           $result = $conn->query($sql);
 
           // For logged-in users, fetch their wishlist items to know what's already in wishlist
@@ -70,6 +69,10 @@ require_once "header-loader.php";
             while ($row = $result->fetch_assoc()):
               // Check if this product is in the user's wishlist
               $in_wishlist = in_array($row['product_id'], $wishlist_items);
+
+              // --- NEW: Parse CSV images and take the first one ---
+              $imagePaths = explode(',', $row['images']);
+              $firstImage = !empty($imagePaths[0]) ? trim($imagePaths[0]) : 'images/default-placeholder.jpg';
         ?>
               <div class="col">
                 <div 
@@ -112,7 +115,7 @@ require_once "header-loader.php";
                   <!-- Product Image -->
                   <div class="text-center mb-2">
                     <img
-                      src="<?php echo htmlspecialchars($row['images']); ?>"
+                      src="<?php echo htmlspecialchars($firstImage); ?>"
                       alt="<?php echo htmlspecialchars($row['name']); ?>"
                       class="img-fluid product-img"
                     />

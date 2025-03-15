@@ -1,7 +1,5 @@
 <?php
-
 header('Content-Type: application/json'); // Ensure JSON response
-
 
 include 'db_connection.php';
 
@@ -34,10 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // **Image Upload Validation**
     if (isset($_FILES['productImages']) && is_array($_FILES['productImages']['name']) && !empty($_FILES['productImages']['name'][0])) {  
-        // Rest of the image validation code
-        $imageCount = count($_FILES['productImages']['name']); // ✅ Now count() will not fail
+        // Count how many images were uploaded
+        $imageCount = count($_FILES['productImages']['name']);
         $allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-        $maxImages = min($imageCount, 3);
+        $maxImages = min($imageCount, 3); // We'll only process up to 3
 
         for ($i = 0; $i < $maxImages; $i++) {
             if ($_FILES['productImages']['error'][$i] == 0) {
@@ -87,29 +85,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Convert image paths array to comma-separated string
-    $imagesString = implode(',', $uploadedImages);
+    // 1) Check if product already exists in DB
+    $checkSql = "SELECT images FROM products WHERE product_id = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->bind_param("s", $productID);
+    $checkStmt->execute();
+    $resultCheck = $checkStmt->get_result();
 
-    // Insert Product into Database
-    $sql = "INSERT INTO products (product_id, name, category, description, images, price, stock) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($sql);
+    if ($resultCheck->num_rows > 0) {
+        // === Product exists => Merge newly uploaded images with existing ones ===
+        $rowCheck = $resultCheck->fetch_assoc();
+        $existingImagesStr = $rowCheck['images']; // e.g. "uploads/img1.png,uploads/img2.png"
+        
+        // Convert existing CSV to array
+        $existingImages = array_filter(explode(',', $existingImagesStr));
+        
+        // Merge
+        $allImages = array_merge($existingImages, $uploadedImages);
 
-    if ($stmt) {
-        $stmt->bind_param("sssssdi", $productID, $productName, $productCategory, $productDescription, $imagesString, $productPrice, $productStock);
+        // Limit to max 3 total
+        $allImages = array_slice($allImages, 0, 3);
 
-        if ($stmt->execute()) {
-            $response["status"] = "success";
-            $response["message"] = "Product added successfully!";
+        // Convert back to CSV
+        $imagesString = implode(',', $allImages);
+
+        // Update the existing product
+        $sqlUpdate = "UPDATE products
+                      SET name = ?, category = ?, description = ?, images = ?, price = ?, stock = ?
+                      WHERE product_id = ?";
+        $stmtUpdate = $conn->prepare($sqlUpdate);
+        if ($stmtUpdate) {
+            $stmtUpdate->bind_param("ssssdis",
+                $productName,
+                $productCategory,
+                $productDescription,
+                $imagesString,
+                $productPrice,
+                $productStock,
+                $productID
+            );
+            if ($stmtUpdate->execute()) {
+                $response["status"] = "success";
+                $response["message"] = "Product updated successfully (images merged)!";
+            } else {
+                $response["message"] = "Database error (update): " . $stmtUpdate->error;
+            }
+            $stmtUpdate->close();
         } else {
-            $response["message"] = "Database error: " . $stmt->error;
+            $response["message"] = "Error preparing UPDATE statement.";
         }
-
-        $stmt->close();
     } else {
-        $response["message"] = "Error preparing SQL statement.";
+        // === Product does not exist => Insert a new record ===
+        $imagesString = implode(',', $uploadedImages);
+        $sqlInsert = "INSERT INTO products (product_id, name, category, description, images, price, stock) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmtInsert = $conn->prepare($sqlInsert);
+        if ($stmtInsert) {
+            $stmtInsert->bind_param("sssssdi",
+                $productID,
+                $productName,
+                $productCategory,
+                $productDescription,
+                $imagesString,
+                $productPrice,
+                $productStock
+            );
+
+            if ($stmtInsert->execute()) {
+                $response["status"] = "success";
+                $response["message"] = "Product added successfully!";
+            } else {
+                $response["message"] = "Database error (insert): " . $stmtInsert->error;
+            }
+            $stmtInsert->close();
+        } else {
+            $response["message"] = "Error preparing INSERT statement.";
+        }
     }
+    $checkStmt->close();
+
 } else {
     $response["message"] = "Invalid request method.";
 }
