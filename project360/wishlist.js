@@ -143,58 +143,54 @@ document.addEventListener("DOMContentLoaded", function () {
   moveAllBtn.addEventListener("click", function() {
     const allCols = wishlistContainer.querySelectorAll(".col");
     if (!allCols.length) return;
-
+    
+    // Array to hold all fetch promises for moveAll operations
+    let allPromises = [];
+    
     allCols.forEach(col => {
-      const removeBtn  = col.querySelector(".remove-wishlist-item");
-      const cartBtn    = col.querySelector(".add-to-cart-btn");
+      const removeBtn = col.querySelector(".remove-wishlist-item");
+      const cartBtn   = col.querySelector(".add-to-cart-btn");
       if (!removeBtn || !cartBtn) return;
-
-      // 1) Remove from DB
+      
       const productId = removeBtn.getAttribute("data-product-id");
-      fetch(`wishlist.php?action=remove&product_id=${productId}`)
-        .then(r => r.text())
-        .then(resp => {
-          console.log("MoveAll => server says:", resp);
+      
+      // Remove from wishlist DB and then from the DOM
+      let removePromise = fetch(`wishlist.php?action=remove&product_id=${productId}`)
+        .then(response => response.text())
+        .then(data => {
+           console.log("MoveAll => remove response:", data);
+           // Remove from DOM
+           col.remove();
         })
-        .catch(err => console.error("MoveAll => error:", err));
-
-      // ----------------------------------------------------------------
-      // ORIGINAL localStorage update for cart (disabled):
-      // const productName  = cartBtn.getAttribute("data-product-name");
-      // const productPrice = parseFloat(cartBtn.getAttribute("data-product-price")) || 0;
-      // const productImage = cartBtn.getAttribute("data-product-image");
-      //
-      // const existingProduct = cart.find(item => item.name === productName);
-      // if (existingProduct) {
-      //   existingProduct.quantity += 1;
-      // } else {
-      //   cart.push({ name: productName, price: productPrice, image: productImage, quantity: 1 });
-      // }
-      // ----------------------------------------------------------------
-
-      // Instead, add each product to the cart DB via fetch:
-      fetch(`cart.php?product_id=${productId}&quantity=1`)
-        .then(r => r.text())
-        .then(resp => {
-          console.log("MoveAll => add to cart response:", resp);
+        .catch(err => console.error("MoveAll => remove error:", err));
+        
+      // Add to cart DB
+      let addPromise = fetch(`cart.php?product_id=${productId}&quantity=1`)
+        .then(response => response.text())
+        .then(data => {
+           console.log("MoveAll => add to cart response:", data);
         })
         .catch(err => console.error("MoveAll => add to cart error:", err));
+        
+      // Combine both promises for this product
+      allPromises.push(Promise.all([removePromise, addPromise]));
     });
-
-    // Clear the DOM
-    wishlistContainer.innerHTML = `<p class="text-muted">You have no items in your wishlist.</p>`;
-    updateWishlistCount();
-    // ----------------------------------------------------------------
-    // ORIGINAL: saveCartAndUpdateCount();
-    // ----------------------------------------------------------------
-    // (Now the cart count is updated via server-side fetch calls)
     
-    // Refresh header wishlist count from server after move all
-    refreshHeaderWishlistCount();
-
-    // Possibly show a message
-    alert("All items moved to cart!");
+    // When all fetch operations have finished:
+    Promise.all(allPromises).then(() => {
+      updateWishlistCount();       // Update local DOM count
+      refreshHeaderWishlistCount(); // Update header count from server
+      if (typeof refreshCartCount === "function") {
+         refreshCartCount();       // Update cart count, if available
+      }
+      
+      // Show confirmation modal instead of an alert
+      const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+      document.getElementById('cartModalBody').textContent = "All items added to cart successfully!";
+      cartModal.show();
+    });
   });
+  
 
   //-----------------------------------
   // On load, do a final local count and update header from server
