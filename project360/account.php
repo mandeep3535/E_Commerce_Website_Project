@@ -123,6 +123,8 @@ require_once 'header-loader.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel = "stylesheet" href = "footer.css">
+    <link rel = "stylesheet" href = "header.css">
 </head>
 <body>
 
@@ -142,8 +144,8 @@ require_once 'header-loader.php';
         <div class="col-md-3 mt-5 text-center text-lg-start">
             <h6 class="fw-bold">Manage Account</h6>
             <ul class="list-unstyled">
-                <li><a href="wishlist.html" > Wishlist</a></li>
-                <li><a href="order-history.html"> Orders</a></li>
+                <li><a href="wishlist.php" > Wishlist</a></li>
+                <li><a href="order-history.php"> Orders</a></li>
             </ul>
         </div>
 
@@ -230,7 +232,6 @@ require_once 'header-loader.php';
 
 <?php require_once "footer.php"; ?>
 
-<script src="hfload.js"></script>
 <script src = "loginheader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
