@@ -1,3 +1,8 @@
+<?php
+require_once "session_handler.php";
+require_once 'db_connection.php'; 
+require_once "header-loader.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,26 +11,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Bootstrap CSS -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-  >
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   
   <style>
     /* Custom styles */
-    body {
-      background-color: #f8f9fa;
-      font-family: Arial, sans-serif;
-    }
+
     .order-history-card {
       border: none;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+   
   </style>
+      <link rel = "stylesheet" href = "footer.css">
+      <link rel = "stylesheet" href = "header.css">
 </head>
 <body>
-    <div id = "loginheader"></div>
+ 
   <div class="container my-4">
     <!-- Breadcrumb -->
 <nav class="breadcrumb mb-4">
@@ -91,12 +95,11 @@
       </div>
     </div> 
   </div> 
-  
-  <!-- Bootstrap Bundle JS -->
-  <script 
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
-  </script>
-  <div id = "footer"></div>
-  <script src = "hfload.js"></script>
+  <?php
+require_once "footer.php";
+?>
+<script src="loginheader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
