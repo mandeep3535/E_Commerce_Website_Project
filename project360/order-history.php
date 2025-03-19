@@ -40,7 +40,7 @@ require_once "header-loader.php";
     <h1 class="text-center mb-4">My Order History</h1>
     
     <!-- Wrap in a Card for a sleek look -->
-    <div class="card order-history-card">
+    <div class="card order-history-card mb-5">
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-hover align-middle">
