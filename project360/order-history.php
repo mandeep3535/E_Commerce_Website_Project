@@ -34,7 +34,7 @@ require_once "header-loader.php";
     <!-- Breadcrumb -->
 <nav class="breadcrumb mb-4">
   <a class="breadcrumb-item text-decoration-none text-muted" href="home.php">Home</a>
-  <a class="breadcrumb-item text-decoration-none text-muted" href="Account.html">Account</a>
+  <a class="breadcrumb-item text-decoration-none text-muted" href="Account.php">Account</a>
   <span class="breadcrumb-item active text-secondary fw-bold" aria-current="page">Orders</span>
 </nav>
     <h1 class="text-center mb-4">My Order History</h1>
@@ -55,40 +55,53 @@ require_once "header-loader.php";
               </tr>
             </thead>
             <tbody>
-              <!-- row 1 -->
-              <tr>
-                <td>00123</td>
-                <td>Wireless Headphones</td>
-                <td>1</td>
-                <td>2025-01-11</td>
-                <td>2025-01-18</td>
-                <td>
-                  <span class="badge bg-success">Delivered</span>
-                </td>
-              </tr>
-              <!-- row 2 -->
-              <tr>
-                <td>00456</td>
-                <td>Gaming Mouse</td>
-                <td>2</td>
-                <td>2025-02-05</td>
-                <td>2025-02-12</td>
-                <td>
-                  <span class="badge bg-secondary">Shipped</span>
-                </td>
-              </tr>
-              <!-- row 3 -->
-              <tr>
-                <td>00789</td>
-                <td>Bluetooth Speaker</td>
-                <td>1</td>
-                <td>2025-02-15</td>
-                <td>2025-02-22</td>
-                <td>
-                  <span class="badge bg-warning text-dark">Pending</span>
-                </td>
-              </tr>
-              <!--Rows can be added more rows  -->
+            <tbody>
+                <?php
+                if ($is_logged_in && isset($user_id)) {
+                    $sql = "SELECT o.order_id, o.order_date, o.delivery_date, o.status, 
+                                  oi.quantity, p.name AS product_name
+                            FROM orders o
+                            JOIN orderitems oi ON o.order_id = oi.order_id
+                            JOIN products p ON oi.product_id = p.product_id
+                            WHERE o.user_id = ?
+                            ORDER BY o.order_date DESC";
+
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("i", $user_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            // Map status to Bootstrap badge class
+                            $statusClass = match(strtolower($row['status'])) {
+                                'pending'   => 'bg-warning text-dark',
+                                'shipped'   => 'bg-secondary',
+                                'delivered' => 'bg-success',
+                                'canceled'  => 'bg-danger',
+                                default     => 'bg-light text-dark'
+                            };
+                            echo "<tr>
+                            <td><a href=\"order_details.php?order_id={$row['order_id']}\" style=\"color: black; text-decoration: underline;\">#{$row['order_id']}</a></td>
+                            <td>" . htmlspecialchars($row['product_name']) . "</td>
+                            <td>{$row['quantity']}</td>
+                            <td>{$row['order_date']}</td>
+                            <td>" . ($row['delivery_date'] ?? '-') . "</td>
+                            <td><span class='badge {$statusClass}'>" . ucfirst($row['status']) . "</span></td>
+                          </tr>";
+                    
+                        }
+                    } else {
+                        echo "<tr><td colspan='6' class='text-center text-muted'>No orders found.</td></tr>";
+                    }
+
+                    $stmt->close();
+                } else {
+                    echo "<tr><td colspan='6' class='text-center text-muted'>Please log in to view your orders.</td></tr>";
+                }
+                ?>
+                </tbody>
+
             </tbody>
           </table>
         </div> 
