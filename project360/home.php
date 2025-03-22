@@ -323,7 +323,7 @@ require_once "header-loader.php";
 <?php require_once "categories_common_script.php"; ?>
 
 <!-- Custom JS -->
-<script src="hfload.js"></script>
+
 <script src="loginheader.js"></script>
 
 <!-- Bootstrap JS -->

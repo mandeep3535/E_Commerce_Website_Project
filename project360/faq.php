@@ -174,7 +174,7 @@ require_once "header-loader.php";
                     </h2>
                     <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                         <div class="accordion-body">
-                            You can reach our support team via email at <a href="mailto:support@mvelectronics.com" class="text-danger">support@mvelectronics.com</a> or through our <a href="contact.html" class="text-danger">Contact Us</a> page.
+                            You can reach our support team via email at <a href="mailto:mvelectronics31@gmail.com" class="text-danger">mvelectronics31@gmail.com</a> or through our <a href="contact.php" class="text-danger">Contact Us</a> page.
                         </div>
                     </div>
                 </div>

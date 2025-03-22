@@ -52,7 +52,7 @@ require_once "header-loader.php";
                         <h5 class="fw-bold">Write</h5>
                         <p class="text-muted">Fill out our form and we will contact you within 24 hours.</p>
                         <p class="fw-bold">
-                            Email: <a href="mailto:support@mvelectronics.com" class="text-dark text-decoration-none">support@mvelectronics.com</a>
+                            Email: <a href="mailto:mvelectronics31@gmail.com" class="text-dark text-decoration-none">mvelectronics31@gmail.com</a>
                         </p>
                     </div>
                 </div>
