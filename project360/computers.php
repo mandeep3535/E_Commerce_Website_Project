@@ -45,8 +45,13 @@ require_once "header-loader.php";
           require_once 'db_connection.php';
 
           // Fetch computer products
-          $sql = "SELECT * FROM products 
-                  WHERE category = 'Computers'";
+          $sql = "SELECT p.*, 
+               COALESCE(AVG(r.rating), 0) AS avg_rating, 
+               COUNT(r.review_id) AS review_count 
+              FROM products p 
+              LEFT JOIN reviews r ON p.product_id = r.product_id 
+              WHERE p.category = 'Computers' 
+             GROUP BY p.product_id";
           $result = $conn->query($sql);
 
           // For logged-in users, fetch their wishlist items to know what's already in wishlist
@@ -159,14 +164,19 @@ require_once "header-loader.php";
                   </p>
 
                   <!-- Star Rating (static) -->
-                  <div class="star-rating">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <span class="text-muted">(65)</span>
-                  </div>
+                  <?php
+                    $avg = floatval($row['avg_rating']);
+                    $count = intval($row['review_count']);
+                    $full = floor($avg);
+                    $half = ($avg - $full) >= 0.5 ? 1 : 0;
+                    $empty = 5 - $full - $half;
+                    ?>
+                    <div class="star-rating text-warning" style="pointer-events: none;">
+                    <?php for ($i = 0; $i < $full; $i++) echo '<i class="bi bi-star-fill"></i>'; ?>
+                    <?php if ($half) echo '<i class="bi bi-star-half"></i>'; ?>
+                    <?php for ($i = 0; $i < $empty; $i++) echo '<i class="bi bi-star"></i>'; ?>
+                     <span class="text-muted">(<?php echo $count; ?>)</span>
+                    </div>
                 </div>
               </div>
         <?php
