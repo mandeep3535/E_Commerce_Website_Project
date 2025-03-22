@@ -69,7 +69,7 @@ require_once "header-loader.php";
             </ul>
 
             <h4 class="fw-bold mt-4">6. Returns & Refunds</h4>
-            <p>Customers may return eligible products within 30 days of purchase. Read our <a href="refund.html" class="text-danger">Refund Policy</a> for details.</p>
+            <p>Customers may return eligible products within 30 days of purchase. 
 
             <h4 class="fw-bold mt-4">7. Account Termination</h4>
             <p>We reserve the right to terminate accounts found violating these Terms.</p>
@@ -81,7 +81,7 @@ require_once "header-loader.php";
             <p>We may update these Terms periodically. Continued use of our website means you accept the latest version.</p>
 
             <h4 class="fw-bold mt-4">10. Contact Us</h4>
-            <p>If you have questions, reach out to us at <a href="mailto:support@mvelectronics.com" class="text-danger">support@mvelectronics.com</a>.</p>
+            <p>If you have questions, reach out to us at <a href="mailto:mvelectronics31@gmail.com" class="text-danger">mvelectronics31@gmail.com</a>.</p>
         </div>
     </div>
 

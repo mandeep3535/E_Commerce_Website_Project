@@ -20,7 +20,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="col-md-3 col-sm-6 mb-3 text-center">
                 <h5>Support</h5>
                 <p>3333 University Way, Kelowna, BC</p>
-                <p id="email"><a href="mailto:official.mvelectronics@gmail.com">Email: official.mvelectronics@gmail.com</a></p>
+                <p id="email"><a href="mailto:mvelectronics31@gmail.com">Email: mvelectronics31@gmail.com</a></p>
                 <p id="phone">
                     <a href="tel:+12345678902">Phone: +1-234-567-8902</a>
                 </p>
