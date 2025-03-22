@@ -124,6 +124,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="col-lg-7">
       <h2 class="mb-4 fw-bold">Delivery Details</h2>
       <form id="deliveryForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        
+        <div class="mb-3">
+          <label class="form-label">Street Address*</label>
+          <input type="text" class="form-control" name="street_address" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Apartment, floor, etc. (optional)</label>
+          <input type="text" class="form-control" name="apartment_info" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Town/City*</label>
+          <input type="text" class="form-control" name="city" required />
+        </div>
+        
         <div class="mb-3">
           <label for="provinceSelect" class="form-label">Province*</label>
           <select class="form-select" id="provinceSelect" name="province" required>
@@ -143,19 +157,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="NU">Nunavut</option>
           </select>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Street Address*</label>
-          <input type="text" class="form-control" name="street_address" required />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Apartment, floor, etc. (optional)</label>
-          <input type="text" class="form-control" name="apartment_info" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Town/City*</label>
-          <input type="text" class="form-control" name="city" required />
-        </div>
-        
         <!-- Hidden fields to store order data -->
         <input type="hidden" name="total_price" id="hiddenTotalPrice" value="0" />
         <input type="hidden" name="payment_method" id="hiddenPaymentMethod" value="Credit Card" />
@@ -199,13 +200,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input class="form-check-input payment-method-radio" type="radio" name="payment_method" id="credit_card" value="Credit Card" checked />
             <label class="form-check-label" for="credit_card">
               Credit Card <img src="images/visa.webp" width="40" />
-            </label>
-          </div>
-          
-          <div class="form-check">
-            <input class="form-check-input payment-method-radio" type="radio" name="payment_method" id="paypal" value="PayPal" />
-            <label class="form-check-label" for="paypal">
-              PayPal <img src="images/paypal.webp" width="40" />
             </label>
           </div>
           

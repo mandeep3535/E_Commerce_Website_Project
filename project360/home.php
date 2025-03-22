@@ -146,7 +146,15 @@ require_once "header-loader.php";
         $wishlist_stmt->close();
       }
 
-      $sql = "SELECT * FROM products WHERE best_seller = 1 LIMIT 4";
+      $sql = "SELECT p.*, 
+               COALESCE(AVG(r.rating), 0) AS avg_rating, 
+               COUNT(r.review_id) AS review_count 
+        FROM products p 
+        LEFT JOIN reviews r ON p.product_id = r.product_id 
+        WHERE p.best_seller = 1 
+        GROUP BY p.product_id 
+        LIMIT 4";
+
       $result = $conn->query($sql);
 
       if ($result && $result->num_rows > 0):
@@ -195,14 +203,20 @@ require_once "header-loader.php";
           </span>
         </p>
 
-        <div class="text-warning small mb-1">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <span class="text-muted">(65)</span>
+        <?php
+          $avg = floatval($row['avg_rating']);
+          $count = intval($row['review_count']);
+          $full = floor($avg);
+          $half = ($avg - $full) >= 0.5 ? 1 : 0;
+          $empty = 5 - $full - $half;
+        ?>
+        <div class="text-danger small mb-1" style="pointer-events: none;">
+          <?php for ($i = 0; $i < $full; $i++) echo '<i class="bi bi-star-fill text-warning"></i>'; ?>
+          <?php if ($half) echo '<i class="bi bi-star-half text-warning"></i>'; ?>
+          <?php for ($i = 0; $i < $empty; $i++) echo '<i class="bi bi-star text-warning"></i>'; ?>
+          <span class="text-muted">(<?php echo $count; ?>)</span>
         </div>
+
 
         <?php if ($is_logged_in): ?>
           <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart" data-product-id="<?php echo $row['product_id']; ?>" onclick="event.stopPropagation();">
