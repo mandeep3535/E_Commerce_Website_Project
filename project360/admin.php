@@ -281,11 +281,11 @@ $conn->close();
 
     
     <script>
-        // Passing PHP data to JavaScript variables
-        const revenueByCustomer = <?php echo json_encode($revenueByCustomer); ?>;
-        const categoryData = <?php echo json_encode($categoryData); ?>;
-        const monthlySales = <?php echo json_encode($monthlySales); ?>;
-    </script>
+    // Passing PHP data to JavaScript variables
+    let revenueByCustomer = <?php echo json_encode($revenueByCustomer); ?>;
+    let categoryData = <?php echo json_encode($categoryData); ?>;
+    let monthlySales = <?php echo json_encode($monthlySales); ?>;
+</script>
 
     <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
