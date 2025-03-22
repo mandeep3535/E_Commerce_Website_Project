@@ -1,6 +1,4 @@
-/**************************************************
- * 1) REGISTER PLUGINS & SET GLOBALS ON DOM LOADED
- **************************************************/
+/*1) REGISTER PLUGINS & SET GLOBALS ON DOM LOADED*/
 document.addEventListener('DOMContentLoaded', function() {
     // Register the data labels plugin globally (required in Chart.js 2.x)
     Chart.plugins.register(ChartDataLabels);
@@ -17,9 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFilters();
 });
 
-/**************************************************
+/**
  * 2) GLOBAL VARIABLES (chart instances + data copies)
- **************************************************/
+ */
 let monthlySalesChartInstance = null;
 let customerRevenueChartInstance = null;
 let categoryChartInstance = null;
@@ -29,41 +27,37 @@ let originalMonthlySales = [];
 let originalRevenueByCustomer = [];
 let originalCategoryData = [];
 
-/**************************************************
- * 3) INITIALIZE ALL CHARTS
- **************************************************/
+/*3) INITIALIZE ALL CHARTS*/
 function initializeCharts() {
     initializeMonthlySalesChart();
     initializeCustomerRevenueChart();
     initializeCategoryChart();
 }
 
-/**************************************************
- * 4) INITIALIZE ALL FILTERS
- **************************************************/
+/*4) INITIALIZE ALL FILTERS*/
 function initializeFilters() {
     addMonthlyChartFilters();
     addCustomerRevenueFilters();
     addCategoryFilters();
 }
 
-/**************************************************
- * 5) MONTHLY SALES FILTERS
- **************************************************/
+/** 5) MONTHLY SALES FILTERS*/
 function addMonthlyChartFilters() {
     const chartCard = document.querySelector('#monthlySalesChart').closest('.card');
     const cardHeader = chartCard.querySelector('.card-header');
     
     const filterDiv = document.createElement('div');
-    filterDiv.className = 'mt-2 d-flex align-items-center';
+    filterDiv.className = 'mt-2 row g-2 align-items-center';
     filterDiv.innerHTML = `
         <label for="monthlyDateRange" class="me-2">Date Range:</label>
         <select id="monthlyDateRange" class="form-select form-select-sm me-2" style="width: auto;">
             <option value="all">All Time</option>
-            <option value="last3">Last 3 Months</option>
-            <option value="last6">Last 6 Months</option>
-            <option value="last12">Last 12 Months</option>
+            <option value="week">This Week</option>
+            <option value="month">Monthly</option>
+            <option value="quarter">Quarterly</option>
+            <option value="year">Yearly</option>
         </select>
+
         <button id="resetMonthlySalesFilter" class="btn btn-sm btn-outline-secondary">Reset</button>
     `;
     cardHeader.appendChild(filterDiv);
@@ -79,28 +73,65 @@ function addMonthlyChartFilters() {
 }
 
 function filterMonthlySalesChart(rangeValue) {
-    let filteredData = [...originalMonthlySales];
+        // Make a copy of the original data
+        let filteredData = [...originalMonthlySales];
     
-    if (rangeValue !== 'all') {
-        const months = parseInt(rangeValue.replace('last', ''));
-        // Take only the last X months
-        filteredData = filteredData.slice(-months);
+        // We'll compare each data point's date to `startDate`
+        let now = new Date();
+        let startDate = null;
+    
+        switch (rangeValue) {
+            case 'week':
+                // Last 7 days
+                startDate = new Date(now);
+                startDate.setDate(startDate.getDate() - 7);
+                break;
+            case 'month':
+                // Last 1 month
+                startDate = new Date(now);
+                startDate.setMonth(startDate.getMonth() - 1);
+                break;
+            case 'quarter':
+                // Last 3 months
+                startDate = new Date(now);
+                startDate.setMonth(startDate.getMonth() - 3);
+                break;
+            case 'year':
+                // Last 12 months
+                startDate = new Date(now);
+                startDate.setFullYear(startDate.getFullYear() - 1);
+                break;
+            case 'all':
+            default:
+                // Show entire dataset
+                startDate = null;
+                break;
+        }
+    
+        // If we have a startDate, filter out older entries
+        if (startDate) {
+            filteredData = filteredData.filter(item => {
+                // Parse item.month (format "YYYY-MM") into a JS Date
+                const [year, month] = item.month.split('-');
+                // We'll assume day=1 since it's monthly data
+                const itemDate = new Date(year, month - 1, 1);
+                
+                // Keep only data points within the date range
+                return itemDate >= startDate;
+            });
+        }
+    
+        // Update global monthlySales & reinitialize chart
+        monthlySales = filteredData;
+        initializeMonthlySalesChart();
     }
-    
-    // Update global monthlySales and re-init chart
-    monthlySales = filteredData;
-    initializeMonthlySalesChart();
-}
-
-/**************************************************
- * 6) CUSTOMER REVENUE FILTERS
- **************************************************/
+/* 6) CUSTOMER REVENUE FILTERS */
 function addCustomerRevenueFilters() {
     const chartCard = document.querySelector('#customerRevenueChart').closest('.card');
     const cardHeader = chartCard.querySelector('.card-header');
     
     const filterDiv = document.createElement('div');
-    filterDiv.className = 'mt-2 d-flex align-items-center';
+    filterDiv.className = 'mt-2 row g-2 align-items-center';
     filterDiv.innerHTML = `
         <label for="customerCount" class="me-2">Top:</label>
         <select id="customerCount" class="form-select form-select-sm me-2" style="width: auto;">
@@ -109,12 +140,10 @@ function addCustomerRevenueFilters() {
             <option value="15">15 Customers</option>
             <option value="all">All Customers</option>
         </select>
-        <div class="me-3">
-            <label for="minRevenue" class="me-2">Min Revenue:</label>
-            <input type="number" id="minRevenue" class="form-control form-control-sm" style="width: 100px;" placeholder="Min $">
-        </div>
+        <input type="number" id="minRevenue" class="form-control form-control-sm me-2" style="width: auto;" placeholder="Min $">
         <button id="resetCustomerFilter" class="btn btn-sm btn-outline-secondary">Reset</button>
     `;
+    
     cardHeader.appendChild(filterDiv);
     
     document.getElementById('customerCount').addEventListener('change', applyCustomerRevenueFilter);
@@ -147,15 +176,13 @@ function applyCustomerRevenueFilter() {
     initializeCustomerRevenueChart();
 }
 
-/**************************************************
- * 7) CATEGORY FILTERS
- **************************************************/
+/*7) CATEGORY FILTERS*/
 function addCategoryFilters() {
     const chartCard = document.querySelector('#categoryChart').closest('.card');
     const cardHeader = chartCard.querySelector('.card-header');
     
     const filterDiv = document.createElement('div');
-    filterDiv.className = 'mt-2 d-flex align-items-center';
+    filterDiv.className = 'mt-2 row g-2 align-items-center';
     
     // Generate a unique list of categories
     const categories = [...new Set(originalCategoryData.map(item => item.category))];
@@ -170,8 +197,7 @@ function addCategoryFilters() {
             ${categoryOptions}
         </select>
         <div class="me-3">
-            <label for="minProducts" class="me-2">Min Products:</label>
-            <input type="number" id="minProducts" class="form-control form-control-sm" style="width: 100px;" placeholder="Min">
+            <input type="number" id="minProducts" class="form-control form-control-sm" style="width: auto;" placeholder="Min Products">
         </div>
         <button id="resetCategoryFilter" class="btn btn-sm btn-outline-secondary">Reset</button>
     `;
@@ -207,10 +233,7 @@ function applyCategoryFilter() {
     initializeCategoryChart();
 }
 
-/**************************************************
- * 8) INITIALIZE MONTHLY SALES CHART (LINE)
- *    (Chart.js 2.9.4 style)
- **************************************************/
+/* 8) INITIALIZE MONTHLY SALES CHART (LINE)*/
 function initializeMonthlySalesChart() {
     const canvas = document.getElementById('monthlySalesChart');
     const ctx = canvas.getContext('2d');
@@ -270,9 +293,7 @@ function initializeMonthlySalesChart() {
     });
 }
 
-/**************************************************
- * 9) INITIALIZE CUSTOMER REVENUE CHART (BAR)
- **************************************************/
+/* 9) INITIALIZE CUSTOMER REVENUE CHART (BAR)*/
 function initializeCustomerRevenueChart() {
     const canvas = document.getElementById('customerRevenueChart');
     const ctx = canvas.getContext('2d');
@@ -332,9 +353,7 @@ function initializeCustomerRevenueChart() {
     });
 }
 
-/**************************************************
- * 10) INITIALIZE CATEGORY CHART (PIE)
- **************************************************/
+/*10) INITIALIZE CATEGORY CHART (PIE)*/
 function initializeCategoryChart() {
     const canvas = document.getElementById('categoryChart');
     const ctx = canvas.getContext('2d');
@@ -399,9 +418,7 @@ function initializeCategoryChart() {
     });
 }
 
-/**************************************************
- * 11) COLOR HELPER
- **************************************************/
+/* 11) COLOR HELPER */
 function generateColors(count) {
     const backgroundColors = [
         'rgba(255, 99, 132, 0.7)',
