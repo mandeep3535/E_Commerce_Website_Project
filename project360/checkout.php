@@ -205,7 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="form-check">
             <input class="form-check-input payment-method-radio" type="radio" name="payment_method" id="paypal" value="PayPal" />
             <label class="form-check-label" for="paypal">
-              PayPal <img src="images/paypal.webp" width="40" />
+              PayPal <img src="images/paypal.png" width="40" />
             </label>
           </div>
           

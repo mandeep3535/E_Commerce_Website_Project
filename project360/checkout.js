@@ -35,9 +35,25 @@ document.addEventListener("DOMContentLoaded", () => {
   applyCouponBtn.textContent = "Apply Coupon";
 
   // Function to render the order summary.
-  // We assume get_cart_items.php returns the final price in item.price.
   // When a coupon is active, item.price is the discounted price.
   // We want to display that price in red.
+
+
+  function extractFirstImage(images) {
+    try {
+      const parsed = JSON.parse(images);
+      if (Array.isArray(parsed)) {
+        return parsed[0];
+      }
+    } catch (e) {
+      if (images.includes(",")) {
+        return images.split(",")[0].trim();
+      }
+    }
+    return images; // fallback
+  }
+
+  
   const renderOrder = () => {
     let subtotal = 0;
     let orderItemsHtml = "";
@@ -65,7 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         orderItemsHtml += `
           <div class="d-flex align-items-center mb-2">
-            <img src="${item.image}" alt="${item.name}" width="40" class="me-2" />
+            <img src="${extractFirstImage(item.image)}" alt="${item.name}" width="40" class="me-2" />
+
             <div class="flex-grow-1">
               <div>${item.name} (x${item.quantity})</div>
               <div style="${priceStyle}">$${lineSubtotal.toFixed(2)}</div>
