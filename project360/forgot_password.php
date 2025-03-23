@@ -76,7 +76,8 @@ try {
     $mail->setFrom('mvelectronics31@gmail.com', 'MV Electronics');
     $mail->addAddress($email);
     $mail->Subject = 'Password Reset Request';
-    $resetLink = "https://cosc360.ok.ubc.ca/project360/reset_password.php?token=$token";
+ //   $resetLink = "https://cosc360.ok.ubc.ca/vgarg28/project360/project360/reset_password.php?token=$token";
+    $resetLink = "https://cosc360.ok.ubc.ca/msingh78/project360/project360/reset_password.php?token=$token";
     $mail->Body = "Hello,\n\nClick this link to reset your password:\n$resetLink\n\nThis link expires in 1 hour.";
 
     $mail->send();
