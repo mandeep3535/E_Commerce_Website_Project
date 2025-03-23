@@ -92,8 +92,8 @@
               }
               
               // Max file size validation (2MB)
-              if (imageFile.size > 2 * 1024 * 1024) {
-                  errorMessages.push("Image file size must be less than 2MB");
+              if (imageFile.size > 25 * 1024 * 1024) {
+                  errorMessages.push("Image file size must be less than 25MB");
                   isValid = false;
               }
           }
