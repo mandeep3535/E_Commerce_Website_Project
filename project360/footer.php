@@ -37,7 +37,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <?php endif; ?>
     </li>
     <?php if (!isset($_SESSION["user_id"])): ?>
-        <li><a href="Admin_login.html" class="text-white">Admin Login</a></li>
+        <li><a href="admin_login.html" class="text-white">Admin Login</a></li>
     <?php endif; ?>
     <li><a href="home.php" class="text-white">Shop</a></li>
 </ul>
