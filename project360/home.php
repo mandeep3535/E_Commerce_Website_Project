@@ -283,7 +283,7 @@ require_once "header-loader.php";
     <div class="col-md-4">
       <i class="bi bi-truck fs-1 text-dark mb-2"></i>
       <h6 class="fw-bold">FREE AND FAST DELIVERY</h6>
-      <p class="text-muted">Free delivery for all orders over $140</p>
+      <p class="text-muted">Free delivery for all orders over $500</p>
     </div>
     <div class="col-md-4">
       <i class="bi bi-headset fs-1 text-dark mb-2"></i>
