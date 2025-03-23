@@ -184,12 +184,19 @@ require_once "header-loader.php";
             </button>
           <?php endif; ?>
         </div>
+        <?php
+            $image_paths = explode(',', $row['images']);
+            $first_image = trim($image_paths[0]);
+          ?>
+           <div class="ratio ratio-1x1 mb-3">
+          <img 
+            src="<?php echo htmlspecialchars($first_image); ?>" 
+            alt="<?php echo htmlspecialchars($row['name']); ?>" 
+            class="img-fluid"
+            style="object-fit: contain;"
+          />
+        </div>
 
-        <img
-          src="<?php echo htmlspecialchars($row['images']); ?>"
-          alt="<?php echo htmlspecialchars($row['name']); ?>"
-          class="img-fluid mb-3 product-img"
-        />
         <p class="mb-0 fw-semibold">
                     <a href="product_info.php?id=<?php echo $row['product_id']; ?>" class="text-dark text-decoration-none product-link">
                       <?php echo htmlspecialchars($row['name']); ?>
