@@ -1,3 +1,4 @@
+
 <?php
 // Ensure session is available
 require_once "session_handler.php";
@@ -29,6 +30,7 @@ if ($orderResult->num_rows == 0) {
 
 $orderData = $orderResult->fetch_assoc();
 
+
 // Fetch order items
 $itemsSql = "SELECT oi.*, p.name, p.images 
              FROM orderitems oi 
@@ -38,19 +40,109 @@ $itemsStmt = $conn->prepare($itemsSql);
 $itemsStmt->bind_param("i", $order_id);
 $itemsStmt->execute();
 $itemsResult = $itemsStmt->get_result();
+
+// Load PHPMailer
+require 'mailer/PHPMailer.php';
+require 'mailer/SMTP.php';
+require 'mailer/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Fetch customer email
+$userSql = "SELECT email, user_name FROM users WHERE user_id = ?";
+$userStmt = $conn->prepare($userSql);
+$userStmt->bind_param("i", $user_id);
+$userStmt->execute();
+$userResult = $userStmt->get_result();
+$userData = $userResult->fetch_assoc();
+
+$customerEmail = $userData['email'];
+$customerName  = $userData['user_name'];
+
+// Prepare order summary (plain text)
+$orderSummary = "Order ID: $order_id\n";
+$orderSummary .= "Order Date: " . date('F j, Y, g:i a', strtotime($orderData['order_date'])) . "\n";
+$orderSummary .= "Status: " . ucfirst($orderData['status']) . "\n";
+$orderSummary .= "Payment: " . $orderData['payment_method'] . "\n\n";
+$orderSummary .= "Items:\n";
+
+$itemsResult->data_seek(0); // reset result pointer to loop again
+while ($item = $itemsResult->fetch_assoc()) {
+    $orderSummary .= "- {$item['name']} x {$item['quantity']} = $" . number_format($item['price'] * $item['quantity'], 2) . "\n";
+}
+$orderSummary .= "\nTotal: $" . number_format($orderData['total_price'], 2);
+
+// Email both customer and admin
+$recipients = [
+    [$customerEmail, $customerName],
+    ['mvelectronics31@gmail.com', 'Admin']
+];
+
+foreach ($recipients as $recipient) {
+    $toEmail = $recipient[0];
+    $toName = $recipient[1];
+    $mail = new PHPMailer(true);
+    
+    try {
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'mvelectronics31@gmail.com';
+        $mail->Password   = 'dzvbtsppjvyoukhk';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port       = 465;
+
+        $mail->setFrom('mvelectronics31@gmail.com', 'MV Electronics');
+        $mail->addAddress($toEmail, $toName);
+        $mail->addReplyTo('mvelectronics31@gmail.com', 'MV Electronics');
+
+        if ($toEmail === 'mvelectronics31@gmail.com') {
+            // Email to admin
+            $mail->Subject = "New Order Placed - Order #$order_id";
+            $mail->Body    = "Hello Admin,\n\nA new order has been placed by $customerName ($customerEmail).\n\n$orderSummary\n\nLogin to the dashboard to view more details.";
+        } else {
+            // Email to customer
+            $mail->Subject = "Your Order Confirmation - Order #$order_id";
+            $mail->Body    = "Hi $toName,\n\nThank you for shopping with MV Electronics! Your order has been received and is being processed.\n\n$orderSummary\n\nWe'll notify you once your order is shipped.\n\nBest regards,\nMV Electronics Team";
+        }
+
+        $mail->send();
+    } catch (Exception $e) {
+        error_log("Mail error to $toEmail: " . $mail->ErrorInfo);
+    }
+}
+
+ob_end_flush();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation</title>
-    <link rel="stylesheet" href="checkout.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="checkout.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
 </head>
 <body>
+<style>
+  #initial-loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+</style>
+<div id="initial-loader">
+  <div class="spinner-border text-danger" role="status" style="width: 3rem; height: 3rem;"></div>
+</div>
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -128,5 +220,21 @@ $itemsResult = $itemsStmt->get_result();
     <script src="hfload.js"></script>
     <script src="loginheader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+  // Remove loader once DOM is ready, don't wait for images
+  document.addEventListener("DOMContentLoaded", function() {
+    const loader = document.getElementById("initial-loader");
+    if (loader) loader.remove();
+  });
+
+  // Optional: clear localStorage if flag was set
+  <?php if (isset($_SESSION['clear_cart'])): ?>
+    localStorage.removeItem('cart');
+    localStorage.removeItem('appliedCoupon');
+    <?php unset($_SESSION['clear_cart']); ?>
+  <?php endif; ?>
+</script>
+
 </body>
 </html>
+
