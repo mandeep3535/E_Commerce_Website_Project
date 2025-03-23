@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const productPriceElement = document.getElementById("productPrice");
   
     // Parse the base price from the productPrice element.
-    const basePrice = parseFloat(productPriceElement.innerText.replace("$", "").trim());
-  
+    const basePrice = parseFloat(productPriceElement.textContent.replace(/[$,]/g, "").trim());
+
     function updatePrice() {
       let quantity = parseInt(quantityInput.value);
       if (isNaN(quantity) || quantity < 1) {
@@ -27,8 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
         quantityInput.value = 1;
       }
       const totalPrice = (basePrice * quantity).toFixed(2);
-      productPriceElement.innerText = `$${totalPrice}`;
+      productPriceElement.innerText = `$${Number(totalPrice).toLocaleString()}`;
     }
+    
   
     // Increase quantity button.
     document.getElementById("increaseQty").addEventListener("click", function () {
