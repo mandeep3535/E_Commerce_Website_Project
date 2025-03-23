@@ -129,9 +129,11 @@ require_once 'header-loader.php';
                   <?php echo ($product['stock'] > 0) ? "In Stock" : "Out of Stock"; ?>
                 </span>
             </div>
-
-            <h4 class="text-danger text-md-start text-center" id="productPrice">
-              $<?php echo number_format($product['price'], 2); ?>
+            <h4 class="text-danger text-md-start text-center mb-1">
+            <span id="productPrice">$<?php echo number_format($product['price'], 2); ?></span>
+            <span class="text-muted text-decoration-line-through ms-2">
+                $<?php echo number_format($product['price'] + 200, 2); ?>
+            </span>
             </h4>
 
             <p class="text-muted"><?php echo htmlspecialchars($product['description']); ?></p>
@@ -308,7 +310,7 @@ require_once 'header-loader.php';
 <!-- Shared Wishlist and Cart Modals & JS Logic -->
 <script src="product.js"></script> 
 <?php require_once "categories_common_script.php"; ?>
-<script src="hfload.js"></script>
+
 <script src="loginheader.js"></script>
 
 
