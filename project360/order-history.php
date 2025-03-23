@@ -34,7 +34,7 @@ require_once "header-loader.php";
     <!-- Breadcrumb -->
 <nav class="breadcrumb mb-4">
   <a class="breadcrumb-item text-decoration-none text-muted" href="home.php">Home</a>
-  <a class="breadcrumb-item text-decoration-none text-muted" href="Account.php">Account</a>
+  <a class="breadcrumb-item text-decoration-none text-muted" href="account.php">Account</a>
   <span class="breadcrumb-item active text-secondary fw-bold" aria-current="page">Orders</span>
 </nav>
     <h1 class="text-center mb-4">My Order History</h1>

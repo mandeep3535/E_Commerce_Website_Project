@@ -103,7 +103,7 @@ require_once "header-loader.php";
                 <div class="social-icons">
                     <i class="bi bi-instagram"></i>
                     <i class="bi bi-twitter-x"></i>
-                    <a href = "https:/www.linkedin.com/in/varun-garg-762289192" target = "_blank"><i class="bi bi-linkedin"></i></a>
+                    <a href = "https://www.linkedin.com/in/varun-garg-762289192" target = "_blank"><i class="bi bi-linkedin"></i></a>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@ require_once "header-loader.php";
         <div class="col-md-4">
             <i class="bi bi-truck fs-1"></i>
             <h6 class="fw-bold mt-2">FREE AND FAST DELIVERY</h6>
-            <p class="text-muted">Free delivery for all orders over $140</p>
+            <p class="text-muted">Free delivery for all orders over $500</p>
         </div>
         <div class="col-md-4">
             <i class="bi bi-headset fs-1"></i>
