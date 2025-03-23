@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <h5 class="fw-bold">Call</h5>
             <p class="text-muted">We are available 24/7, 7 days a week.</p>
             <p class="fw-bold">
-              Phone: <a href="tel:+123456789" class="text-dark text-decoration-none">+123456789</a>
+              Phone: <a href="tel:+123456789" class="text-dark text-decoration-none">+1234567890</a>
             </p>
           </div>
         </div>
