@@ -152,7 +152,7 @@ ob_end_flush();
                     </div>
                     <div class="card-body">
                         <div class="text-center mb-4">
-                            <i class="bi bi-check-circle-fill text-dark" style="font-size: 5rem;"></i>
+                            <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
                             <h4 class="mt-3">Thank you for your order!</h4>
                             <p>Your order #<?php echo $order_id; ?> has been placed successfully.</p>
                         </div>
