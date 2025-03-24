@@ -80,9 +80,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors[] = "Only JPG, JPEG, PNG & GIF files are allowed";
         }
         
-        // Check file size (2MB max)
+        // Check file size (25MB max)
         if ($_FILES["image"]["size"] > 25 * 1024 * 1024) {
-            $errors[] = "Image file size must be less than 2MB";
+            $errors[] = "Image file size must be less than 25MB";
         }
     }
     

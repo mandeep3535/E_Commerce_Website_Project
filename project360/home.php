@@ -161,83 +161,83 @@ require_once "header-loader.php";
         while ($row = $result->fetch_assoc()):
           $in_wishlist = in_array($row['product_id'], $wishlist_items);
   ?>
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="product-card p-3 bg-white position-relative">
-        <div class="product-icons position-absolute top-0 end-0 m-2">
-          <?php if ($is_logged_in): ?>
-            <button
-              class="btn btn-link p-0 wishlist-icon logged-in-wishlist <?php echo $in_wishlist ? 'in-wishlist' : ''; ?>"
-              title="<?php echo $in_wishlist ? 'Already in wishlist' : 'Add to Wishlist'; ?>"
-              data-product-id="<?php echo $row['product_id']; ?>"
-              data-in-wishlist="<?php echo $in_wishlist ? '1' : '0'; ?>"
-            >
-              <i class="bi <?php echo $in_wishlist ? 'bi-heart-fill text-danger' : 'bi-heart'; ?> fs-5"></i>
-            </button>
-          <?php else: ?>
-            <button
-              class="btn btn-link p-0 wishlist-icon"
-              title="Add to Wishlist"
-              data-bs-toggle="modal"
-              data-bs-target="#loginModal"
-            >
-              <i class="bi bi-heart fs-5"></i>
-            </button>
-          <?php endif; ?>
-        </div>
-        <?php
-            $image_paths = explode(',', $row['images']);
-            $first_image = trim($image_paths[0]);
-          ?>
-           <div class="ratio ratio-1x1 mb-3">
-          <img 
-            src="<?php echo htmlspecialchars($first_image); ?>" 
-            alt="<?php echo htmlspecialchars($row['name']); ?>" 
-            class="img-fluid"
-            style="object-fit: contain;"
-          />
-        </div>
-
-        <p class="mb-0 fw-semibold">
-                    <a href="product_info.php?id=<?php echo $row['product_id']; ?>" class="text-dark text-decoration-none product-link">
-                      <?php echo htmlspecialchars($row['name']); ?>
-                    </a>
-                  </p>
-
-        <p class="text-danger mb-0">
-          $<?php echo number_format($row['price'], 2); ?>
-          <span class="text-muted text-decoration-line-through">
-            $<?php echo number_format($row['price'] + 100, 2); ?>
-          </span>
-        </p>
-
-        <?php
-          $avg = floatval($row['avg_rating']);
-          $count = intval($row['review_count']);
-          $full = floor($avg);
-          $half = ($avg - $full) >= 0.5 ? 1 : 0;
-          $empty = 5 - $full - $half;
-        ?>
-        <div class="text-danger small mb-1" style="pointer-events: none;">
-          <?php for ($i = 0; $i < $full; $i++) echo '<i class="bi bi-star-fill text-warning"></i>'; ?>
-          <?php if ($half) echo '<i class="bi bi-star-half text-warning"></i>'; ?>
-          <?php for ($i = 0; $i < $empty; $i++) echo '<i class="bi bi-star text-warning"></i>'; ?>
-          <span class="text-muted">(<?php echo $count; ?>)</span>
-        </div>
-
-
+<div class="col-6 col-md-4 col-lg-3">
+  <a href="product_info.php?id=<?php echo $row['product_id']; ?>" class="text-decoration-none text-dark">
+    <div class="product-card p-3 bg-white position-relative">
+      <div class="product-icons position-absolute top-0 end-0 m-2">
         <?php if ($is_logged_in): ?>
-          <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart" data-product-id="<?php echo $row['product_id']; ?>" onclick="event.stopPropagation();">
-  Add To Cart
-</button>
-
+          <button
+            class="btn btn-link p-0 wishlist-icon logged-in-wishlist <?php echo $in_wishlist ? 'in-wishlist' : ''; ?>"
+            title="<?php echo $in_wishlist ? 'Already in wishlist' : 'Add to Wishlist'; ?>"
+            data-product-id="<?php echo $row['product_id']; ?>"
+            data-in-wishlist="<?php echo $in_wishlist ? '1' : '0'; ?>"
+            onclick="event.preventDefault(); event.stopPropagation();"
+          >
+            <i class="bi <?php echo $in_wishlist ? 'bi-heart-fill text-danger' : 'bi-heart'; ?> fs-5"></i>
+          </button>
         <?php else: ?>
-          <button class="btn btn-danger w-100 btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#loginModal" onclick="event.stopPropagation();">
-  Add To Cart
-</button>
-
+          <button
+            class="btn btn-link p-0 wishlist-icon"
+            title="Add to Wishlist"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+            onclick="event.preventDefault(); event.stopPropagation();"
+          >
+            <i class="bi bi-heart fs-5"></i>
+          </button>
         <?php endif; ?>
       </div>
+
+      <?php
+        $image_paths = explode(',', $row['images']);
+        $first_image = trim($image_paths[0]);
+      ?>
+      <div class="ratio ratio-1x1 mb-3">
+        <img 
+          src="<?php echo htmlspecialchars($first_image); ?>" 
+          alt="<?php echo htmlspecialchars($row['name']); ?>" 
+          class="img-fluid"
+          style="object-fit: contain;"
+        />
+      </div>
+
+      <p class="mb-0 fw-semibold product-link">
+        <?php echo htmlspecialchars($row['name']); ?>
+      </p>
+
+      <p class="text-danger mb-0">
+        $<?php echo number_format($row['price'], 2); ?>
+        <span class="text-muted text-decoration-line-through">
+          $<?php echo number_format($row['price'] + 100, 2); ?>
+        </span>
+      </p>
+
+      <?php
+        $avg = floatval($row['avg_rating']);
+        $count = intval($row['review_count']);
+        $full = floor($avg);
+        $half = ($avg - $full) >= 0.5 ? 1 : 0;
+        $empty = 5 - $full - $half;
+      ?>
+      <div class="text-danger small mb-1" style="pointer-events: none;">
+        <?php for ($i = 0; $i < $full; $i++) echo '<i class="bi bi-star-fill text-warning"></i>'; ?>
+        <?php if ($half) echo '<i class="bi bi-star-half text-warning"></i>'; ?>
+        <?php for ($i = 0; $i < $empty; $i++) echo '<i class="bi bi-star text-warning"></i>'; ?>
+        <span class="text-muted">(<?php echo $count; ?>)</span>
+      </div>
+
+      <?php if ($is_logged_in): ?>
+        <button class="btn btn-danger w-100 btn-sm mt-2 btn-add-to-cart" data-product-id="<?php echo $row['product_id']; ?>" onclick="event.preventDefault(); event.stopPropagation();">
+          Add To Cart
+        </button>
+      <?php else: ?>
+        <button class="btn btn-danger w-100 btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#loginModal" onclick="event.preventDefault(); event.stopPropagation();">
+          Add To Cart
+        </button>
+      <?php endif; ?>
     </div>
+  </a>
+</div>
     <?php
         endwhile;
       else:
