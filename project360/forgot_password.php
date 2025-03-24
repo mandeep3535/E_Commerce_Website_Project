@@ -81,7 +81,7 @@ try {
     $mail->Body = "Hello,\n\nClick this link to reset your password:\n$resetLink\n\nThis link expires in 1 hour.";
 
     $mail->send();
-    echo json_encode(['success' => true, 'message' => 'Reset link sent to your email']);
+    echo json_encode(['success' => true,  'message' => 'Reset link sent to your email. If you didn\'t receive it, please check your spam or junk folder.']);
 } catch (Exception $e) {
     // Clean up token if email fails
     $conn->query("DELETE FROM password_resets WHERE token = '$token'");

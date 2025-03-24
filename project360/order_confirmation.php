@@ -154,7 +154,9 @@ ob_end_flush();
                         <div class="text-center mb-4">
                             <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
                             <h4 class="mt-3">Thank you for your order!</h4>
-                            <p>Your order #<?php echo $order_id; ?> has been placed successfully.</p>
+<p>Your order #<?php echo $order_id; ?> has been placed successfully.</p>
+<p>You will receive an email shortly. Please check your spam or junk folder if you don't see it soon.</p>
+
                         </div>
                         
                         <div class="order-details mb-4">
@@ -171,9 +173,10 @@ ob_end_flush();
                                 </div>
                             </div>
                         </div>
-                        
+                        <?php $itemsResult->data_seek(0); ?>
                         <div class="order-items">
                             <h5 class="border-bottom pb-2">Order Items</h5>
+                            
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -188,8 +191,24 @@ ob_end_flush();
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="<?php echo $item['images']; ?>" alt="<?php echo $item['name']; ?>" width="40" class="me-2">
-                                                    <?php echo $item['name']; ?>
+                                                <?php 
+  $decoded = json_decode($item['images'], true);
+  if (is_array($decoded)) {
+      $firstImage = trim($decoded[0]);
+  } else if (strpos($item['images'], ',') !== false) {
+      $parts = explode(',', $item['images']);
+      $firstImage = trim($parts[0]);
+  } else {
+      $firstImage = $item['images'];
+  }
+?>
+<img 
+  src="<?php echo htmlspecialchars($firstImage); ?>" 
+  alt="<?php echo htmlspecialchars($item['name']); ?>" 
+  width="40" 
+  class="me-2"
+>
+        <?php echo $item['name']; ?>
                                                 </div>
                                             </td>
                                             <td><?php echo $item['quantity']; ?></td>

@@ -1,24 +1,25 @@
 <?php
-// Normalize the request URI
-$request_uri = $_SERVER['REQUEST_URI'];
+//$basePath = '/vgarg28/project360/project360/'; // <-- YOUR base path
+$basePath = '/msingh78/project360/project360/';
 
-// Redirect if URI is just base or index.php (to make the URL explicit)
-if ($request_uri === '/project360/project360/' || $request_uri === '/project360/project360/index.php') {
-    header("Location: index.php?page=home");
-    exit;
-}
 
 // Check if ?page=... is provided
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
 } else {
     // Get the requested path
-    $uri = parse_url($request_uri, PHP_URL_PATH);
-    $uri = trim($uri, '/');
-    $parts = explode('/', $uri);
-    $page = end($parts);
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-    // Handle empty, 'index', or 'index.php' as 'home'
+    // If it's the base URL, show homepage
+    if ($uri === $basePath || $uri === rtrim($basePath, '/')) {
+        $page = 'home';
+    } else {
+        $uri = trim($uri, '/');
+        $parts = explode('/', $uri);
+        $page = end($parts);
+    }
+
+    // Handle direct calls to index
     if ($page === '' || $page === 'index' || $page === 'index.php') {
         $page = 'home';
     }

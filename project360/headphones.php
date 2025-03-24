@@ -33,157 +33,135 @@ require_once "header-loader.php";
       <span class="breadcrumb-item active text-secondary fw-bold" aria-current="page">HeadPhones</span>
     </nav>
 
-    <!-- Products Section -->
-    <div class="products-section border rounded p-3">
+       <!-- Products Section -->
+       <div class="products-section border rounded p-3">
       <h5 class="fw-bold mb-4">Our Products</h5>
 
       <!-- Row of Product Cards -->
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="productRow">
+  <?php
+    require_once 'db_connection.php';
 
-        <?php
-          // Include your database connection
-          require_once 'db_connection.php';
+    $sql = "SELECT p.*, 
+              COALESCE(AVG(r.rating), 0) AS avg_rating, 
+              COUNT(r.review_id) AS review_count 
+            FROM products p 
+            LEFT JOIN reviews r ON p.product_id = r.product_id 
+            WHERE p.category = 'HeadPhones' 
+            GROUP BY p.product_id";
 
-          // Fetch headphone products
-          $sql = "SELECT p.*, 
-               COALESCE(AVG(r.rating), 0) AS avg_rating, 
-               COUNT(r.review_id) AS review_count 
-              FROM products p 
-              LEFT JOIN reviews r ON p.product_id = r.product_id 
-              WHERE p.category = 'HeadPhones' 
-             GROUP BY p.product_id";
-          $result = $conn->query($sql);
+    $result = $conn->query($sql);
 
-          // For logged-in users, fetch their wishlist items to know what's already in wishlist
-          $wishlist_items = array();
-          if ($is_logged_in && isset($user_id)) {
-            $wishlist_sql = "SELECT product_id FROM wishlist WHERE user_id = ?";
-            $stmt = $conn->prepare($wishlist_sql);
-            $stmt->bind_param("i", $user_id);
-            $stmt->execute();
-            $wishlist_result = $stmt->get_result();
-            
-            while ($wishlist_row = $wishlist_result->fetch_assoc()) {
-              $wishlist_items[] = $wishlist_row['product_id'];
-            }
-            $stmt->close();
-          }
+    $wishlist_items = array();
+    if ($is_logged_in && isset($user_id)) {
+      $wishlist_sql = "SELECT product_id FROM wishlist WHERE user_id = ?";
+      $stmt = $conn->prepare($wishlist_sql);
+      $stmt->bind_param("i", $user_id);
+      $stmt->execute();
+      $wishlist_result = $stmt->get_result();
 
-          // If we have products, display them
-          if ($result && $result->num_rows > 0):
-            while ($row = $result->fetch_assoc()):
-              // Check if this product is in the user's wishlist
-              $in_wishlist = in_array($row['product_id'], $wishlist_items);
+      while ($wishlist_row = $wishlist_result->fetch_assoc()) {
+        $wishlist_items[] = $wishlist_row['product_id'];
+      }
+      $stmt->close();
+    }
 
-              // --- NEW: Parse CSV images and take the first one ---
-              $imagePaths = explode(',', $row['images']);
-              $firstImage = !empty($imagePaths[0]) ? trim($imagePaths[0]) : 'images/default-placeholder.jpg';
-        ?>
-              <div class="col">
-                <div 
-                  class="product-card p-3 d-flex flex-column position-relative h-100"
-                  onclick="event.stopPropagation();"
-                >
-                  <!-- Heart Icon (Wishlist) - Conditional based on login status -->
-                  <?php if ($is_logged_in): ?>
-                    <!-- For logged-in users -->
-                    <button
-                      class="icon-btn wishlist-icon logged-in-wishlist <?php echo $in_wishlist ? 'in-wishlist' : ''; ?>"
-                      title="<?php echo $in_wishlist ? 'Already in wishlist' : 'Add to Wishlist'; ?>"
-                      data-product-id="<?php echo $row['product_id']; ?>"
-                      data-in-wishlist="<?php echo $in_wishlist ? '1' : '0'; ?>"
-                      onclick="event.stopPropagation();"
-                    >
-                      <!-- If in wishlist, show a filled red heart -->
-                      <i class="bi 
-                        <?php 
-                          if ($in_wishlist) {
-                            echo 'bi-heart-fill text-danger';
-                          } else {
-                            echo 'bi-heart';
-                          }
-                        ?>
-                      "></i>
-                    </button>
-                  <?php else: ?>
-                    <!-- For non-logged-in users -->
-                    <button
-                      class="icon-btn wishlist-icon"
-                      title="Add to Wishlist"
-                      data-bs-toggle="modal" 
-                      data-bs-target="#loginModal" 
-                    >
-                      <i class="bi bi-heart"></i>
-                    </button>
-                  <?php endif; ?>
+    if ($result && $result->num_rows > 0):
+      while ($row = $result->fetch_assoc()):
+        $in_wishlist = in_array($row['product_id'], $wishlist_items);
+        $imagePaths = explode(',', $row['images']);
+        $firstImage = !empty($imagePaths[0]) ? trim($imagePaths[0]) : 'images/default-placeholder.jpg';
+  ?>
+    <div class="col">
+      <a href="product_info.php?id=<?php echo $row['product_id']; ?>" class="product-card-link text-decoration-none text-dark">
+        <div class="product-card p-3 d-flex flex-column position-relative h-100">
+          <!-- Heart Icon (Wishlist) -->
+          <?php if ($is_logged_in): ?>
+            <button
+              class="icon-btn wishlist-icon logged-in-wishlist <?php echo $in_wishlist ? 'in-wishlist' : ''; ?>"
+              title="<?php echo $in_wishlist ? 'Already in wishlist' : 'Add to Wishlist'; ?>"
+              data-product-id="<?php echo $row['product_id']; ?>"
+              data-in-wishlist="<?php echo $in_wishlist ? '1' : '0'; ?>"
+              onclick="event.preventDefault(); event.stopPropagation();"
+            >
+              <i class="bi <?php echo $in_wishlist ? 'bi-heart-fill text-danger' : 'bi-heart'; ?>"></i>
+            </button>
+          <?php else: ?>
+            <button
+              class="icon-btn wishlist-icon"
+              title="Add to Wishlist"
+              data-bs-toggle="modal" 
+              data-bs-target="#loginModal"
+              onclick="event.preventDefault(); event.stopPropagation();"
+            >
+              <i class="bi bi-heart"></i>
+            </button>
+          <?php endif; ?>
 
-                  <!-- Product Image -->
-                  <div class="text-center mb-2">
-                    <img
-                      src="<?php echo htmlspecialchars($firstImage); ?>"
-                      alt="<?php echo htmlspecialchars($row['name']); ?>"
-                      class="img-fluid product-img"
-                    />
-                  </div>
+          <!-- Product Image -->
+          <div class="text-center mb-2">
+            <img
+              src="<?php echo htmlspecialchars($firstImage); ?>"
+              alt="<?php echo htmlspecialchars($row['name']); ?>"
+              class="img-fluid product-img"
+            />
+          </div>
 
-                  <!-- Add To Cart Button - Conditional based on login status -->
-                  <?php if ($is_logged_in): ?>
-                    <!-- For logged-in users -->
-                    <button 
-                      class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart"
-                      data-product-id="<?php echo $row['product_id']; ?>"
-                      onclick="event.stopPropagation();"
-                    >
-                      Add To Cart
-                    </button>
-                  <?php else: ?>
-                    <!-- For non-logged-in users -->
-                    <button 
-                      class="btn btn-danger w-100 btn-sm mb-2"
-                      data-bs-toggle="modal" 
-                      data-bs-target="#loginModal"
-                      onclick="event.stopPropagation();"
-                    >
-                      Add To Cart
-                    </button>
-                  <?php endif; ?>
+          <!-- Add To Cart Button -->
+          <?php if ($is_logged_in): ?>
+            <button 
+              class="btn btn-danger w-100 btn-sm mb-2 btn-add-to-cart"
+              data-product-id="<?php echo $row['product_id']; ?>"
+              onclick="event.preventDefault(); event.stopPropagation();"
+            >
+              Add To Cart
+            </button>
+          <?php else: ?>
+            <button 
+              class="btn btn-danger w-100 btn-sm mb-2"
+              data-bs-toggle="modal" 
+              data-bs-target="#loginModal"
+              onclick="event.preventDefault(); event.stopPropagation();"
+            >
+              Add To Cart
+            </button>
+          <?php endif; ?>
 
-                  <!-- Product Info -->
-                  <p class="mb-0 fw-semibold">
-                    <a href="product_info.php?id=<?php echo $row['product_id']; ?>" class="product-link">
-                      <?php echo htmlspecialchars($row['name']); ?>
-                    </a>
-                  </p>
+          <!-- Product Name -->
+          <p class="mb-0 fw-semibold product-link">
+            <?php echo htmlspecialchars($row['name']); ?>
+          </p>
 
-                  <!-- Price and "Discount" (Optional) -->
-                  <p class="text-danger mb-1">
-                    $<?php echo number_format($row['price'], 2); ?>
-                    <span class="text-muted text-decoration-line-through ms-1">
-                      $<?php echo number_format($row['price'] + 200, 2); ?>
-                    </span>
-                  </p>
+          <!-- Price -->
+          <p class="text-danger mb-1">
+            $<?php echo number_format($row['price'], 2); ?>
+            <span class="text-muted text-decoration-line-through ms-1">
+              $<?php echo number_format($row['price'] + 200, 2); ?>
+            </span>
+          </p>
 
-                  <!-- Star Rating-->
-                  <?php
-                    $avg = floatval($row['avg_rating']);
-                    $count = intval($row['review_count']);
-                    $full = floor($avg);
-                    $half = ($avg - $full) >= 0.5 ? 1 : 0;
-                    $empty = 5 - $full - $half;
-                  ?>
-                  <div class="star-rating text-warning" style="pointer-events: none;">
-                    <?php for ($i = 0; $i < $full; $i++) echo '<i class="bi bi-star-fill"></i>'; ?>
-                    <?php if ($half) echo '<i class="bi bi-star-half"></i>'; ?>
-                    <?php for ($i = 0; $i < $empty; $i++) echo '<i class="bi bi-star"></i>'; ?>
-                    <span class="text-muted">(<?php echo $count; ?>)</span>
-                  </div>
-                </div>
-              </div>
+          <!-- Star Rating -->
+          <?php
+            $avg = floatval($row['avg_rating']);
+            $count = intval($row['review_count']);
+            $full = floor($avg);
+            $half = ($avg - $full) >= 0.5 ? 1 : 0;
+            $empty = 5 - $full - $half;
+          ?>
+          <div class="star-rating text-warning" style="pointer-events: none;">
+            <?php for ($i = 0; $i < $full; $i++) echo '<i class="bi bi-star-fill"></i>'; ?>
+            <?php if ($half) echo '<i class="bi bi-star-half"></i>'; ?>
+            <?php for ($i = 0; $i < $empty; $i++) echo '<i class="bi bi-star"></i>'; ?>
+            <span class="text-muted">(<?php echo $count; ?>)</span>
+          </div>
+        </div>
+      </a>
+    </div>
         <?php
             endwhile;
           else:
-            // If no headphone products are found, show a message
-            echo "<p>No HeadPhone products found.</p>";
+          
+            echo "<p>No headphone products found.</p>";
           endif;
 
           // Close the DB connection
@@ -193,6 +171,7 @@ require_once "header-loader.php";
       </div>
     </div>
   </div>
+
 
   <?php require_once "footer.php"; ?>
 
