@@ -4,7 +4,7 @@ $servername = "localhost";
 $username = "root"; 
 $password = "";  // Empty password since 'root' has no password
 $database = "mv_data"; 
-$port = 3306; // Specify the correct port
+$port = 3307; // Specify the correct port
 
 /* Varun's server */
 /*
