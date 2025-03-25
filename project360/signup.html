@@ -84,19 +84,21 @@
           }
 
           // Image validation
-          if (imageFile) {
-              const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-              if (!validTypes.includes(imageFile.type)) {
-                  errorMessages.push("Only JPG, JPEG, PNG & GIF files are allowed");
+          if (!imageFile) {
+                  errorMessages.push("Please upload an image file");
                   isValid = false;
+              } else {
+                  const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                  if (!validTypes.includes(imageFile.type)) {
+                      errorMessages.push("Only JPG, JPEG, PNG & GIF files are allowed");
+                      isValid = false;
+                  }
+
+                  if (imageFile.size > 25 * 1024 * 1024) {
+                      errorMessages.push("Image file size must be less than 25MB");
+                      isValid = false;
+                  }
               }
-              
-              // Max file size validation (2MB)
-              if (imageFile.size > 25 * 1024 * 1024) {
-                  errorMessages.push("Image file size must be less than 25MB");
-                  isValid = false;
-              }
-          }
 
           // Display client-side validation errors if any
           if (!isValid) {
@@ -222,7 +224,7 @@
             </div>
             <!-- Image Upload Field -->
             <div class="mb-3">
-              <input type="file" id="customFile" name="image" class="d-none" accept="image/*" required onchange="updateFileName()">
+              <input type="file" id="customFile" name="image" class="d-none" accept="image/*" onchange="updateFileName()">
               <button type="button" class="btn btn-secondary w-100" onclick="document.getElementById('customFile').click();">
                 <span id="fileLabel">Upload Your Image</span>
               </button>
