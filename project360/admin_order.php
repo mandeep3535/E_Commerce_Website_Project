@@ -52,7 +52,7 @@ if (!$result) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin.order.php" class="nav-link active">
+                    <a href="admin_order.php" class="nav-link active">
                         <i class="bi bi-cart me-2"></i> Orders
                     </a>
                 </li>

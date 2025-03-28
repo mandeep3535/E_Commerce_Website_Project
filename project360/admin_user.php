@@ -132,7 +132,7 @@ if (!$result) {
                 </a>
             </li>
             <li class="nav-item">
-                <a href="admin.user.php" class="nav-link active">
+                <a href="admin_user.php" class="nav-link active">
                     <i class="bi bi-people me-2"></i> Users
                 </a>
             </li>
