@@ -296,8 +296,7 @@ require_once "header-loader.php";
     </div>
   </div>
 
-  <!-- JS to load header/footer -->
-  <script src="hfload.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="cart.js"></script>
 </body>

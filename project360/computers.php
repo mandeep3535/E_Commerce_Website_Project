@@ -194,7 +194,7 @@ require_once "header-loader.php";
     </div>
   </div>
 
-  <script src="hfload.js"></script>
+
 
   <!-- Bootstrap Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
