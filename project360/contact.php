@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 <?php require_once "footer.php"; ?>
-<script src="hfload.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php if ($showSuccessModal): ?>
