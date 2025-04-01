@@ -85,20 +85,20 @@
 
           // Image validation
           if (!imageFile) {
-              errorMessages.push("Please upload an image file");
-              isValid = false;
-          } else {
-              const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-              if (!validTypes.includes(imageFile.type)) {
-                  errorMessages.push("Only JPG, JPEG, PNG & GIF files are allowed");
+                  errorMessages.push("Please upload an image file");
                   isValid = false;
-              }
+              } else {
+                  const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                  if (!validTypes.includes(imageFile.type)) {
+                      errorMessages.push("Only JPG, JPEG, PNG & GIF files are allowed");
+                      isValid = false;
+                  }
 
-              if (imageFile.size > 25 * 1024 * 1024) {
-                  errorMessages.push("Image file size must be less than 25MB");
-                  isValid = false;
+                  if (imageFile.size > 25 * 1024 * 1024) {
+                      errorMessages.push("Image file size must be less than 25MB");
+                      isValid = false;
+                  }
               }
-          }
 
           // Display client-side validation errors if any
           if (!isValid) {
@@ -200,35 +200,35 @@
             <!-- First Name Field -->
             <div class="mb-3">
               <input type="text" class="form-control" name="first_name" placeholder="Enter first name" required>
-              <small class="form-text text-muted">Enter your first name <span class="text-danger">*</span></small>
+              <small class="form-text text-muted">Enter your first name</small>
             </div>
             <!-- Last Name Field -->
             <div class="mb-3">
               <input type="text" class="form-control" name="last_name" placeholder="Enter last name" required>
-              <small class="form-text text-muted">Enter your last name <span class="text-danger">*</span></small>
+              <small class="form-text text-muted">Enter your last name</small>
             </div>
             <!-- Username Field -->
             <div class="mb-3">
               <input type="text" class="form-control" name="user_name" placeholder="Enter user name" required>
-              <small class="form-text text-muted">3-30 characters, letters, numbers and spaces only <span class="text-danger">*</span></small>
+              <small class="form-text text-muted">3-30 characters, letters, numbers and spaces only</small>
             </div>
             <!-- Email Field -->
             <div class="mb-3">
               <input type="email" class="form-control" name="email" placeholder="Email" required>
-              <small class="form-text text-muted">Must be a unique email address <span class="text-danger">*</span></small>
+              <small class="form-text text-muted">Must be a unique email address</small>
             </div>
             <!-- Password Field -->
             <div class="mb-3">
               <input type="password" class="form-control" name="password" placeholder="Password" required>
-              <small class="form-text text-muted">Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number <span class="text-danger">*</span></small>
+              <small class="form-text text-muted">Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number</small>
             </div>
             <!-- Image Upload Field -->
             <div class="mb-3">
-              <input type="file" id="customFile" name="image" class="d-none" accept="image/*" onchange="updateFileName()" required>
+              <input type="file" id="customFile" name="image" class="d-none" accept="image/*" onchange="updateFileName()">
               <button type="button" class="btn btn-secondary w-100" onclick="document.getElementById('customFile').click();">
                 <span id="fileLabel">Upload Your Image</span>
               </button>
-              <small class="form-text text-muted">JPG, JPEG, PNG or GIF format only, max 25MB <span class="text-danger">*</span></small>
+              <small class="form-text text-muted">JPG, JPEG, PNG or GIF format only, max 25MB</small>
             </div>
             <!-- Submit Button -->
             <button type="submit" class="btn btn-danger w-100">Sign Up</button>
