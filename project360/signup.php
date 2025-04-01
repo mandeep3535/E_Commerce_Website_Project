@@ -53,19 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result && $result->num_rows > 0) {
             $errors[] = "Email already in use. Please use a different email or login instead";
         }
-        // Check if username already exists
-$user_nameEscaped = mysqli_real_escape_string($conn, $user_name);
-$check_username = "SELECT * FROM users WHERE user_name = '$user_nameEscaped'";
-$result_username = $conn->query($check_username);
-
-if ($result_username && $result_username->num_rows > 0) {
-    $errors[] = "Username already taken. Please choose a different username";
-}
-
     }
     
-
-
     // Password validation (min 8 chars, at least 1 uppercase, 1 lowercase, 1 number)
     if (strlen($password) < 8) {
         $errors[] = "Password must be at least 8 characters long";
