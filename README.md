@@ -86,7 +86,7 @@ To experience the admin panel:
 - Forgot password & reset system  
 - ...and many more. Run the project for full experience.
 
-### 🛠️ Admin Side
+###  Admin Side
 
 - Dashboard with metrics: revenue, orders, products, users  
 - Add/Edit/Delete Products with image upload  
@@ -97,7 +97,7 @@ To experience the admin panel:
 
 ---
 
-## 📧 Email Functionality
+## Email Functionality
 
 - Users receive order confirmation emails  
 - Admins are notified of new orders  
