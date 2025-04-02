@@ -57,7 +57,7 @@ $dbname = "msingh78";
 ```
 
 **Step 6:** Run the project  
-Visit: http://localhost/project360/home.php](http://localhost/project360/home.php
+Visit: http://localhost/project360/home.php
 
 ---
 
