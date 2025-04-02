@@ -22,7 +22,7 @@ MV Electronics is a dynamic, full-featured e-commerce platform built using HTML,
 
 ---
 
-## ⚙️ Setup: How to Run the Project Locally
+## Setup: How to Run the Project Locally
 
 ### Requirements
 
