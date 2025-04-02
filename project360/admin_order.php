@@ -6,8 +6,6 @@ include 'db_connection.php';
 $query = "SELECT order_id, user_id, total_price, order_date, delivery_date, 
           delivery_address, payment_method, status FROM orders ORDER BY order_date DESC";
 $result = mysqli_query($conn, $query);
-
-// Check for errors in the query
 if (!$result) {
     die("Database error: " . mysqli_error($conn));
 }
@@ -68,6 +66,11 @@ if (!$result) {
     <!-- Main Content -->
     <div class="container-fluid my-4">
         <h2>Customer Orders</h2>
+        
+        <!-- Global Search Box -->
+        <div class="mb-3">
+            <input type="text" id="globalSearch" class="form-control" placeholder="Search Orders...">
+        </div>
 
         <!-- Orders Table -->
         <div class="table-responsive">
@@ -83,6 +86,18 @@ if (!$result) {
                         <th>Payment Method</th>
                         <th>Status</th>
                         <th>Actions</th>
+                    </tr>
+                    <!-- Column Filters -->
+                    <tr>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Order ID"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter User ID"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Total Price"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Order Date"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Delivery Date"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Delivery Address"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Payment Method"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input" placeholder="Filter Status"></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,11 +157,57 @@ if (!$result) {
         </div>
     </div>
 
-    <!-- Bootstrap JavaScript -->
+   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- js for Global Search and Column Filtering -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterInputs = document.querySelectorAll('.filter-input');
+            const globalSearchInput = document.getElementById('globalSearch');
+            
+            // listeners to both filter inputs and the global search input
+            filterInputs.forEach(input => {
+                input.addEventListener('keyup', filterTable);
+            });
+            globalSearchInput.addEventListener('keyup', filterTable);
+            
+            function filterTable() {
+                const table = document.querySelector('.table');
+                const rows = table.querySelectorAll('tbody tr');
+                const globalSearch = globalSearchInput.value.toLowerCase();
+                
+                rows.forEach(row => {
+                    let showRow = true;
+                    
+                    //  if the input is non-empty, at least one cell must match
+                    if (globalSearch !== '') {
+                        let globalMatch = false;
+                        Array.from(row.cells).forEach(cell => {
+                            if (cell.innerText.toLowerCase().indexOf(globalSearch) > -1) {
+                                globalMatch = true;
+                            }
+                        });
+                        if (!globalMatch) {
+                            showRow = false;
+                        }
+                    }
+                    
+                    // Column-specific filtering
+                    filterInputs.forEach((input, index) => {
+                        const filterText = input.value.toLowerCase();
+                        const cell = row.cells[index];
+                        if (cell && filterText !== '' && cell.innerText.toLowerCase().indexOf(filterText) === -1) {
+                            showRow = false;
+                        }
+                    });
+                    
+                    row.style.display = showRow ? '' : 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 <?php
-// Close connection
 mysqli_close($conn);
 ?>
