@@ -73,7 +73,7 @@ function updateCartCount() {
 function loadCart() {
     updateCart();
     updateCartCount();
-    bindQuantityListeners(); // re-bind after loading in case elements were re-rendered
+    bindQuantityListeners(); 
 }
 
 // -----------------------------------------------------
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // -----------------------------------------------------
-//  Add to Cart function if needed elsewhere
+//  Add to Cart function
 // -----------------------------------------------------
 function addToCart() {
     const productImage = document.getElementById("mainProductImage");
@@ -182,43 +182,3 @@ function addToCart() {
         })
         .catch(err => console.error("Error adding to cart:", err));
 }
-
-/*
-function updateWishlistCount() {
-    let wishlist = []; // localStorage handling removed
-    let totalItems = wishlist.length;
-  
-    const wishlistBadgeDesktop = document.getElementById("wishlistCountBadge");
-    const wishlistBadgeMobile = document.getElementById("wishlistCountBadgeMobile");
-  
-    if (totalItems > 0) {
-        if (wishlistBadgeDesktop) {
-            wishlistBadgeDesktop.innerText = totalItems;
-            wishlistBadgeDesktop.style.display = "inline-block";
-        }
-        if (wishlistBadgeMobile) {
-            wishlistBadgeMobile.innerText = totalItems;
-            wishlistBadgeMobile.style.display = "inline-block";
-        }
-    } else {
-        if (wishlistBadgeDesktop) wishlistBadgeDesktop.style.display = "none";
-        if (wishlistBadgeMobile) wishlistBadgeMobile.style.display = "none";
-    }
-}
-  
-document.addEventListener("DOMContentLoaded", function () {
-    updateWishlistCount();
-});
-  
-window.addEventListener("storage", function () {
-    updateWishlistCount();
-});
-  
-if (typeof wishlistBtn !== "undefined") {
-    wishlistBtn.addEventListener("click", function () {
-        let wishlist = []; // localStorage handling removed
-        wishlist.push(product);
-        updateWishlistCount();
-    });
-}
-*/

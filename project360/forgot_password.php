@@ -69,7 +69,7 @@ try {
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'mvelectronics31@gmail.com';
-    $mail->Password = 'dzvbtsppjvyoukhk'; // Replace with valid app password
+    $mail->Password = 'dzvbtsppjvyoukhk'; 
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
 

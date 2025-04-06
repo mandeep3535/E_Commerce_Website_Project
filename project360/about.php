@@ -1,6 +1,6 @@
 <?php
 require_once 'session_handler.php';
-// Now you can use $_SESSION variables on this page.
+
 require_once "header-loader.php";
 ?>
 <!DOCTYPE html>

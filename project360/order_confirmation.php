@@ -1,5 +1,5 @@
 <?php
-ob_start(); // Start output buffering
+ob_start(); 
 
 // Validate session and required files
 require_once "session_handler.php";
@@ -15,7 +15,6 @@ if (!isset($_GET['order_id']) || empty($_GET['order_id'])) {
 $order_id = $_GET['order_id'];
 $user_id = $_SESSION['user_id'];
 
-// Output initial HTML (with loader) so it appears immediately
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +44,7 @@ $user_id = $_SESSION['user_id'];
     <div class="spinner-border text-danger" role="status" style="width: 3rem; height: 3rem;"></div>
   </div>
 <?php
-// Flush the output so the loader is sent immediately
+
 ob_flush();
 flush();
 

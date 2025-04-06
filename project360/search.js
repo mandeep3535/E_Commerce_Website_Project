@@ -1,4 +1,4 @@
-// search.js
+/* Initial searchbar, now search.php handles all the search functionality (Fetches from db) */
 
 // Function to get query parameter from URL
 function getQueryParam(param) {

@@ -9,7 +9,7 @@ require_once 'db_connection.php';
 
 // Initialize variables
 $userName = 'User';
-$profileImage = '';  // This can be a path, e.g. "uploads/default.png" if you want a default
+$profileImage = '';  
 
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
@@ -24,7 +24,7 @@ if (isset($_SESSION['user_id'])) {
     // Fetch user data if it exists
     if ($row = $result->fetch_assoc()) {
         $userName = $row['user_name'];
-        $profileImage = $row['profile_image']; // e.g. "uploads/profile123.jpg"
+        $profileImage = $row['profile_image']; 
     }
     $stmt->close();
 }

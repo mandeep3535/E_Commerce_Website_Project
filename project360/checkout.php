@@ -1,7 +1,7 @@
 <?php
 // Ensure session is available
 require_once "session_handler.php";
-require_once "header-loader.php";
+
 require_once "db_connection.php"; 
 
 // Check if user is logged in
@@ -10,6 +10,24 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php?redirect=checkout.php");
     exit();
 }
+
+// Check if user's cart is empty
+$user_id = (int)$_SESSION['user_id'];
+
+$cartCheckSql = "SELECT COUNT(*) AS item_count FROM cart WHERE user_id = ?";
+$cartCheckStmt = $conn->prepare($cartCheckSql);
+$cartCheckStmt->bind_param("i", $user_id);
+$cartCheckStmt->execute();
+$cartCheckResult = $cartCheckStmt->get_result()->fetch_assoc();
+$cartCheckStmt->close();
+
+if ((int)$cartCheckResult['item_count'] === 0) {
+    $_SESSION['flash_message'] = "Your cart is empty. Please add items before checking out.";
+    header("Location: cart.php");
+    exit();
+}
+
+require_once "header-loader.php";
 
 // Process order submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -57,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       $product_id = $productRow['product_id'];
                   } else {
                       error_log("Could not find product ID for: " . $item['name']);
-                      continue; // Skip this item
+                      continue;
                   }
               } else {
                   $product_id = $item['id'];

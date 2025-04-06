@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Modal helper (assumes a Bootstrap modal with id "feedbackModal")
+  // Modal helper 
   function showModal(title, message) {
     const modalElement = document.getElementById("feedbackModal");
     if (!modalElement) return;
@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const couponMessageEl = document.getElementById("couponMessage");
   const paymentMethodRadios = document.querySelectorAll('.payment-method-radio');
 
-  let couponApplied = false; // determined by the server
-  let cart = []; // will be filled by the server fetch
+  let couponApplied = false; 
+  let cart = []; 
 
   // Initialize coupon UI state
   couponApplied = false;
@@ -35,9 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applyCouponBtn.textContent = "Apply Coupon";
 
   // Function to render the order summary.
-  // When a coupon is active, item.price is the discounted price.
-  // We want to display that price in red.
-
+ 
 
   function extractFirstImage(images) {
     try {
