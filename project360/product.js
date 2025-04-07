@@ -1,4 +1,4 @@
-// product.js
+
 document.addEventListener("DOMContentLoaded", function () {
     // Capture the main image element and store its default source.
     const mainImageElement = document.getElementById("mainProductImage");

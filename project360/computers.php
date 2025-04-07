@@ -1,5 +1,4 @@
 <?php
-// Include session handler which sets $is_logged_in, $user_id, etc.
 require_once "session_handler.php";
 require_once "header-loader.php";
 ?>

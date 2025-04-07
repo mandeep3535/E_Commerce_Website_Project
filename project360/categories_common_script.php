@@ -1,6 +1,5 @@
 <?php
 // This file contains all the JavaScript related to cart and wishlist functionality
-// Include this file at the bottom of each category page (phones.php, computers.php, etc.)
 ?>
 
 <!-- Cart Modal -->
@@ -180,7 +179,7 @@ cartModalEl.addEventListener('hidden.bs.modal', function () {
     while(backdrops.length > 0) {
       backdrops[0].parentNode.removeChild(backdrops[0]);
     }
-    // NEW: Refresh the cart count
+    // Refresh the cart count
     refreshCartCount();
 });
 </script>

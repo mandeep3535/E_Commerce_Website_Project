@@ -1,7 +1,7 @@
 <?php
-header('Content-Type: application/json'); // Ensure proper JSON response
+header('Content-Type: application/json'); 
 
-include 'db_connection.php'; // Make sure db_connection.php has no echo
+include 'db_connection.php'; 
 
 // [PHPMailer Integration – NEW]
 require 'mailer/PHPMailer.php';
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $errors = [];
 
-    // --- Validations (unchanged from your code) ---
+    // --- Validations  ---
     if (strlen($first_name) < 2) $errors[] = "First name must be at least 2 characters long";
     if (!preg_match('/^[A-Za-z\s]+$/', $first_name)) $errors[] = "First name can only contain letters and spaces";
 
@@ -91,14 +91,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response["message"] = "Registration successful! Please check your email for a welcome message. If you don’t see it, check your spam/junk folder.";
 
 
-            // [Email Sending – NEW]
+     //Email sending functionality
             $mail = new PHPMailer(true);
             try {
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'mvelectronics31@gmail.com';
-                $mail->Password   = 'dzvbtsppjvyoukhk'; // Consider using env variables in production
+                $mail->Password   = 'dzvbtsppjvyoukhk'; 
                 $mail->SMTPSecure = 'ssl';
                 $mail->Port       = 465;
 
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Optionally: log email success
             } catch (Exception $e) {
                 error_log("Signup email error: " . $mail->ErrorInfo);
-                // Don't affect user experience if mail fails
+                
             }
 
         } else {

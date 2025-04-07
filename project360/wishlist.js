@@ -5,17 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const wishlistHeader    = document.getElementById("wishlistHeader");
   const moveAllBtn        = document.getElementById("moveAllButton");
 
-  // ----------------------------------------------------------------
-  // ORIGINAL localStorage cart code (disabled):
-  // let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  // function saveCartAndUpdateCount() {
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-  //   if (typeof window.updateCartCount === "function") {
-  //     window.updateCartCount(); 
-  //   }
-  // }
-  // ----------------------------------------------------------------
-
   //-----------------------------------
   // UTILITY: Recount how many items are in the wishlist DOM (local count)
   //-----------------------------------
@@ -79,25 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  //-----------------------------------
-  // ORIGINAL function to add an item to localStorage CART (disabled):
-  // function addToCart(product) {
-  //   const existingProduct = cart.find(item => item.name === product.name);
-  //   if (existingProduct) {
-  //     existingProduct.quantity += 1;
-  //   } else {
-  //     cart.push({ ...product, quantity: 1 });
-  //   }
-  //   saveCartAndUpdateCount();
-  //
-  //   // Show confirmation modal
-  //   const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
-  //   document.getElementById('cartModalBody').textContent = `${product.name} added to cart!`;
-  //   cartModal.show();
-  // }
-  //-----------------------------------
-  // EVENT: Clicking inside the wishlistContainer
-  //-----------------------------------
   wishlistContainer.addEventListener("click", function(e) {
     const removeBtn = e.target.closest(".remove-wishlist-item");
     if (removeBtn) {
@@ -116,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const productPrice = parseFloat(addCartBtn.getAttribute("data-product-price")) || 0;
       const productImage = addCartBtn.getAttribute("data-product-image");
     
-      // Use fetch to add the item to the cart DB (like on Phones)
+      // Use fetch to add the item to the cart DB 
       fetch(`cart.php?product_id=${productId}&quantity=1`)
         .then(response => response.text())
         .then(data => {
@@ -197,12 +167,10 @@ document.addEventListener("DOMContentLoaded", function () {
   //-----------------------------------
   updateWishlistCount();
   refreshHeaderWishlistCount();
-  // ----------------------------------------------------------------
-  // ORIGINAL: saveCartAndUpdateCount(); // updates cart count if you have one
-  // ----------------------------------------------------------------
+
 });
 
-/* "Just for you" remains the same (adds to localStorage cart) */
+
 document.addEventListener("DOMContentLoaded", function() {
   const justForYouContainer = document.getElementById("justForYouContainer");
 
@@ -220,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const productPrice = parseFloat(rawPrice) || 0;
       const productImage = imgEl ? imgEl.src : "";
 
-      // This section still uses localStorage for the "Just for you" section
+      
       const product = { name: productName, price: productPrice, image: productImage, quantity: 1 };
 
       let cart = JSON.parse(localStorage.getItem("cart")) || [];

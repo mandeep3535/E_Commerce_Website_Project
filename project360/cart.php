@@ -9,8 +9,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
+if (isset($_SESSION['flash_message'])) {
+  echo '<div class="alert alert-warning text-center m-3">' . htmlspecialchars($_SESSION['flash_message']) . '</div>';
+  unset($_SESSION['flash_message']);
+}
+
 /********************************************************
- * (A) Handle "Remove from Cart" if ?action=remove&product_id=...
+ * (A) Handle "Remove from Cart" 
  ********************************************************/
 if (
     isset($_GET['action']) && $_GET['action'] === 'remove'
@@ -38,7 +43,7 @@ if (
 }
 
 /********************************************************
- * (B) Handle "Update Quantity" if ?action=update&product_id=...&quantity=...
+ * (B) Handle "Update Quantity" 
  ********************************************************/
 if (
     isset($_GET['action']) && $_GET['action'] === 'update'
@@ -72,8 +77,7 @@ if (
 }
 
 /********************************************************
- * (C) Handle "Add to Cart" if ?product_id=...
- *  (No "action" param => just product_id)
+ * (C) Handle "Add to Cart" 
  ********************************************************/
 if (isset($_GET['product_id']) && !empty($_GET['product_id'])) {
   require_once "db_connection.php";

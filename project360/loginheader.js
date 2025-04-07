@@ -1,10 +1,8 @@
-// This runs when the page first loads
 document.addEventListener("DOMContentLoaded", function () {
   refreshWishlistCount();
   refreshCartCount();
 });
 
-// This event fires even when a page is restored from cache (e.g. using the back button)
 window.addEventListener("pageshow", function () {
   refreshWishlistCount();
   refreshCartCount();
